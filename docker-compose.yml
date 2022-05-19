@@ -26,6 +26,11 @@ services:
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
 
+
+
+
+
+
 #  pma:
 #         image: phpmyadmin:5.1
 #         environment:
