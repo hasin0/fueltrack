@@ -12,9 +12,22 @@ services:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
     working_dir: /fueltrack-app
+    volumes:
+      - ./:/fueltrack-app
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+
+
+
+
+
+
 
  mysql-db:
     image: mysql
+    volumes:
+            - dbdata:/var/lib/mysql
+            # - ./mysql/my.cnf:/etc/mysql/my.cnf
     container_name: mysql_db2
     restart: unless-stopped
     tty: true
@@ -22,10 +35,48 @@ services:
       - "3306:3306"
     environment:
       MYSQL_DATABASE: fueltrack
-      MYSQL_ROOT_PASSWORD: hassan
+      MYSQL_ROOT_PASSWORD: root
+    #   MYSQL_PASSWORD: ${DB_PASSWORD}
+    #   MYSQL_USER: ${DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
 
+
+ phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+
+    #   - PMA_HOST=db
+    #   - PMA_USER=root
+    #   - PMA_PASSWORD=root
+    #   - PMA_PORT=3306
+
+
+
+#Nginx Service
+ webserver:
+    image: nginx:alpine
+    container_name: Webserver
+    volumes:
+      - ./:/fueltrack-app
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "9090:80"
+      - "443:443"
+
+
+
+
+
+
+volumes:
+    dbdata:
 
 
 
