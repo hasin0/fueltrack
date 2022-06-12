@@ -21,4 +21,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+
 require __DIR__.'/auth.php';
+
+
+Route::group(['prefix'=>'admin/','middleware'=>'auth'],function(){
+     Route::get('/',[\App\Http\Controllers\AdminController::class,'admin'])->name('admin');
+});
