@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+//Auth::routes(['register'=>false]);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -32,6 +35,6 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 
 
 
-//require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';
 
 
