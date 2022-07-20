@@ -23,9 +23,9 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Banner
+        Vehicles
     </div>
-   
+
     <!-- Nav Item - Pages Collapse Menu -->
     <!-- Nav Item - Charts -->
 
@@ -33,30 +33,30 @@
         <a class="nav-link" href="{{route('file-manager')}}">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Media Manager</span></a>
-    </li>--}} 
+    </li>--}}
 
-    
-  
 
-    {{--<li class="nav-item">
+
+
+    <li class="nav-item">
       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
         <i class="fas fa-image"></i>
-        <span>Banners</span>
+        <span>Vehicles</span>
       </a>
       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Banner Options:</h6>
-          <a class="collapse-item" href="{{route('banner.index')}}">Banners</a>
-          <a class="collapse-item" href="{{route('banner.create')}}">Add Banners</a>
+          <h6 class="collapse-header">Vehicles Options:</h6>
+          <a class="collapse-item" href="{{route('vehicle.index')}}">Vehicles</a>
+          <a class="collapse-item" href="{{route('vehicle.create')}}">Add Vehicles</a>
         </div>
       </div>
-    </li>--}}
+    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">
         <!-- Heading -->
         <div class="sidebar-heading">
-            Shop
+            FuelTrack
         </div>
 
     <!-- Categories -->
@@ -74,7 +74,7 @@
         </div>
     </li>
     {{-- Products --}}
-   
+
      {{--}} <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#productCollapse" aria-expanded="true" aria-controls="productCollapse">
           <i class="fas fa-cubes"></i>
@@ -133,7 +133,7 @@
             <i class="fas fa-comments"></i>
             <span>Reviews</span></a>
     </li>--}}
-    
+
 
     <!-- Divider -->
     <hr class="sidebar-divider">

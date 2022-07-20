@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\VehicleController;
+use App\Models\Vehicle;
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -24,11 +29,14 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-
-
-
+//AdminDashbord
 Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
     Route::get('/',[\App\Http\Controllers\AdminController::class,'admin'])->name('admin');
+
+
+
+    //Vehicles
+    Route::resource('/vehicle',\App\Http\Controllers\VehicleController::class);
 });
 
 
