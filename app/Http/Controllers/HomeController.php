@@ -23,6 +23,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return  view('home'); //redirect()->route('auth()->user()->role');
+        return view('backend.layouts.master');
+       // redirect()->route('auth()->user()->role');
+
     }
 }

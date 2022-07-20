@@ -10,7 +10,7 @@ class AdminController extends Controller
 
     public function admin()
     {
-        return view('backend.layouts.index');
+        return view('backend.layouts.master');
 
     }
 }
