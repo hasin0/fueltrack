@@ -37,6 +37,8 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 
     //Vehicles
     Route::resource('/vehicle',\App\Http\Controllers\VehicleController::class);
+
+    Route::post('vehicle_status',[\App\Http\Controllers\VehicleController::class,'vehicleStatus'])->name('vehicle.status');
 });
 
 

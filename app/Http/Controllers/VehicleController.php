@@ -17,7 +17,7 @@ class VehicleController extends Controller
 
         $vehicle=Vehicle::orderBy('id','DESC')->paginate(10);
 
-         dd($vehicle);
+       //  dd($vehicle);
         return view('backend.layouts.vehicles.index')->with('vehicles',$vehicle);
         //
     }
@@ -72,6 +72,20 @@ class VehicleController extends Controller
 
 
 
+    }
+
+
+    public function vehicleStatus(Request $request)
+    {
+
+        dd($request->all());
+        $vehicle = Vehicle::find($request->vehicle_id);
+
+        $vehicle->status = $request->status;
+        dd($vehicle);
+        $vehicle->save();
+
+        return response()->json(['success'=>'Status change successfully.']);
     }
 
     /**

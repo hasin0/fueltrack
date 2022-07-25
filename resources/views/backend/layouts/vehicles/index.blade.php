@@ -14,7 +14,7 @@
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        @if(count($vehicle)>1)
+        @if(count($vehicles)>0)
 
 
 
@@ -48,7 +48,7 @@
 
 
           <tbody>
-            @foreach($vehicle as $vehicles)
+            @foreach($vehicles as $vehicles)
                 <tr>
                     <td>{{$vehicles->id}}</td>
                     <td>{{$vehicles->name}}</td>
@@ -67,16 +67,27 @@
                             <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid zoom" style="max-width:100%" alt="avatar.png">
                         @endif
                     </td> --}}
+
                     <td>
-                        @if($vehicles->status=='active')
-                            <span class="badge badge-success">{{$vehicles->status}}</span>
-                        @else
-                            <span class="badge badge-warning">{{$vehicles->status}}</span>
-                        @endif
+
+                        {{-- <input  type="checkbox"   value="{{$vehicles->id}}" class="toggle-class" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $vehicles->status == 'active' ? 'checked' : '' }}> --}}
+
+                        {{-- @if($vehicles->status=='active')
+
+                        <input  type="checkbox"   value="{{$vehicles->id}}" name="toogle" class="toggle-class" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $vehicles->status == 'active' ? 'checked' : '' }}>
+
+                            {{-- <span class="badge badge-success">{{$vehicles->status}}</span> --}}
+                        {{-- @else --}}
+
+                        <input data-id="{{$vehicles->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $vehicles->status ? 'checked' : '' }}>
+
+
+                        {{-- <input data-id="{{$vehicles->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $vehicles->status ? 'checked' : '' }}> --}}
+                        {{-- @endif --}}
                     </td>
                     <td>
-                        <a href="{{route('vehicles.edit',$vehicles->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                        <form method="POST" action="{{route('vehicles.destroy',[$vehicles->id])}}">
+                        <a href="{{route('vehicle.edit',$vehicles->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                        <form method="POST" action="{{route('vehicle.destroy',[$vehicles->id])}}">
                           @csrf
                           @method('delete')
                               <button class="btn btn-danger btn-sm dltBtn" data-id={{$vehicles->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
@@ -106,7 +117,7 @@
             @endforeach
           </tbody>
         </table>
-        <span style="float:right">{{$vehicle->links()}}</span>
+        {{-- <span style="float:right">{{$vehicles->links()}}</span> --}}
         @else
           <h6 class="text-center">No vehicle found!!! Please create vehicles</h6>
         @endif
@@ -186,5 +197,33 @@
                 });
           })
       })
+  </script>
+
+
+<script>
+    $(function() {
+      $('.toggle-class').change(function() {
+          var status = $(this).prop('checked') == true ? 1 : 0;
+          alert(status)
+          var vehicle_id = $(this).data('id');
+
+          $.ajax({
+              type: "POST",
+              dataType: "json",
+              url: '/vehicleStatus',
+              data: {'status': status, 'vehicle_id': vehicle_id},
+              success: function(data){
+                console.log(data.success)
+              }
+          });
+      })
+    })
+
+
+    // $('input[name=toggle]').change(function () {
+    //     var mode=$(this).prop('checked');
+    //     alert(mode)
+
+    // });
   </script>
 @endpush
