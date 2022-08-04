@@ -191,6 +191,7 @@ class VehicleController extends Controller
             request()->session()->flash('success','Banner successfully deleted');
         }
         else{
+
             request()->session()->flash('error','Error occurred while deleting banner');
         }
         return redirect()->route('vehicle.index');
