@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class VehicleController extends Controller
 {
@@ -78,14 +80,27 @@ class VehicleController extends Controller
     public function vehicleStatus(Request $request)
     {
 
-        dd($request->all());
-        $vehicle = Vehicle::find($request->vehicle_id);
+        //dd($request->all());
 
-        $vehicle->status = $request->status;
-        dd($vehicle);
-        $vehicle->save();
+        if ($request->mode == 'true') {
+            DB::table('vehicles')->where('id', $request->id)->update(['status'=>'active']);
+            # code...
+        }
+        else {
+            DB::table('vehicles')->where('id', $request->id)->update(['status'=>'inactive']);
 
-        return response()->json(['success'=>'Status change successfully.']);
+            # code...
+        }
+
+        return response()->json(['msg'=>'Successfully updated status','status'=>true]);
+
+        // $vehicle = Vehicle::find($request->vehicle_id);
+
+        // $vehicle->status = $request->status;
+        // dd($vehicle);
+        // $vehicle->save();
+
+        // return response()->json(['success'=>'Status change successfully.']);
     }
 
     /**
@@ -107,6 +122,17 @@ class VehicleController extends Controller
      */
     public function edit($id)
     {
+        $vehicle=Vehicle::findOrFail($id);
+        if ($vehicle) {
+
+            return view('backend.layouts.vehicles.edit')->with('vehicle',$vehicle);
+
+            # code...
+
+        }
+        else {
+            return back()->with('error','data not found');
+        }
         //
     }
 
@@ -119,6 +145,35 @@ class VehicleController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $vehicle=vehicle::findOrFail($id);
+        $this->validate($request,[
+            'name'=>'string|required',
+            'model'=>'string|required',
+            'plate_no'=>'string|required',
+            'tag_no'=>'string|required',
+            'fueltank'=>'numeric|required',
+            'name'=>'string|required',
+            'status'=>'required|in:active,inactive',
+            'department'=>'required',
+
+        ]);
+        $data=$request->all();
+        // $slug=Str::slug($request->title);
+        // $count=Banner::where('slug',$slug)->count();
+        // if($count>0){
+        //     $slug=$slug.'-'.date('ymdis').'-'.rand(0,999);
+        // }
+        // $data['slug']=$slug;
+        // return $slug;
+        $status=$vehicle->fill($data)->save();
+        if($status){
+            request()->session()->flash('success','Banner successfully updated');
+        }
+        else{
+            request()->session()->flash('error','Error occurred while updating banner');
+        }
+        return redirect()->route('vehicle.index');
         //
     }
 
@@ -130,6 +185,15 @@ class VehicleController extends Controller
      */
     public function destroy($id)
     {
+        $vehicle=vehicle::findOrFail($id);
+        $status=$vehicle->delete();
+        if($status){
+            request()->session()->flash('success','Banner successfully deleted');
+        }
+        else{
+            request()->session()->flash('error','Error occurred while deleting banner');
+        }
+        return redirect()->route('vehicle.index');
         //
     }
 }

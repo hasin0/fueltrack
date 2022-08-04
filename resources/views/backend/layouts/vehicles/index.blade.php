@@ -69,22 +69,8 @@
                     </td> --}}
 
                     <td>
+                        <input value="{{$vehicles->id}}" name="toogle" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $vehicles->status =='active' ? 'checked' : '' }}>
 
-                        {{-- <input  type="checkbox"   value="{{$vehicles->id}}" class="toggle-class" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $vehicles->status == 'active' ? 'checked' : '' }}> --}}
-
-                        {{-- @if($vehicles->status=='active')
-
-                        <input  type="checkbox"   value="{{$vehicles->id}}" name="toogle" class="toggle-class" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $vehicles->status == 'active' ? 'checked' : '' }}>
-
-                            {{-- <span class="badge badge-success">{{$vehicles->status}}</span> --}}
-                        {{-- @else --}}
-
-                        <input data-id="{{$vehicles->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $vehicles->status ? 'checked' : '' }}>
-
-
-                        {{-- <input data-id="{{$vehicles->id}}" class="toggle-class" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $vehicles->status ? 'checked' : '' }}> --}}
-                        {{-- @endif --}}
-                    </td>
                     <td>
                         <a href="{{route('vehicle.edit',$vehicles->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
                         <form method="POST" action="{{route('vehicle.destroy',[$vehicles->id])}}">
@@ -129,6 +115,14 @@
 @push('styles')
   <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" ></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"  />
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+
+
   <style>
       div.dataTables_wrapper div.dataTables_paginate{
           display: none;
@@ -150,8 +144,27 @@
   <script src="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
+{{--
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" ></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"  />
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+  <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+ --}}
+
+
+
+
+
+
+
+
   <!-- Page level custom scripts -->
   <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
+
+
+
   <script>
 
       $('#vehicles-dataTable').DataTable( {
@@ -202,28 +215,60 @@
 
 <script>
     $(function() {
-      $('.toggle-class').change(function() {
-          var status = $(this).prop('checked') == true ? 1 : 0;
-          alert(status)
-          var vehicle_id = $(this).data('id');
+      $('input[name=toogle]').change(function() {
+          var mode = $(this).prop('checked'); //== true ? 1 : 0;
+         // alert(mode)
+          var id = $(this).val();
+        //  alert(id);
 
           $.ajax({
+              url:"{{route('vehicle.status')}}",
+
               type: "POST",
-              dataType: "json",
-              url: '/vehicleStatus',
-              data: {'status': status, 'vehicle_id': vehicle_id},
-              success: function(data){
-                console.log(data.success)
+              // dataType: "json",
+              data:{
+                  // 'status': status, 'vehicle_id': vehicle_id
+                  _token:'{{csrf_token()}}',
+                  mode:mode,
+                  id:id,
+              },
+              success:function(response){
+                  if (response.status) {
+
+                      alert(response.msg);
+
+                  }
+                  else {
+                      alert('Please wait for approval')
+                  }
               }
           });
       })
     })
 
-
-    // $('input[name=toggle]').change(function () {
-    //     var mode=$(this).prop('checked');
-    //     alert(mode)
-
-    // });
   </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @endpush
+
+
+
+
+
+
+
+
+
+
