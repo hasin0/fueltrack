@@ -39,6 +39,19 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
     Route::resource('/vehicle',\App\Http\Controllers\VehicleController::class);
 
     Route::post('vehicle_status',[\App\Http\Controllers\VehicleController::class,'vehicleStatus'])->name('vehicle.status');
+
+
+
+ //users
+ Route::resource('/users',\App\Http\Controllers\UserController::class);
+
+ Route::post('user_status',[\App\Http\Controllers\UserController::class,'userStatus'])->name('user.status');
+
+
+
+
+
+
 });
 
 
