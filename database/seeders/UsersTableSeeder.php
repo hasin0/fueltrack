@@ -24,6 +24,8 @@ class UsersTableSeeder extends Seeder
                 'name'=>'hassan',
                 'phone'=>'081223322',
                 'photo'=>'photo',
+                'sap'=>'3445',
+
 
                 'email'=>'Admin@gmail.com',
                 'password'=>Hash::make('1111'),
@@ -40,6 +42,8 @@ class UsersTableSeeder extends Seeder
                 'name'=>'hassan driver',
                 'phone'=>'08122332213',
                 'photo'=>'photo',
+                'sap'=>'3634',
+
 
                 'email'=>'driver@gmail.com',
                 'password'=>Hash::make('2222'),
@@ -56,6 +60,8 @@ class UsersTableSeeder extends Seeder
                 'name'=>'HOD hassan',
                 'phone'=>'081223322123',
                 'photo'=>'photo',
+                'sap'=>'3212',
+
 
                 'email'=>'Hod@gmail.com',
                 'password'=>Hash::make('1111'),

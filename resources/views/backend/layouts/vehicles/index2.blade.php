@@ -51,7 +51,7 @@
       //  alert(id);
 
         $.ajax({
-            url:"{{route('vehicle.status')}}",
+            url:"{{route('user.status')}}",
 
             type: "POST",
             // dataType: "json",

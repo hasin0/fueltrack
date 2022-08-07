@@ -17,10 +17,12 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('photo');
+            $table->integer('sap')->unique();
+
 
             $table->string('phone');
             $table->enum('role',['admin','driver','HOD'])->default('driver');
-            $table->enum('status',['active','inactive'])->default('active');
+            $table->enum('status',['active','inactive'])->default('inactive');
             $table->string('department');
 
 

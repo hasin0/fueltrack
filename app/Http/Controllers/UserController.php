@@ -52,6 +52,10 @@ class UserController extends Controller
             'role'=>'required|in:admin,user',
             'status'=>'required|in:active,inactive',
             'photo'=>'nullable|string',
+            'sap'=>'string|nullable|unique:users',
+            'phone'=>'string|nullable|unique:users',
+
+
 
         ]);
         // dd($request->all());
@@ -88,13 +92,7 @@ class UserController extends Controller
 
         return response()->json(['msg'=>'Successfully updated status','status'=>true]);
 
-        // $vehicle = Vehicle::find($request->vehicle_id);
 
-        // $vehicle->status = $request->status;
-        // dd($vehicle);
-        // $vehicle->save();
-
-        // return response()->json(['success'=>'Status change successfully.']);
     }
 
 
@@ -153,10 +151,13 @@ class UserController extends Controller
         $this->validate($request,
         [
             'name'=>'string|required|max:30',
-            'email'=>'string|required',
+            'email'=>'string|required|unique:users',
+            'password'=>'string|required',
             'role'=>'required|in:admin,user',
             'status'=>'required|in:active,inactive',
             'photo'=>'nullable|string',
+            'sap'=>'string|nullable|unique:users',
+            'phone'=>'string|nullable|unique:users',
         ]);
         // dd($request->all());
         $data=$request->all();
