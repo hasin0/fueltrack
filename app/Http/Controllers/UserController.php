@@ -48,12 +48,12 @@ class UserController extends Controller
         [
             'name'=>'string|required|max:30',
             'email'=>'string|required|unique:users',
-            'password'=>'string|required',
-            'role'=>'required|in:admin,user',
+            'password'=>'string|required|min:4',
+            'role'=>'required|in:admin,driver,HOD',
             'status'=>'required|in:active,inactive',
             'photo'=>'nullable|string',
-            'sap'=>'string|nullable|unique:users',
-            'phone'=>'string|nullable|unique:users',
+            'sap'=>'numeric|nullable|unique:users|min:4',
+            'phone'=>'numeric|nullable|unique:users|min:11',
 
 
 
@@ -152,12 +152,12 @@ class UserController extends Controller
         [
             'name'=>'string|required|max:30',
             'email'=>'string|required|unique:users',
-            'password'=>'string|required',
-            'role'=>'required|in:admin,user',
+            'password'=>'string|required|min:4',
+            'role'=>'required|in:admin,driver,HOD',
             'status'=>'required|in:active,inactive',
             'photo'=>'nullable|string',
-            'sap'=>'string|nullable|unique:users',
-            'phone'=>'string|nullable|unique:users',
+            'sap'=>'numeric|nullable|unique:users|min:4',
+            'phone'=>'numeric|nullable|unique:users|min:11',
         ]);
         // dd($request->all());
         $data=$request->all();

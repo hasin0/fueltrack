@@ -16,14 +16,14 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('photo');
+            $table->string('photo')->nullable();
             $table->integer('sap')->unique();
 
 
             $table->string('phone');
             $table->enum('role',['admin','driver','HOD'])->default('driver');
             $table->enum('status',['active','inactive'])->default('inactive');
-            $table->string('department');
+            $table->string('department')->nullable();
 
 
 

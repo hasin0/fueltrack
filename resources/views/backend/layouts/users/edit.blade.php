@@ -6,7 +6,7 @@
     <h5 class="card-header">Edit User</h5>
     <div class="card-body">
       <form method="post" action="{{route('users.update',$user->id)}}">
-        @csrf 
+        @csrf
         @method('PATCH')
         <div class="form-group">
           <label for="inputTitle" class="col-form-label">Name</label>
@@ -23,6 +23,38 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
+
+
+
+
+        <div class="form-group">
+            <label for="inputSap" class="col-form-label">Sap</label>
+          <input id="inputSap" type="number" name="sap" placeholder="Enter Sap"  value="{{$user->sap}}" class="form-control">
+          @error('sap')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="inputPhone" class="col-form-label">Phone</label>
+          <input id="inputPhone" type="number" name="phone" placeholder="Enter phone no"  value="{{$user->phone}}" class="form-control">
+          @error('phone')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+        </div>
+
+
+
+
+
+
+
+
+
+
+
 
         {{-- <div class="form-group">
             <label for="inputPassword" class="col-form-label">Password</label>
@@ -47,7 +79,7 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-        @php 
+        @php
         $roles=DB::table('users')->select('role')->where('id',$user->id)->get();
         // dd($roles);
         @endphp
@@ -57,7 +89,9 @@
                 <option value="">-----Select Role-----</option>
                 @foreach($roles as $role)
                     <option value="{{$role->role}}" {{(($role->role=='admin') ? 'selected' : '')}}>Admin</option>
-                    <option value="{{$role->role}}" {{(($role->role=='user') ? 'selected' : '')}}>User</option>
+                    <option value="{{$role->role}}" {{(($role->role=='driver') ? 'selected' : '')}}>Driver</option>
+                    <option value="{{$role->role}}" {{(($role->role=='HOD') ? 'selected' : '')}}>Hod</option>
+
                 @endforeach
             </select>
           @error('role')

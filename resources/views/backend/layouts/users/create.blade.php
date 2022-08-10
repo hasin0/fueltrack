@@ -4,6 +4,17 @@
 
 <div class="card">
     <h5 class="card-header">Add User</h5>
+
+
+    @if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
     <div class="card-body">
       <form method="post" action="{{route('users.store')}}">
         {{csrf_field()}}
@@ -31,6 +42,33 @@
           @enderror
         </div>
 
+
+        <div class="form-group">
+            <label for="inputSap" class="col-form-label">Sap</label>
+          <input id="inputSap" type="number" name="sap" placeholder="Enter Sap"  value="{{old('sap')}}" class="form-control">
+          @error('sap')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="inputphone" class="col-form-label">Phone</label>
+          <input id="inputphone" type="number" name="phone" placeholder="Enter phone no"  value="{{old('phone')}}" class="form-control">
+          @error('phone')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+        </div>
+
+
+
+
+
+
+
+
+
         <div class="form-group">
         <label for="inputPhoto" class="col-form-label">Photo</label>
         <div class="input-group">
@@ -46,10 +84,10 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-        @php
+        {{-- @php
         $roles=DB::table('users')->select('role')->get();
-        @endphp
-        <div class="form-group">
+        @endphp --}}
+        {{-- <div class="form-group">
             <label for="role" class="col-form-label">Role</label>
 
             <select name="role" class="form-control">
@@ -66,10 +104,27 @@
                     <option value="{{$role->role}}">{{$role->role}}</option>
                 @endforeach
             </select> --}}
+          {{-- @error('role')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+          </div>  --}}
+
+
+
+          <div class="form-group">
+            <label for="role" class="col-form-label">Status</label>
+            <select name="role" class="form-control">
+                <option value="admin">Admin</option>
+                <option value="driver">Driver</option>
+                <option value="HOD">HOD</option>
+
+            </select>
           @error('role')
           <span class="text-danger">{{$message}}</span>
           @enderror
           </div>
+
+
           <div class="form-group">
             <label for="status" class="col-form-label">Status</label>
             <select name="status" class="form-control">

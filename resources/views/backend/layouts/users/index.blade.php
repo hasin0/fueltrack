@@ -25,6 +25,8 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Sap</th>
+                <th>Phone</th>
+
 
                 <th>Photo</th>
                 <th>Join Date</th>
@@ -39,6 +41,8 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Sap</th>
+                <th>Phone</th>
+
 
                 <th>Photo</th>
                 <th>Join Date</th>
@@ -56,6 +60,8 @@
                 <td>{{$user->name}}</td>
                 <td>{{$user->email}}</td>
                 <td>{{$user->sap}}</td>
+                <td>{{$user->phone}}</td>
+
 
                 <td>
                     @if($user->photo)
