@@ -21,4 +21,15 @@ class Vehicle extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
+    public function fuelrequests()
+    {
+        return $this->belongsToMany(fuelrequest::class,'fuelrequest_vehicles','vehicle_id','fuelrequest_id');
+    }
+
+
+
+
+
 }

@@ -25,6 +25,22 @@ class CreateFuelrequestsTable extends Migration
               $table->integer('km_used');//->nullable()->change();
 
               $table->integer('liters_km');
+              $table->enum('HOD_approval',['active','inactive'])->default('inactive');
+              $table->enum('Admin_approval',['active','inactive'])->default('inactive');
+              $table->string('order_number')->unique();
+
+              $table->enum('Fuel_station_approval',['issued','Notissued'])->default('Notissued');
+
+              $table->string('Fuel_station')->unique();
+            //   $table->SoftDeletes();
+
+
+
+
+
+
+
+
 
 
 

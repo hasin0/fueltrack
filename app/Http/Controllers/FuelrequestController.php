@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\fuelrequest;
+use App\Models\Vehicle;
+use App\Models\User;
+
 use Illuminate\Http\Request;
 
-class FuelTrackController extends Controller
+
+class FuelrequestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,6 +18,16 @@ class FuelTrackController extends Controller
      */
     public function index()
     {
+
+//         $fuelrequest = fuelrequest::with(['User'])->get();
+//    dd($fuelrequest);
+
+
+
+        $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
+
+        //  dd($vehicle);
+         return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
         //
     }
 
@@ -23,6 +38,12 @@ class FuelTrackController extends Controller
      */
     public function create()
     {
+
+        // $brand=Brand::get();
+         $vehicle=Vehicle::where('status','active')->get();
+
+        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle);//->with('brands',$brand);;
+
         //
     }
 
@@ -34,7 +55,36 @@ class FuelTrackController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       // return $request->all();
+
+        // 'user_id','',
+        // '',
+        // '',
+        // 'order_number','
+        // ',
+
+
+        $this->validate($request,[
+            'present_km'=>'numeric|required',
+            'liters_km'=>'numeric|required',
+
+            'last_fuel_qty'=>'numeric|required',
+            'last_km'=>'numeric|required',
+            'last_km_when_fueling'=>'last_km_when_fueling|required',
+            'fueltank'=>'numeric|required',
+            'km_used'=>'numeric|required',
+            'HOD_approval'=>'required|in:active,inactive',
+            'Admin_approval'=>'required|in:active,inactive',
+            'Fuel_station_approval'=>'required|in:active,inactive',
+
+            'Fuel_station'=>'required',
+
+
+
+
+         ]);
+
+
     }
 
     /**

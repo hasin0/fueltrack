@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
+use App\Models\User;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +18,8 @@ class VehicleController extends Controller
      */
     public function index()
     {
+        $vehicle = Vehicle::with(['User'])->get();
+        dd($vehicle);
 
         $vehicle=Vehicle::orderBy('id','DESC')->paginate(10);
 
@@ -44,6 +48,7 @@ class VehicleController extends Controller
     public function store(Request $request)
     {
         //
+
 
          //return $request->all();
 

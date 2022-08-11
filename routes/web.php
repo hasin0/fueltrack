@@ -50,6 +50,12 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 
 
 
+ //fuelrequest
+ Route::resource('/fuelrequests',\App\Http\Controllers\FuelrequestController::class);
+
+ Route::post('user_status',[\App\Http\Controllers\FuelrequestController::class,'userStatus'])->name('user.status');
+
+
 
 
 });
