@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+
 
 class fuelrequest extends Model
 {
@@ -21,22 +23,22 @@ class fuelrequest extends Model
      'Admin_approval',
      'order_number','
      Fuel_station_approval',
-     'Fuel_station'];
+     'Fuel_station','user_id'];
 
 
      public function vehicles(){
 
 
-        return $this->belongsToMany(Vehicle::class,'fuelrequest_vehicles','fuelrequest_id','vehicle_id');
+        return $this->belongsToMany(Vehicle::class);//->withTimestamps();
         //'vehicles','requestfuel','driver_id'
     }
 
 
 
-    public function users(){
+    public function user(){
 
 
-        return $this->hasMany(User::class,'user_id');
+        return $this->belongsTo(User::class);
        // return $this->belongsToMany(drivers::class,'drivers','requestfuel','vehicle_id');
 
     }

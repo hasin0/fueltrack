@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\fuelrequest;
 use App\Models\Vehicle;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
 
@@ -19,12 +20,22 @@ class FuelrequestController extends Controller
     public function index()
     {
 
-//         $fuelrequest = fuelrequest::with(['User'])->get();
-//    dd($fuelrequest);
+
+
+        $fuelrequest = fuelrequest::with(['vehicles'])->get();
+ dd($fuelrequest);
+
+
+//     $fuelrequest=fuelrequest::find(4);
+
+//     $vehicle=Vehicle::find(6);
+
+//   return  $vehicle->fuelrequests()->attach($fuelrequest);
 
 
 
-        $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
+
+       // $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
 
         //  dd($vehicle);
          return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
@@ -40,9 +51,9 @@ class FuelrequestController extends Controller
     {
 
         // $brand=Brand::get();
-         $vehicle=Vehicle::where('status','active')->get();
+        // $vehicle=Vehicle::where('status','active')->get();
 
-        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle);//->with('brands',$brand);;
+        return view('backend.layouts.fuelrequests.create');//->with('vehicle',$vehicle);//->with('brands',$brand);;
 
         //
     }
@@ -70,12 +81,14 @@ class FuelrequestController extends Controller
 
             'last_fuel_qty'=>'numeric|required',
             'last_km'=>'numeric|required',
-            'last_km_when_fueling'=>'last_km_when_fueling|required',
-            'fueltank'=>'numeric|required',
+            'last_km_when_fueling'=>'numeric|required',
+            'vehicle_id'=>'exists:vehicles,id,fueltank|required',               'vehicle_id'=>'exists:vehicles,id|required',
+           // 'vehicle_id'=>'exists:vehicles,id|required',
+
             'km_used'=>'numeric|required',
             'HOD_approval'=>'required|in:active,inactive',
             'Admin_approval'=>'required|in:active,inactive',
-            'Fuel_station_approval'=>'required|in:active,inactive',
+            'Fuel_station_approval'=>'required|in:issued,Notissued',
 
             'Fuel_station'=>'required',
 
@@ -83,6 +96,48 @@ class FuelrequestController extends Controller
 
 
          ]);
+
+         $data['order_number']='ORD-'.strtoupper(Str::random(10));
+
+         $data=$request->all();
+         $data['user_id']=auth()->id();
+         $data['order_number']='ORD-'.strtoupper(Str::random(10));
+
+
+
+
+         $data['km_used']=$data['last_km']+$data['liters_km'];
+
+         //
+       //  $vehicle=Vehicle::where('status','active')->get();
+
+
+
+
+         $data=fuelrequest::create($data);
+        // $data->vehicles()->sync($data['vehicle_id']);
+
+        $data=$data['vehicle_id']->vehicles()->attach($data);
+
+        dd($data);
+
+
+
+
+
+
+         if ($data) {
+            return redirect()->route('fuelrequests.index', ['parameterKey' => 'success']);
+            # code...
+         }else {
+            return redirect()->back()->withErrors('someting went wrong')->withInput();
+         }
+
+         $data->vehicles()->attach(request('vehicles'));
+
+
+
+
 
 
     }

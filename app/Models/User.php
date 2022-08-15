@@ -6,6 +6,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\fuelrequest;
+
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -53,4 +55,24 @@ class User extends Authenticatable
     {
         return $this->hasOne(Vehicle::class);
     }
+
+
+
+    public function fuelrequests()
+  {
+
+  //  return $this->belongsTo(User::class);
+
+      return $this->hasMany(fuelrequest::class);
+
+
+    //return $this->hasOne(User::class);
+
+
+  }
+
+
+
+
+
 }

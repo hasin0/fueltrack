@@ -65,6 +65,10 @@
           <tbody>
             @foreach($fuelrequest as $fuelrequests)
 
+            {{-- @php
+            $shipping_charge=DB::table('vehicles')->where('id',$order->shipping_id)->pluck('price');
+            @endphp --}}
+
 
                 <tr>
                     <td>{{$fuelrequests->id}}</td>

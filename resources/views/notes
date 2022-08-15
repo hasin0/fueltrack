@@ -194,3 +194,29 @@
       @endforeach
     </tbody>
   </table>
+
+
+
+  # \App\Models\User::factory(10)->create();
+  // \App\Models\Vehicle::factory(10)->create();
+
+
+  $this->call(VehicleSeeder::class);
+  //           \App\Models\Vehicle::factory(10)->create();
+
+
+
+
+
+  Schema::create('fuelrequest_vehicles', function (Blueprint $table) {
+    $table->id();
+    $table->timestamps();
+    $table->unsignedBigInteger('vehicle_id')->index();
+    $table->unsignedBigInteger('fuelrequest_id')->index();
+
+    $table->unique(['fuelrequest_id','vehicle_id']);
+
+
+    $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+    $table->foreign('fuelrequest_id')->references('id')->on('fuelrequests')->onDelete('cascade');
+});

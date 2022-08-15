@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFuelrequestVehiclesTable extends Migration
+class CreateFuelrequestVehicleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateFuelrequestVehiclesTable extends Migration
      */
     public function up()
     {
-        Schema::create('fuelrequest_vehicles', function (Blueprint $table) {
+        Schema::create('fuelrequest_vehicle', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+
             $table->unsignedBigInteger('vehicle_id')->index();
             $table->unsignedBigInteger('fuelrequest_id')->index();
 
-            $table->unique(['fuelrequest_id','vehicle_id']);
+           // $table->unique(['fuelrequest_id','vehicle_id']);
 
 
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
@@ -34,6 +35,6 @@ class CreateFuelrequestVehiclesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fuelrequest_vehicles');
+        Schema::dropIfExists('fuelrequest_vehicle');
     }
 }

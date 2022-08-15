@@ -31,7 +31,9 @@ class CreateFuelrequestsTable extends Migration
 
               $table->enum('Fuel_station_approval',['issued','Notissued'])->default('Notissued');
 
-              $table->string('Fuel_station')->unique();
+              $table->string('Fuel_station');
+              //$table->unsignedBigInteger('user_id');
+
             //   $table->SoftDeletes();
 
 
@@ -44,7 +46,7 @@ class CreateFuelrequestsTable extends Migration
 
 
 
-             $table->foreign('user_id')->references('id')->on('users');
+             $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE')->onUpdate('CASCADE');;
              // $table->foreign('vehicles_id')->references('id')->on('vehicles');
         });
     }

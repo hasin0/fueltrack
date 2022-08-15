@@ -18,8 +18,13 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        $vehicle = Vehicle::with(['User'])->get();
-        dd($vehicle);
+       // $vehicle = Vehicle::with(['User'])->get();
+       // dd($vehicle);
+
+
+       $vehicle = Vehicle::with(['fuelrequests'])->get();
+       dd($vehicle);
+
 
         $vehicle=Vehicle::orderBy('id','DESC')->paginate(10);
 

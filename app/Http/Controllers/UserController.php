@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Models\fuelrequest;
+
 
 
 use App\Models\User;
@@ -19,6 +21,10 @@ class UserController extends Controller
      */
     public function index()
     {
+
+        //$users = User::with(['fuelrequests'])->get();
+        //dd($users);
+
         $users= User::orderBy('id','ASC')->paginate(10);
         return view('backend.layouts.users.index')->with('users',$users);
         //

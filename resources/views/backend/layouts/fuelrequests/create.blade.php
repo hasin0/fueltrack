@@ -104,7 +104,7 @@
 
             <select name="vehicle_id" class="form-control">
                 <option value="">--Select vehicle--</option>
-               @foreach($vehicle as $vehicles)
+               @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles)
                 <option value="{{$vehicles->id}}">Car-Tag {{$vehicles->tag_no}} :{{$vehicles->fueltank}}Liters: {{$vehicles->department}}</option>
                @endforeach
             </select>
