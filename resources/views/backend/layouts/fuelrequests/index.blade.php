@@ -65,9 +65,10 @@
           <tbody>
             @foreach($fuelrequest as $fuelrequests)
 
-            {{-- @php
-            $shipping_charge=DB::table('vehicles')->where('id',$order->shipping_id)->pluck('price');
-            @endphp --}}
+             @php
+            $vehicle_fueltank=DB::table('vehicles')->where('id',$fuelrequests->vehicle_id)->pluck('fueltank','department');
+            @endphp
+
 
 
                 <tr>
@@ -79,7 +80,7 @@
                     <td>{{$fuelrequests->last_km}}</td>
                     <td>{{$fuelrequests->last_km_when_fueling}}</td>
                     <td>{{$fuelrequests->km_used}}</td>
-
+                    <td>@foreach($vehicle_fueltank as $data) $ {{number_format($data,2)}} @endforeach</td>
                     <td>{{$fuelrequests->fueltank}}</td>
                     <td>{{$fuelrequests->department}}</td>
                     <td>{{$fuelrequests->order_number}}</td>

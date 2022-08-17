@@ -22,15 +22,20 @@ class FuelrequestController extends Controller
 
 
 
-        $fuelrequest = fuelrequest::with(['vehicles'])->get();
- dd($fuelrequest);
+     $fuelrequest = fuelrequest::with(['vehicles','user'])->get();
+     dd($fuelrequest);
+     $fuelrequest = fuelrequest::find(1);
+     return $fuelrequest;
 
 
-//     $fuelrequest=fuelrequest::find(4);
+     //return  $fuelrequest->vehicles();//->attach($vehicle);
 
-//     $vehicle=Vehicle::find(6);
 
-//   return  $vehicle->fuelrequests()->attach($fuelrequest);
+     //return $fuelrequest->vehicle;
+     // $fuelrequest;
+
+
+
 
 
 
@@ -38,7 +43,7 @@ class FuelrequestController extends Controller
        // $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
 
         //  dd($vehicle);
-         return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
+        return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
         //
     }
 
@@ -51,9 +56,11 @@ class FuelrequestController extends Controller
     {
 
         // $brand=Brand::get();
-        // $vehicle=Vehicle::where('status','active')->get();
+         $vehicle=Vehicle::where('status','active')->get();
+               // dd($vehicle);
 
-        return view('backend.layouts.fuelrequests.create');//->with('vehicle',$vehicle);//->with('brands',$brand);;
+
+        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle);//->with('brands',$brand);;
 
         //
     }
@@ -82,7 +89,8 @@ class FuelrequestController extends Controller
             'last_fuel_qty'=>'numeric|required',
             'last_km'=>'numeric|required',
             'last_km_when_fueling'=>'numeric|required',
-            'vehicle_id'=>'exists:vehicles,id,fueltank|required',               'vehicle_id'=>'exists:vehicles,id|required',
+           // 'vehicle_id'=>'exists:vehicles,id,fueltank|required',
+               //'vehicle_id'=>'exists:vehicles,id|required',
            // 'vehicle_id'=>'exists:vehicles,id|required',
 
             'km_used'=>'numeric|required',
@@ -91,10 +99,6 @@ class FuelrequestController extends Controller
             'Fuel_station_approval'=>'required|in:issued,Notissued',
 
             'Fuel_station'=>'required',
-
-
-
-
          ]);
 
          $data['order_number']='ORD-'.strtoupper(Str::random(10));
@@ -109,17 +113,13 @@ class FuelrequestController extends Controller
          $data['km_used']=$data['last_km']+$data['liters_km'];
 
          //
-       //  $vehicle=Vehicle::where('status','active')->get();
-
+         $vehicle=$data['vehicle_id'];
 
 
 
          $data=fuelrequest::create($data);
-        // $data->vehicles()->sync($data['vehicle_id']);
 
-        $data=$data['vehicle_id']->vehicles()->attach($data);
-
-        dd($data);
+     $data->vehicles()->attach($vehicle);
 
 
 
@@ -133,7 +133,6 @@ class FuelrequestController extends Controller
             return redirect()->back()->withErrors('someting went wrong')->withInput();
          }
 
-         $data->vehicles()->attach(request('vehicles'));
 
 
 

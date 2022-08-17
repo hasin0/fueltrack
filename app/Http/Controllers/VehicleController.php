@@ -22,8 +22,8 @@ class VehicleController extends Controller
        // dd($vehicle);
 
 
-       $vehicle = Vehicle::with(['fuelrequests'])->get();
-       dd($vehicle);
+    //    $vehicle = Vehicle::with(['fuelrequests'])->get();
+    //    dd($vehicle);
 
 
         $vehicle=Vehicle::orderBy('id','DESC')->paginate(10);
