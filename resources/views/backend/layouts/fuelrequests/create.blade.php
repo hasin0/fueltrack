@@ -150,7 +150,7 @@
 
 
 
-
+{{--
 
           <div class="form-group">
             <label for="HOD_approval" class="col-form-label">HOD_approval <span class="text-danger">*</span></label>
@@ -191,7 +191,7 @@
             @error('Fuel_station_approval')
             <span class="text-danger">{{$message}}</span>
             @enderror
-          </div>
+          </div> --}}
 
 
 

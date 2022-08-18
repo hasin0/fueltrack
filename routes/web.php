@@ -53,8 +53,11 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
  //fuelrequest
  Route::resource('/fuelrequests',\App\Http\Controllers\FuelrequestController::class);
 
- Route::post('user_status',[\App\Http\Controllers\FuelrequestController::class,'userStatus'])->name('user.status');
+ Route::post('Admin_approval',[\App\Http\Controllers\FuelrequestController::class,'AdminStatus'])->name('admin.status');
 
+ Route::post('HOD_approval',[\App\Http\Controllers\FuelrequestController::class,'HodStatus'])->name('hod.status');
+
+ Route::post('Fuel_station_approval',[\App\Http\Controllers\FuelrequestController::class,'FSAStatus'])->name('FSA.status');
 
 
 

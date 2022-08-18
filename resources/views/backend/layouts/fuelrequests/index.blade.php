@@ -22,6 +22,8 @@
           <thead>
             <tr>
               <th>S.N.</th>
+              <th>Name/phone</th>
+
               <th>present_km</th>
               <th>liters_km</th>
               <th>last_fuel_qty</th>
@@ -43,6 +45,8 @@
           <tfoot>
             <tr>
                <th>S.N.</th>
+               <th>Name/phone</th>
+
               <th>present_km</th>
               <th>liters_km</th>
               <th>last_fuel_qty</th>
@@ -74,15 +78,19 @@
                 <tr>
                     <td>{{$fuelrequests->id}}</td>
 
+                    <td>{{$fuelrequests->user->name}}/{{$fuelrequests->user->phone}}</td>
+
+
                     <td>{{$fuelrequests->present_km}}</td>
                     <td>{{$fuelrequests->liters_km}}</td>
                     <td>{{$fuelrequests->last_fuel_qty}}</td>
                     <td>{{$fuelrequests->last_km}}</td>
                     <td>{{$fuelrequests->last_km_when_fueling}}</td>
                     <td>{{$fuelrequests->km_used}}</td>
-                    <td>@foreach($vehicle_fueltank as $data) $ {{number_format($data,2)}} @endforeach</td>
-                    <td>{{$fuelrequests->fueltank}}</td>
-                    <td>{{$fuelrequests->department}}</td>
+                    {{-- <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank - $fuelrequests->last_km_when_fueling)}}  @endforeach</td> --}}
+
+                    <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank)}}  @endforeach</td>
+                    <td>@foreach($fuelrequests->vehicles as $data){{($data->department)}} @endforeach</td>
                     <td>{{$fuelrequests->order_number}}</td>
                     <td>{{$fuelrequests->Fuel_station}}</td>
 
@@ -100,18 +108,18 @@
                     </td> --}}
 
                     <td>
-                        <input value="{{$fuelrequests->id}}" name="toogle" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $fuelrequests->Admin_approval =='active' ? 'checked' : '' }}>
+                        <input value="{{$fuelrequests->id}}" name="toogle1" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $fuelrequests->Admin_approval =='active' ? 'checked' : '' }}>
 
                     </td>
 
                     <td>
-                        <input value="{{$fuelrequests->id}}" name="toogle" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $fuelrequests->HOD_approval =='active' ? 'checked' : '' }}>
+                        <input value="{{$fuelrequests->id}}" name="toogle2" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $fuelrequests->HOD_approval =='active' ? 'checked' : '' }}>
 
                     </td>
 
 
                     <td>
-                        <input value="{{$fuelrequests->id}}" name="toogle" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $fuelrequests->Fuel_station_approval =='active' ? 'checked' : '' }}>
+                        <input value="{{$fuelrequests->id}}" name="toogle3" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="issued" data-off="Notissued" {{ $fuelrequests->Fuel_station_approval =='issued' ? 'checked' : '' }}>
 
                     </td>
 
@@ -296,6 +304,131 @@
 
 
 
+
+
+
+
+
+<script>
+    $(function() {
+      $('input[name=toogle1]').change(function() {
+          var mode = $(this).prop('checked'); //== true ? 1 : 0;
+         // alert(mode)
+          var id = $(this).val();
+        //  alert(id);
+
+          $.ajax({
+              url:"{{route('admin.status')}}",
+
+              type: "POST",
+              // dataType: "json",
+              data:{
+                  // 'status': status, 'vehicle_id': vehicle_id
+                  _token:'{{csrf_token()}}',
+                  mode:mode,
+                  id:id,
+              },
+              success:function(response){
+                  if (response.status) {
+
+                      alert(response.msg);
+
+                  }
+                  else {
+                      alert('Please wait for approval')
+                  }
+              }
+          });
+      })
+    })
+
+  </script>
+
+
+
+
+
+
+
+
+
+<script>
+    $(function() {
+      $('input[name=toogle2]').change(function() {
+          var mode = $(this).prop('checked'); //== true ? 1 : 0;
+         // alert(mode)
+          var id = $(this).val();
+        //  alert(id);
+
+          $.ajax({
+              url:"{{route('hod.status')}}",
+
+              type: "POST",
+              // dataType: "json",
+              data:{
+                  // 'status': status, 'vehicle_id': vehicle_id
+                  _token:'{{csrf_token()}}',
+                  mode:mode,
+                  id:id,
+              },
+              success:function(response){
+                  if (response.status) {
+
+                      alert(response.msg);
+
+                  }
+                  else {
+                      alert('Please wait for approval')
+                  }
+              }
+          });
+      })
+    })
+
+  </script>
+
+
+
+
+
+
+
+
+
+<script>
+    $(function() {
+      $('input[name=toogle3]').change(function() {
+          var mode = $(this).prop('checked'); //== true ? 1 : 0;
+         // alert(mode)
+          var id = $(this).val();
+        //  alert(id);
+
+          $.ajax({
+              url:"{{route('FSA.status')}}",
+
+              type: "POST",
+              // dataType: "json",
+              data:{
+                  // 'status': status, 'vehicle_id': vehicle_id
+                  _token:'{{csrf_token()}}',
+                  mode:mode,
+                  id:id,
+              },
+              success:function(response){
+                  if (response.status) {
+
+                      alert(response.msg);
+
+                  }
+                  else {
+                      alert('Please wait for approval')
+                  }
+              }
+          });
+      })
+    })
+
+  </script>
 
 
 

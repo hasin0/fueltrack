@@ -1,11 +1,11 @@
 @extends('backend.layouts.master')
 
-@section('title','E-SHOP || Vehicle Create')
+@section('title','E-SHOP || fuelrequests Create')
 
 @section('main-content')
 
 <div class="card">
-    <h5 class="card-header">Edit vehicle</h5>
+    <h5 class="card-header">Requestfuels</h5>
     <div class="card-body">
 
 @if ($errors->any())
@@ -17,36 +17,59 @@
     </ul>
 </div>
 @endif
-      <form method="post" action="{{route('vehicle.update',$vehicle->id)}}">
+
+
+     <form method="post" action="{{route('fuelrequests.update',$fuelrequests->id)}}">
         {{csrf_field()}}
         @method('patch')
+
         <div class="form-group">
-          <label for="inputTitle" class="col-form-label">Name <span class="text-danger">*</span></label>
-        <input id="inputTitle" type="text" name="name" placeholder="Enter name"  value="{{($vehicle->name)}}" class="form-control">
-        @error('name')
+          <label for="inputTitle" class="col-form-label">present_km <span class="text-danger">*</span></label>
+        <input id="inputTitle" type="number" name="present_km" placeholder="Enter present_km"  value="{{($fuelrequests->present_km)}}" class="form-control">
+        @error('present_km')
         <span class="text-danger">{{$message}}</span>
         @enderror
         </div>
+
         <div class="form-group">
-            <label for="inputTitle" class="col-form-label">Model <span class="text-danger">*</span></label>
-          <input id="inputTitle" type="text" name="model" placeholder="Enter model"  value="{{$vehicle->model}}" class="form-control">
-          @error('model')
+            <label for="inputTitle" class="col-form-label">last_fuel_qty <span class="text-danger">*</span></label>
+          <input id="inputTitle" type="number" name="last_fuel_qty" placeholder="Enter last_fuel_qty"  value="{{($fuelrequests->last_fuel_qty)}}}" class="form-control">
+          @error('last_fuel_qty')
           <span class="text-danger">{{$message}}</span>
           @enderror
           </div>
 
           <div class="form-group">
-            <label for="inputTitle" class="col-form-label">Plate-Number <span class="text-danger">*</span></label>
-          <input id="inputTitle" type="text" name="plate_no" placeholder="Enter plate_no"  value="{{$vehicle->plate_no}}" class="form-control">
-          @error('plate_no')
+            <label for="inputTitle" class="col-form-label">last_km <span class="text-danger">*</span></label>
+          <input id="inputTitle" type="number" name="last_km" placeholder="Enter last_km"  value="{{$fuelrequests->last_km}}" class="form-control">
+          @error('last_km')
           <span class="text-danger">{{$message}}</span>
           @enderror
           </div>
 
           <div class="form-group">
-            <label for="inputTitle" class="col-form-label">TAGN <span class="text-danger">*</span></label>
-          <input id="inputTitle" type="text" name="tag_no" placeholder="Enter tag_no"  value="{{$vehicle->tag_no}}" class="form-control">
-          @error('tag_no')
+            <label for="inputTitle" class="col-form-label">last_km_when_fueling <span class="text-danger">*</span></label>
+          <input id="inputTitle" type="number" name="last_km_when_fueling" placeholder="Enter last_km_when_fueling"  value="{{$fuelrequests->last_km_when_fueling}}" class="form-control">
+          @error('last_km_when_fueling')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+          </div>
+
+
+          <div class="form-group">
+            <label for="inputTitle" class="col-form-label">km_used <span class="text-danger">*</span></label>
+          <input id="inputTitle" type="number" name="km_used" placeholder="Enter last_km_when_fueling"  value="{{$fuelrequests->last_km_when_fueling}}" class="form-control">
+          @error('km_used')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+          </div>
+
+
+
+          <div class="form-group">
+            <label for="inputTitle" class="col-form-label">liters_km <span class="text-danger">*</span></label>
+          <input id="inputTitle" type="number" name="liters_km" placeholder="Enter liters_km"  value="{{$fuelrequests->liters_km}}" class="form-control">
+          @error('liters_km')
           <span class="text-danger">{{$message}}</span>
           @enderror
           </div>
@@ -54,60 +77,136 @@
 
 
 
+
+
+
+
+
+
+
+
+
           <div class="form-group">
-            <label for="inputTitle" class="col-form-label">FuelTank <span class="text-danger">*</span></label>
-          <input id="inputTitle" type="number" name="fueltank" placeholder="Enter fueltank"  value="{{$vehicle->fueltank}}" class="form-control">
-          @error('fueltank')
-          <span class="text-danger">{{$message}}</span>
-          @enderror
+            <label for="vehicle_id">VehicleName & FuelTank</label>
+            {{-- {{$brands}} --}}
+
+            <select name="vehicle_id" class="form-control">
+                <option value="">--Select vehicle--</option>
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($vehicle as $vehicles )
+
+                <option value="{{$vehicles->id}}">Car-Tag {{$vehicles->tag_no}} :{{$vehicles->fueltank}}Liters: {{$vehicles->department}}</option>
+               @endforeach
+            </select>
           </div>
 
 
 
 
 
-          <div class="form-group">
+
+
+
+
+
+          {{-- <div class="form-group">
             <label for="department" class="col-form-label">Department <span class="text-danger">*</span></label>
             <select name="department" class="form-control">
-                <option value="Admin" {{(($vehicle->department=='Admin') ? 'selected' : '')}}>Admin</option>
-                <option value="IT" {{(($vehicle->department=='IT') ? 'selected' : '')}}>IT</option>
-                <option value="HR" {{(($vehicle->department=='HR') ? 'selected' : '')}}>HR</option>
-                <option value="HSE" {{(($vehicle->department=='HSE') ? 'selected' : '')}}>HSE</option>
-                <option value="Batching plant" {{(($vehicle->department=='Batching') ? 'selected' : '')}}>Batching plant</option>
-                <option value="Legal" {{(($vehicle->department=='Legal') ? 'selected' : '')}}>Legal</option>
-                <option value="Logistic" {{(($vehicle->department=='Logistic') ? 'selected' : '')}}>Logistic</option>
-                <option value="Security" {{(($vehicle->department=='Security') ? 'selected' : '')}}>Security</option>
-                <option value="GED" {{(($vehicle->department=='GED') ? 'selected' : '')}}>GED</option>
-                <option value="Mechanical" {{(($vehicle->department=='Mechanical') ? 'selected' : '')}}>Mechanical</option>
-                <option value="Process" {{(($vehicle->department=='Process') ? 'selected' : '')}}>Process</option>
-                <option value="Electrical" {{(($vehicle->department=='Electrical') ? 'selected' : '')}}>Electrical</option>
-                <option value="Marine" {{(($vehicle->department=='Marine') ? 'selected' : '')}}>Marine</option>
-                <option value="Chemical" {{(($vehicle->department=='Chemical') ? 'selected' : '')}}>Chemical</option>
-                <option value="Warehouse" {{(($vehicle->department=='Warehouse') ? 'selected' : '')}}>Warehouse</option>
-                <option value="Marketing" {{(($vehicle->department=='Marketing') ? 'selected' : '')}}>Marketing</option>
-                <option value="Clinc"> {{(($vehicle->department=='Clinc') ? 'selected' : '')}}Clinc</option>
+                <option value="Admin">Admin</option>
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="HSE">HSE</option>
+                <option value="Batching plant">Batching plant</option>
+                <option value="Legal">Legal</option>
+                <option value="Logistic">Logistic</option>
+                <option value="Security">Security</option>
+                <option value="GED">GED</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Process">Process</option>
+                <option value="Electrical">Electrical</option>
+                <option value="Marine">Marine</option>
+                <option value="Chemical">Chemical</option>
+                <option value="Warehouse">Warehouse</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Clinc">Clinc</option>
 
 
             </select>
             @error('department')
             <span class="text-danger">{{$message}}</span>
             @enderror
+          </div> --}}
+
+
+
+{{--
+
+          <div class="form-group">
+            <label for="HOD_approval" class="col-form-label">HOD_approval <span class="text-danger">*</span></label>
+            <select name="HOD_approval" class="form-control">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+            @error('HOD_approval')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
           </div>
+
+
+
+
+          <div class="form-group">
+            <label for="Admin_approval" class="col-form-label">Admin_approval <span class="text-danger">*</span></label>
+            <select name="Admin_approval" class="form-control">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+            @error('Admin_approval')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
+
+
+
+
+          <div class="form-group">
+            <label for="Fuel_station_approval" class="col-form-label">Fuel_station_approval <span class="text-danger">*</span></label>
+            <select name="Fuel_station_approval" class="form-control">
+                <option value="">--Select--</option>
+
+                <option value="issued">Issued</option>
+                <option value="Notissued">Not-Issued</option>
+            </select>
+            @error('Fuel_station_approval')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div> --}}
+
 
 
 
 
 
           <div class="form-group">
-            <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
-            <select name="status" class="form-control">
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+            <label for="Fuel_station" class="col-form-label">Fuel-station <span class="text-danger">*</span></label>
+            <select name="Fuel_station" class="form-control">
+                <option value="">--Select--</option>
+
+
+
+                <option value="Total-station"  {{(($fuelrequests->Fuel_station=='Total-station') ? 'selected' : '')}}>Total-station</option>
+                <option value="NNPC-station"  {{(($fuelrequests->Fuel_station=='NNPC-station') ? 'selected' : '')}}>NNPC-station</option>
+                <option value="Petrolcam-station"  {{(($fuelrequests->Fuel_station=='Petrolcam-station') ? 'selected' : '')}}>Petrolcam-station</option>
+
             </select>
-            @error('status')
+            @error('Fuel_station')
             <span class="text-danger">{{$message}}</span>
             @enderror
           </div>
+
+
+
+
 
 
 

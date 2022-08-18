@@ -24,7 +24,7 @@ class CreateVehiclesTable extends Migration
 
             $table->integer('fueltank');
           //  $table->unsignedBigInteger('user_id');
-            $table->enum('status',['active','inactive'])->default('active');
+            $table->enum('status',['active','inactive'])->default('inactive');
 
             $table->timestamps();
            // $table->foreign('user_id')->references('id')->on('users');
