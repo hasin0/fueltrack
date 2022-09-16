@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\department;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +17,9 @@ class VehicleSeeder extends Seeder
     public function run()
     {
 
+       // $department = department::all()->pluck('id')->toArray();
+        // foreach(DB::table('departments')->get() as $department) { DB::table('vehicles')->insert(['department_id' => $department->id]); }
+
         DB::table('vehicles')->insert([
             //admin
 
@@ -26,7 +30,7 @@ class VehicleSeeder extends Seeder
                 'tag_no'=>'34',
                 'fueltank'=>'45',
                 'status'=>'active',
-                'department'=>'ICT',
+                'department_id' =>department::all()//->id
 
 
 
@@ -43,7 +47,7 @@ class VehicleSeeder extends Seeder
                 'tag_no'=>'12',
                 'fueltank'=>'56',
                 'status'=>'active',
-                'department'=>'ADMIN',
+                'department_id' =>department::all()//->id
 
             ],
 
@@ -57,7 +61,8 @@ class VehicleSeeder extends Seeder
                 'tag_no'=>'90',
                 'fueltank'=>'78',
                 'status'=>'active',
-                'department'=>'WAREHOUSE',
+               // 'department_id'=>'3',
+               'department_id' =>department::all()
 
             ]
          ]);

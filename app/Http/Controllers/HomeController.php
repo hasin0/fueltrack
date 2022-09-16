@@ -1,6 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
+
+
 
 use Illuminate\Http\Request;
 
@@ -23,8 +28,42 @@ class HomeController extends Controller
      */
     public function index()
     {
-       // return view('backend.layouts.master');
-       redirect()->route(auth()->user()->role);
+
+        if (Auth::user()->hasRole('Admin')) {
+                  // return view('backend.layouts.index');
+                  return redirect()->route('admin');
+
+        }elseif (Auth::user()->hasRole('HOD')) {
+            return redirect()->route('HOD');
+
+
+            return redirect()->route('HOD');
+        }elseif (Auth::user()->hasRole('Driver')) {
+            return view('backend.layouts.index');
+
+    }else {
+        return view('home');
+    }
+
+        //return view('home');
+
+      // return view('backend.layouts.index');
+      // redirect()->route(auth()->user()->role);
 
     }
+
+
+    // public function HOD()
+    // {
+
+    //     return view('HOD.layouts.index');//, function ($view) {
+
+    //     //});
+
+    // }
+
+
+
+
+
 }

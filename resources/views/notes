@@ -338,3 +338,40 @@ public function store(Request $request)
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+$departments = [
+
+
+
+    //        ' Admin',
+    //        'IT',
+    //        'HR',
+    //        'HSE',
+    //        'Batching plant',
+    //        'Legal',
+    //        'Logistic',
+    //        'Security',
+    //        'GED',
+    //        'Mechanical',
+    //        'Process',
+    //        'Electrical',
+    //        'Marine',
+    //        'Chemical',
+    //        'Warehouse',
+    //        'Marketing',
+    //        'Clinc',
+
+    //     ];
+    //     foreach ($departments as $department) {
+    //         department::create(['name' => $department]);
+    //    }

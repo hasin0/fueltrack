@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\HOD;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\fuelrequest;
 use App\Models\Vehicle;
+use App\Models\department;
+
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-
-
-use Illuminate\Http\Request;
-
 
 class FuelrequestController extends Controller
 {
@@ -19,35 +19,44 @@ class FuelrequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-
-    function __construct()
-    {
-         $this->middleware('permission:fuelrequests-list|fuelrequests-create|fuelrequests-edit|fuelrequests-delete', ['only' => ['index','show']]);
-         $this->middleware('permission:fuelrequests-create', ['only' => ['create','store']]);
-         $this->middleware('permission:fuelrequests-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:fuelrequests-delete', ['only' => ['destroy']]);
-         $this->middleware('permission:fuelrequests-AdminStatus', ['only' => ['AdminStatus']]);
-         $this->middleware('permission:fuelrequests-HodStatus', ['only' => ['HodStatus']]);
-         $this->middleware('permission:fuelrequests-FSAStatus', ['only' => ['FSAStatus']]);
-
-
-
-    }
-
-
-
-
-
     public function index()
     {
 
+            $user=auth()->user();
+
+          //  $user=User::where('department_id',$user->department_id)->get();
+          //  dd($user);
+        // for the whole department count for HODs
+          $fuelrequest=fuelrequest::where('department_id',$user->department_id)->get();//with(['fuelrequests','department'])->get();
 
 
-     $fuelrequest = fuelrequest::with(['vehicles','user'])->get();
-     //dd($fuelrequest);
+
+          // indiviual fuelrequest only
+
+// $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->get();//->with(['vehicles','user'])->get();
+
+     //$user=User::where('department_id',$user->department_id)->with(['fuelrequests','department'])->get();
+
+
+    //  $user=User::where('department_id',$user->department_id)->with(['fuelrequests','department'])->get();
+
+    //   dd($fuelrequest);
     //  $fuelrequest = fuelrequest::find(1);
     //  return $fuelrequest;
+
+    // $fuelrequest = fuelrequest::find(1);
+
+    // $fuelrequest->vehicles();
+
+    //  foreach ($fuelrequest->vehicles as $veH  ) {
+
+    //   return  $veH->department_id; //- $fuelrequest['liters_km'];
+
+
+    //     # code...
+    // }
+
+    //user->department_id;
 
 
      //return  $fuelrequest->vehicles();//->attach($vehicle);
@@ -62,35 +71,35 @@ class FuelrequestController extends Controller
 
 
 
-       // $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
+    //   $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
 
         //  dd($vehicle);
-        return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
+        return view('HOD.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);//->with('fuelrequestC',$fuelrequestC);
         //
     }
 
 
 
 
-    public function AdminStatus(Request $request)
-    {
+    // public function AdminStatus(Request $request)
+    // {
 
-        //dd($request->all());
+    //     //dd($request->all());
 
-        if ($request->mode == 'true') {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['Admin_approval'=>'active']);
-            # code...
-        }
-        else {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['Admin_approval'=>'inactive']);
+    //     if ($request->mode == 'true') {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Admin_approval'=>'active']);
+    //         # code...
+    //     }
+    //     else {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Admin_approval'=>'inactive']);
 
-            # code...
-        }
+    //         # code...
+    //     }
 
-        return response()->json(['msg'=>'Successfully updated status','status'=>true]);
+    //     return response()->json(['msg'=>'Successfully updated status','status'=>true]);
 
 
-    }
+    // }
 
 
 
@@ -120,25 +129,25 @@ class FuelrequestController extends Controller
 
 
 
-    public function FSAStatus(Request $request)
-    {
+    // public function FSAStatus(Request $request)
+    // {
 
-        //dd($request->all());
+    //     //dd($request->all());
 
-        if ($request->mode == 'true') {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'issued']);
-            # code...
-        }
-        else {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'Notissued']);
+    //     if ($request->mode == 'true') {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'issued']);
+    //         # code...
+    //     }
+    //     else {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'Notissued']);
 
-            # code...
-        }
+    //         # code...
+    //     }
 
-        return response()->json(['msg'=>'Successfully updated status','status'=>true]);
+    //     return response()->json(['msg'=>'Successfully updated status','status'=>true]);
 
 
-    }
+    // }
 
 
 
@@ -181,12 +190,19 @@ class FuelrequestController extends Controller
     public function create()
     {
 
+
+        $user=auth()->user();
+
+        $department=department::where('id',$user->department_id)->get();
+        //dd($department);
+
+
         // $brand=Brand::get();
-         $vehicle=Vehicle::where('status','active')->get();
-               // dd($vehicle);
+         $vehicle=Vehicle::where('department_id',$user->department_id)->get();
+            //    dd($vehicle);
 
 
-        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle);//->with('brands',$brand);;
+        return view('HOD.layouts.fuelrequests.create')->with('vehicle',$vehicle)->with('department',$department);;//->with('brands',$brand);;
 
         //
     }
@@ -216,7 +232,7 @@ class FuelrequestController extends Controller
             'last_km'=>'numeric|required',
             'last_km_when_fueling'=>'numeric|required',
             //'vehicle_id'=>'exists:vehicles,id,fueltank|required',
-               //'vehicle_id'=>'exists:vehicles,id|required',
+            'department_id'=>'required',
            // 'vehicle_id'=>'exists:vehicles,id|required',
 
             'km_used'=>'numeric|required',
@@ -227,10 +243,15 @@ class FuelrequestController extends Controller
             'Fuel_station'=>'required',
          ]);
 
-         $data['order_number']='ORD-'.strtoupper(Str::random(10));
 
          $data=$request->all();
+        //  dd($data);
+         $data['order_number']='ORD-'.strtoupper(Str::random(10));
+        //  $data['department_id']=$data->department_id;
+        $data['department_id']=$request->department_id;
+
          $data['user_id']=auth()->id();
+
          $data['order_number']='ORD-'.strtoupper(Str::random(10));
 
 
@@ -275,7 +296,7 @@ class FuelrequestController extends Controller
 
 
          if ($data) {
-            return redirect()->route('fuelrequests.index', ['parameterKey' => 'success']);
+            return redirect()->route('HOD-fuelrequests.index', ['parameterKey' => 'success']);
             # code...
          }else {
             return redirect()->back()->withErrors('someting went wrong')->withInput();
@@ -314,7 +335,7 @@ class FuelrequestController extends Controller
         $fuelrequests=fuelrequest::findOrFail($id);
         if ($fuelrequests) {
 
-            return view('backend.layouts.fuelrequests.edit')->with('fuelrequests',$fuelrequests)->with('vehicle',$vehicle);
+            return view('HOD.layouts.fuelrequests.edit')->with('fuelrequests',$fuelrequests)->with('vehicle',$vehicle);
 
             # code...
 
@@ -406,7 +427,7 @@ class FuelrequestController extends Controller
 
 
          if ($fuelrequestss) {
-            return redirect()->route('fuelrequests.index', ['parameterKey' => 'success']);
+            return redirect()->route('HOD-fuelrequests.index', ['parameterKey' => 'success']);
             # code...
          }else {
             return redirect()->back()->withErrors('someting went wrong')->withInput();
@@ -433,6 +454,6 @@ class FuelrequestController extends Controller
 
             request()->session()->flash('error','Error occurred while deleting banner');
         }
-        return redirect()->route('fuelrequests.index');
+        return redirect()->route('HOD-fuelrequests.index');
     }
 }

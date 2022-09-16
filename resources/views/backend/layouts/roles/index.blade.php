@@ -1,5 +1,5 @@
 @extends('backend.layouts.master')
-@section('title','E-SHOP || vehicles Page')
+@section('title','E-SHOP || roless Page')
 @section('main-content')
  <!-- DataTales Example -->
  <div class="card shadow mb-4">
@@ -9,26 +9,23 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">vehicle List</h6>
-      <a href="{{route('vehicle.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add vehicles</a>
+      <h6 class="m-0 font-weight-bold text-primary float-left">roles List</h6>
+      {{-- @can('role-create') --}}
+      <a href="{{route('roles.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add roles</a>
+      {{-- @endcan --}}
     </div>
+
     <div class="card-body">
       <div class="table-responsive">
-        @if(count($vehicles)>0)
+        @if(count($roles)>0)
 
 
 
-        <table class="table table-bordered" id="vehicles-dataTable" width="100%" cellspacing="0">
+        <table class="table table-bordered" id="roless-dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
               <th>S.N.</th>
               <th>Name</th>
-              <th>Model</th>
-              <th>Plate_no</th>
-              <th>TagN</th>
-              <th>Fueltank_Size</th>
-              <th>Department</th>
-              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -36,47 +33,39 @@
             <tr>
                 <th>S.N.</th>
                 <th>Name</th>
-                <th>Model</th>
-                <th>Plate_no</th>
-                <th>TagN</th>
-                <th>Fueltank_Size</th>
-                <th>Department</th>
-                <th>Status</th>
                 <th>Action</th>
               </tr>
           </tfoot>
 
 
           <tbody>
-            @foreach($vehicles as $vehicles)
+            @foreach($roles as $roless)
                 <tr>
-                    <td>{{$vehicles->id}}</td>
-                    <td>{{$vehicles->name}}</td>
-                    <td>{{$vehicles->model}}</td>
-                    <td>{{$vehicles->plate_no}}</td>
-                    <td>{{$vehicles->tag_no}}</td>
-                    <td>{{$vehicles->fueltank}}</td>
-                    <td>{{$vehicles->department->name}}</td>
+                    <td>{{$roless->id}}</td>
+                    <td>{{$roless->name}}</td>
+
 
 
 
                     {{-- <td>
-                        @if($vehicles->photo)
-                            <img src="{{$vehicles->photo}}" class="img-fluid zoom" style="max-width:80px" alt="{{$vehicles->photo}}">
+                        @if($roless->photo)
+                            <img src="{{$roless->photo}}" class="img-fluid zoom" style="max-width:80px" alt="{{$roless->photo}}">
                         @else
                             <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid zoom" style="max-width:100%" alt="avatar.png">
                         @endif
                     </td> --}}
 
-                    <td>
-                        <input value="{{$vehicles->id}}" name="toogle" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $vehicles->status =='active' ? 'checked' : '' }}>
+                    {{-- <td>
+                        <input value="{{$roless->id}}" name="toogle" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $roless->status =='active' ? 'checked' : '' }}>
 
+
+                    --}}
                     <td>
-                        <a href="{{route('vehicle.edit',$vehicles->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                        <form method="POST" action="{{route('vehicle.destroy',[$vehicles->id])}}">
+                        <a href="{{route('roles.edit',$roless->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                        <form method="POST" action="{{route('roles.destroy',[$roless->id])}}">
                           @csrf
                           @method('delete')
-                              <button class="btn btn-danger btn-sm dltBtn" data-id={{$vehicles->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                              <button class="btn btn-danger btn-sm dltBtn" data-id={{$roless->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
                         </form>
                     </td>
                     {{-- Delete Modal --}}
@@ -90,7 +79,7 @@
                               </button>
                             </div>
                             <div class="modal-body">
-                              <form method="post" action="{{ route('vehicle.destroy',$user->id) }}">
+                              <form method="post" action="{{ route('roles.destroy',$user->id) }}">
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="btn btn-danger" style="margin:auto; text-align:center">Parmanent delete user</button>
@@ -103,9 +92,9 @@
             @endforeach
           </tbody>
         </table>
-        {{-- <span style="float:right">{{$vehicles->links()}}</span> --}}
+        {{-- <span style="float:right">{{$roless->links()}}</span> --}}
         @else
-          <h6 class="text-center">No vehicle found!!! Please create vehicles</h6>
+          <h6 class="text-center">No roles found!!! Please create roless</h6>
         @endif
       </div>
     </div>
@@ -167,7 +156,7 @@
 
   <script>
 
-      $('#vehicles-dataTable').DataTable( {
+      $('#roless-dataTable').DataTable( {
             "columnDefs":[
                 {
                     "orderable":false,
@@ -212,7 +201,7 @@
       })
   </script>
 
-
+{{--
 <script>
     $(function() {
       $('input[name=toogle]').change(function() {
@@ -222,12 +211,12 @@
         //  alert(id);
 
           $.ajax({
-              url:"{{route('vehicle.status')}}",
+              url:"{{route('roles.status')}}",
 
               type: "POST",
               // dataType: "json",
               data:{
-                  // 'status': status, 'vehicle_id': vehicle_id
+                  // 'status': status, 'roles_id': roles_id
                   _token:'{{csrf_token()}}',
                   mode:mode,
                   id:id,
@@ -249,7 +238,7 @@
   </script>
 
 
-
+ --}}
 
 
 

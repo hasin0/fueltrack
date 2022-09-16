@@ -1,6 +1,6 @@
-@extends('backend.layouts.master')
+@extends('HOD.layouts.master')
 @section('title','E-SHOP || DASHBOARD')
-@section('main-content')
+@section('main-contents')
 <div class="container-fluid">
  {{--         @include('backend.layouts.notification')--}}
 
@@ -11,7 +11,7 @@
 
     <!-- Content Row -->
     <div class="row">
-        
+
 
       <!-- Category -->
       <div class="col-xl-3 col-md-6 mb-4">
@@ -19,8 +19,12 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Vehicles</div>
-                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{\App\Models\Vehicle::count()}}</div>
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">department FuelRequest</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"> fuelrequest by you :{{  \App\Models\fuelrequest::where(['user_id'=>auth()->user()->id])->count()}}</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800"> Department Total:{{$fuelrequestC->count()}}</div>
+
+                   {{-- <div class="h5 mb-0 font-weight-bold text-gray-800">{{$user->count()}}</div> --}}
+                  {{-- $user=User::where('department_id',$user->department_id)->with(['fuelrequests','department'])->get(); --}}
 
 
               </div>
@@ -32,13 +36,15 @@
         </div>
       </div>
 
+
       <!-- Products -->
       <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-success shadow h-100 py-2">
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">FuelStations</div>
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Department Vehicles</div>
+
             {{--                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{\App\Models\Product::countActiveProduct()}}</div> --}}
 
               </div>

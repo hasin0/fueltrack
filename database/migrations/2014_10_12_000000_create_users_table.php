@@ -21,9 +21,10 @@ class CreateUsersTable extends Migration
 
 
             $table->string('phone');
-            $table->enum('role',['admin','driver','HOD'])->default('driver');
+            // $table->enum('role',['admin','driver','HOD'])->default('driver');
             $table->enum('status',['active','inactive'])->default('inactive');
-            $table->string('department')->nullable();
+            // $table->unsignedBigInteger('department_id')->index();
+
 
 
 
@@ -32,6 +33,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            // $table->foreign('department_id')->references('id')->on('departments')->onDelete('CASCADE')->onUpdate('CASCADE');;
+
         });
     }
 

@@ -84,34 +84,64 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-        {{-- @php
-        $roles=DB::table('users')->select('role')->get();
-        @endphp --}}
+        @php
+        $roles=DB::table('roles')->select('name')->get();
+        @endphp
         {{-- <div class="form-group">
-            <label for="role" class="col-form-label">Role</label>
 
-            <select name="role" class="form-control">
-                <option value="admin">Admin</option>
-                <option value="driver">Driver</option>
-                <option value="HOD">HOD</option>
-
-            </select>
-            {{-- <select name="role" class="form-control">
-                <option value="">-----Select Role-----</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
                 @foreach($roles as $role)
-                    <option value="{{$role->role}}">{{$role->role}}</option>
+                    <option value="{{$role->id}}">{{$role->name}}</option>
                 @endforeach
-            </select> --}}
-          {{-- @error('role')
+            </select>
+           @error('role')
           <span class="text-danger">{{$message}}</span>
           @enderror
-          </div>  --}}
+          </div> --}}
+
 
 
 
           <div class="form-group">
+            <label for="roles">Role</label>
+            {{-- {{$brands}} --}}
+
+            <select name="roles" class="form-control">
+                {{-- <option value="">--Select vehicle--</option> --}}
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($roles as $role )
+                <option value="{{$role->name}}">{{$role->name}}</option>
+               @endforeach
+            </select>
+          </div>
+
+
+          {{-- <div class="form-group">
+            <strong>Role:</strong>
+            {!! Form::select('roles[]', $roles,[], array('class' => 'form-control','multiple')) !!}
+        </div> --}}
+
+
+
+
+
+        <div class="form-group">
+            <label for="department_id">department</label>
+            {{-- {{$brands}} --}}
+
+            <select name="department_id" class="form-control">
+                {{-- <option value="">--Select vehicle--</option> --}}
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($department as $department )
+                <option value="{{$department->id}}"> {{$department->name}}</option>
+               @endforeach
+            </select>
+          </div>
+
+
+
+
+
+          {{-- <div class="form-group">
             <label for="role" class="col-form-label">Status</label>
             <select name="role" class="form-control">
                 <option value="admin">Admin</option>
@@ -122,7 +152,7 @@
           @error('role')
           <span class="text-danger">{{$message}}</span>
           @enderror
-          </div>
+          </div> --}}
 
 
           <div class="form-group">

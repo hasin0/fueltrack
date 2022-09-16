@@ -1,5 +1,23 @@
 version: '3.8'
 services:
+
+
+ jenkins:
+    container_name: jenkins
+    restart: always
+    image: jenkins/jenkins
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+       - dbdata:/var/jenkins_home jenkins
+
+#  volumes:
+#    /home/ubuntu/fueltrack:
+
+
+
+
  app:
     build:
       context: .
@@ -15,6 +33,9 @@ services:
     volumes:
       - ./:/fueltrack-app
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+
+
 
 
 
@@ -46,9 +67,10 @@ services:
     image: phpmyadmin
     restart: always
     ports:
-      - 8080:80
+      - 8081:80
     environment:
       - PMA_ARBITRARY=1
+
 
     #   - PMA_HOST=db
     #   - PMA_USER=root
@@ -75,9 +97,38 @@ services:
 
 
 
+
 volumes:
     dbdata:
 
+
+
+# jenkins:
+#     image: jenkins/jenkins:lts
+#     container_name: jenkins
+#     ports:
+#       - "8080:8080"
+#       - "50000:50000"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# volumes:
+# - ~/jenkins:/var/jenkins_home
+# - /var/run/docker.sock:/var/run/docker.sock
+# - /usr/local/bin/docker:/usr/local/bin/docker
 
 
 

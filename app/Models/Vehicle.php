@@ -10,7 +10,7 @@ class Vehicle extends Model
     use HasFactory;
 
 
-    protected $fillable=['name','model','plate_no','tag_no','fueltank', 'department'];
+    protected $fillable=['name','model','plate_no','tag_no','fueltank', 'department_id'];
     //protected $fillable=['name','model','plate_no','tag_no','fueltank', 'user_id','department'];
 
 
@@ -29,6 +29,13 @@ class Vehicle extends Model
     {
         return $this->belongsToMany(fuelrequest::class);//->withTimestamps();
     }
+
+
+
+    public function department()
+  {
+    return $this->belongsTo(department::class);
+  }
 
 
 

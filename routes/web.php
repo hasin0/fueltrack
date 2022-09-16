@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Route;
 
@@ -29,8 +31,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
 //AdminDashbord
-Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
+Route::group(['prefix'=>'admin','middleware'=>['role:Admin','auth']],function(){
     Route::get('/',[\App\Http\Controllers\AdminController::class,'admin'])->name('admin');
 
 
@@ -61,9 +66,32 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
 
 
 
+ Route::resource('roles', RoleController::class);
+ //Route::resource('users', UserController::class);
+
 });
 
 
+// HOD ROUTE
+
+Route::group(['prefix'=>'HOD','middleware' => ['role:HOD']], function () {
+    //
+    Route::get('/HOD', [App\Http\Controllers\HodController::class, 'dashboard'])->middleware(['auth'])->name('HOD');
+    //Route::get('/fuelrequests', [App\Http\Controllers\HodController::class, 'index'])->middleware(['auth'])->name('HOD');
+
+   Route::resource('/HOD-fuelrequests',\App\Http\Controllers\HOD\FuelrequestController::class);
+    Route::post('HOD_approval',[\App\Http\Controllers\HOD\FuelrequestController::class,'HodStatus'])->name('hod.status');
+
+
+});
+
+
+
+// Route::group(['middleware' => ['auth']], function() {
+//     Route::resource('roles', RoleController::class);
+//     // Route::resource('users', UserController::class);
+//     // Route::resource('products', ProductController::class);
+// });
 
 
 

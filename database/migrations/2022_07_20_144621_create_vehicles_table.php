@@ -19,7 +19,9 @@ class CreateVehiclesTable extends Migration
             $table->string('model');
             $table->string('plate_no')->unique();
             $table->string('tag_no')->unique();
-            $table->string('department');
+            //  $table->string('department');
+            // $table->unsignedBigInteger('department_id')->index();
+
 
 
             $table->integer('fueltank');
@@ -27,6 +29,8 @@ class CreateVehiclesTable extends Migration
             $table->enum('status',['active','inactive'])->default('inactive');
 
             $table->timestamps();
+            // $table->foreign('department_id')->references('id')->on('departments')->onDelete('CASCADE')->onUpdate('CASCADE');;
+
            // $table->foreign('user_id')->references('id')->on('users');
 
         });

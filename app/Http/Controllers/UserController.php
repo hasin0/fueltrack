@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Models\fuelrequest;
+use App\Models\department;
+
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 
 
 
@@ -24,8 +29,25 @@ class UserController extends Controller
 
         //$users = User::with(['fuelrequests'])->get();
         //dd($users);
+            // $fuelrequest = fuelrequest::with(['vehicles','user'])->get();
+          //  $users= User::with(['department'])->get();
 
-        $users= User::orderBy('id','ASC')->paginate(10);
+
+
+         //$users = User::where(['id'=>auth()->user()->id])->with('roles')->get();
+
+
+         // $users = User::with(['fuelrequests','department'])->get();
+          $users = User::with(['department'])->get();
+
+
+          //$users->hasRole('HOD');
+
+
+            //dd($users);
+       // $users= User::orderBy('id','ASC')->paginate(10);
+
+
         return view('backend.layouts.users.index')->with('users',$users);
         //
     }
@@ -38,7 +60,11 @@ class UserController extends Controller
     public function create()
     {
         //
-        return view('backend.layouts.users.create');
+        $roles = Role::pluck('name','name')->all();
+        $department=department::all();
+
+
+        return view('backend.layouts.users.create',compact('roles','department'));
 
     }
 
@@ -55,20 +81,28 @@ class UserController extends Controller
             'name'=>'string|required|max:30',
             'email'=>'string|required|unique:users',
             'password'=>'string|required|min:4',
-            'role'=>'required|in:admin,driver,HOD',
+            'roles' => 'required',
             'status'=>'required|in:active,inactive',
             'photo'=>'nullable|string',
             'sap'=>'numeric|nullable|unique:users|min:4',
             'phone'=>'numeric|nullable|unique:users|min:11',
+            'department_id'=>'required',
+
 
 
 
         ]);
         // dd($request->all());
         $data=$request->all();
+
+        // $data['department_id']=$request->department_id;
+
         $data['password']=Hash::make($request->password);
         // dd($data);
         $status=User::create($data);
+
+        $status->assignRole($request->input('roles'));
+
         // dd($status);
         if($status){
             request()->session()->flash('success','Successfully added user');
@@ -141,7 +175,10 @@ class UserController extends Controller
     {
         //
         $user=User::findOrFail($id);
-        return view('backend.layouts.users.edit')->with('user',$user);
+        $roles = Role::findOrFail($id);
+        $department=department::findOrFail($id);
+       // dd($department);
+        return view('backend.layouts.users.edit')->with('user',$user)->with('roles',$roles)->with('department',$department);
     }
 
     /**
@@ -157,26 +194,48 @@ class UserController extends Controller
         $this->validate($request,
         [
             'name'=>'string|required|max:30',
-            'email'=>'string|required|unique:users',
-            'password'=>'string|required|min:4',
-            'role'=>'required|in:admin,driver,HOD',
+            'email'=>'string|required|exists:users,email',
+           // 'password'=>'string|required|min:4',
+            'roles' => 'required',
             'status'=>'required|in:active,inactive',
             'photo'=>'nullable|string',
-            'sap'=>'numeric|nullable|unique:users|min:4',
-            'phone'=>'numeric|nullable|unique:users|min:11',
+            'sap'=>'numeric|nullable|min:4',
+            'phone'=>'numeric|nullable|min:11',
+           'department_id'=>'required',
+
+
+
         ]);
         // dd($request->all());
-        $data=$request->all();
+        $input=$request->all();
         // dd($data);
 
-        $status=$user->fill($data)->save();
-        if($status){
-            request()->session()->flash('success','Successfully updated');
-        }
-        else{
-            request()->session()->flash('error','Error occured while updating');
-        }
-        return redirect()->route('users.index');
+        // if(!empty($input['password'])){
+        //     $input['password'] = Hash::make($input['password']);
+        // }else{
+        //     $input = Arr::except($input,array('password'));
+        // }
+
+       // $user = User::find($id);
+        // $input['department_id']=$request->department_id;
+
+
+        $user->update($input);
+        DB::table('model_has_roles')->where('model_id',$id)->delete();
+
+        $user->assignRole($request->input('roles'));
+
+        return redirect()->route('users.index')
+                        ->with('success','User updated successfully');
+
+        // $status=$user->fill($data)->save();
+        // if($status){
+        //     request()->session()->flash('success','Successfully updated');
+        // }
+        // else{
+        //     request()->session()->flash('error','Error occured while updating');
+        // }
+        // return redirect()->route('users.index');
     }
 
     /**

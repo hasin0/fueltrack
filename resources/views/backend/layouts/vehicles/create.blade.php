@@ -64,7 +64,7 @@
 
 
 
-
+{{--
           <div class="form-group">
             <label for="department" class="col-form-label">Department <span class="text-danger">*</span></label>
             <select name="department" class="form-control">
@@ -92,6 +92,33 @@
             <span class="text-danger">{{$message}}</span>
             @enderror
           </div>
+ --}}
+
+{{--
+ <div class="form-group">
+    <strong>Departments:</strong>
+    <br/>
+    @foreach($department as $value)
+        <label>{{ Form::checkbox('department[]', $value->id, false, array('class' => 'name')) }}
+        {{ $value->name }}</label>
+    <br/>
+    @endforeach
+</div> --}}
+
+
+<div class="form-group">
+    <label for="department_id">department</label>
+    {{-- {{$brands}} --}}
+
+    <select name="department_id" class="form-control">
+        {{-- <option value="">--Select vehicle--</option> --}}
+       {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+       @foreach($department as $department )
+        <option value="{{$department->id}}"> {{$department->name}}</option>
+       @endforeach
+    </select>
+  </div>
+
 
 
 

@@ -7,12 +7,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\fuelrequest;
+use App\Models\department;
+
+use Spatie\Permission\Traits\HasRoles;
 
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    use HasRoles;
+
     use HasApiTokens, HasFactory, Notifiable;
+
 
     /**
      * The attributes that are mass assignable.
@@ -27,9 +33,9 @@ class User extends Authenticatable
         'sap',
 
         'photo',
-        'role',
+      //  'role',
         'status',
-        'department',
+        'department_id',
     ];
 
     /**
@@ -71,6 +77,10 @@ class User extends Authenticatable
 
   }
 
+  public function department()
+  {
+    return $this->belongsTo(department::class);
+  }
 
 
 

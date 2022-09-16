@@ -80,24 +80,62 @@
           @enderror
         </div>
         @php
-        $roles=DB::table('users')->select('role')->where('id',$user->id)->get();
-        // dd($roles);
+        $department=DB::table('departments')->select('id','name')->get();
         @endphp
-        <div class="form-group">
-            <label for="role" class="col-form-label">Role</label>
-            <select name="role" class="form-control">
-                <option value="">-----Select Role-----</option>
-                @foreach($roles as $role)
-                    <option value="{{$role->role}}" {{(($role->role=='admin') ? 'selected' : '')}}>Admin</option>
-                    <option value="{{$role->role}}" {{(($role->role=='driver') ? 'selected' : '')}}>Driver</option>
-                    <option value="{{$role->role}}" {{(($role->role=='HOD') ? 'selected' : '')}}>Hod</option>
 
+
+
+         <div class="form-group">
+            <label for="department_id">department</label>
+
+            <select name="department_id" class="form-control">
+
+
+               @foreach($department as $department )
+                <option value="{{$department->id}}"> {{$department->name}}</option>
+               @endforeach
+            </select>
+          </div>
+
+
+
+
+
+
+        {{-- @php
+        $roles=DB::table('roles')->select('id')->where('id',$role->id)->get();
+        // dd($roles);
+        @endphp --}}
+        @php
+        $roles=DB::table('roles')->select('name')->get();
+        @endphp
+        {{-- <div class="form-group">
+
+                @foreach($roles as $role)
+                    <option value="{{$role->id}}">{{$role->name}}</option>
                 @endforeach
             </select>
-          @error('role')
+           @error('role')
           <span class="text-danger">{{$message}}</span>
           @enderror
+          </div> --}}
+
+
+
+
+          <div class="form-group">
+            <label for="roles">Role</label>
+            {{-- {{$brands}} --}}
+
+            <select name="roles" class="form-control">
+                {{-- <option value="">--Select vehicle--</option> --}}
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($roles as $role )
+                <option value="{{$role->name}}">{{$role->name}}</option>
+               @endforeach
+            </select>
           </div>
+
           <div class="form-group">
             <label for="status" class="col-form-label">Status</label>
             <select name="status" class="form-control">

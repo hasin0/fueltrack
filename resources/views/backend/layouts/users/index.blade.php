@@ -26,6 +26,8 @@
                 <th>Email</th>
                 <th>Sap</th>
                 <th>Phone</th>
+                <th>Department</th>
+
 
 
                 <th>Photo</th>
@@ -42,6 +44,8 @@
                 <th>Email</th>
                 <th>Sap</th>
                 <th>Phone</th>
+                <th>Department</th>
+
 
 
                 <th>Photo</th>
@@ -55,12 +59,24 @@
 
           <tbody>
             @foreach($users as $user)
+
+            @php
+              $department=DB::table('departments')->select('name')->where('id',$user->department_id)->get();
+
+            @endphp
+
             <tr>
                 <td>{{$user->id}}</td>
                 <td>{{$user->name}}</td>
                 <td>{{$user->email}}</td>
                 <td>{{$user->sap}}</td>
                 <td>{{$user->phone}}</td>
+
+                <td>{{$user->department->name}}</td>
+                {{-- <td> {{ucfirst($user->department)}}</td> --}}
+
+
+
 
 
                 <td>
@@ -71,7 +87,15 @@
                     @endif
                 </td>
                 <td>{{(($user->created_at)? $user->created_at->diffForHumans() : '')}}</td>
-                <td>{{$user->role}}</td>
+                {{-- <td>{{$user->role}}</td> --}}
+
+                <td>
+                    @if(!empty($user->getRoleNames()))
+                      @foreach($user->getRoleNames() as $v)
+                         <label class="badge badge-success">{{ $v }}</label>
+                      @endforeach
+                    @endif
+                  </td>
                 <td>
 
                     <input value="{{$user->id}}" name="toogle" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $user->status =='active' ? 'checked' : '' }}>

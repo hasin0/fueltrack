@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\department;
 use App\Models\Vehicle;
 use App\Models\User;
 
@@ -16,17 +17,41 @@ class VehicleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
+    function __construct()
+    {
+         $this->middleware('permission:vehicle-list|vehicle-create|vehicle-edit|vehicle-delete', ['only' => ['index','show']]);
+         $this->middleware('permission:vehicle-create', ['only' => ['create','store']]);
+         $this->middleware('permission:vehicle-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:vehicle-delete', ['only' => ['destroy']]);
+         $this->middleware('permission:vehicle-vehicleStatus', ['only' => ['vehicleStatus']]);
+
+    }
+
+
+
+
+
+
+
     public function index()
     {
        // $vehicle = Vehicle::with(['User'])->get();
        // dd($vehicle);
 
 
-    //    $vehicle = Vehicle::with(['fuelrequests'])->get();
+    $vehicle = Vehicle::with(['fuelrequests'])->get();
     //    dd($vehicle);
 
 
         $vehicle=Vehicle::orderBy('id','DESC')->paginate(10);
+
+
+    // $vehicle = Vehicle::find(1);
+
+    // return $vehicle->department->id;
 
        //  dd($vehicle);
         return view('backend.layouts.vehicles.index')->with('vehicles',$vehicle);
@@ -41,7 +66,11 @@ class VehicleController extends Controller
     public function create()
     {
         //
-        return view('backend.layouts.vehicles.create');
+        $department=department::all();
+
+       // dd($department);
+
+        return view('backend.layouts.vehicles.create')->with('department',$department);;;
     }
 
     /**
@@ -65,13 +94,15 @@ class VehicleController extends Controller
             'fueltank'=>'numeric|required',
             'name'=>'string|required',
             'status'=>'required|in:active,inactive',
-            'department'=>'required',
+            'department_id'=>'required',
 
 
 
 
          ]);
          $data=$request->all();
+
+         $data['department_id']=$request->department_id;
 
          $status=Vehicle::create($data);
 
@@ -165,7 +196,7 @@ class VehicleController extends Controller
             'fueltank'=>'numeric|required',
             'name'=>'string|required',
             'status'=>'required|in:active,inactive',
-            'department'=>'required',
+            'department_id'=>'required',
 
         ]);
         $data=$request->all();

@@ -23,7 +23,7 @@ class fuelrequest extends Model
      'Admin_approval',
      'order_number','
      Fuel_station_approval',
-     'Fuel_station','user_id'];
+     'Fuel_station','department_id'];
 
 
      public function vehicles(){
@@ -32,6 +32,12 @@ class fuelrequest extends Model
         return $this->belongsToMany(Vehicle::class);//->withTimestamps();
         //'vehicles','requestfuel','driver_id'
     }
+
+
+    public function department()
+  {
+    return $this->belongsTo(department::class);
+  }
 
 
 
