@@ -232,11 +232,15 @@
 
 
      <!-- Users -->
-    {{-- <li class="nav-item">
-        <a class="nav-link" href="{{route('users.index')}}">
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('hod.profile')}}">
             <i class="fas fa-users"></i>
-            <span>Users</span></a>
-    </li> --}}
+            <span>User Profile</span></a>
+
+        <a class="nav-link" href="{{route('HOD.change.password.form')}}">
+            <i class="fas fa-users"></i>
+            <span>change Password</span></a>
+    </li>
      <!-- General settings -->
        {{-- <li class="nav-item">
         <a class="nav-link" href="{{route('settings')}}">

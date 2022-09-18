@@ -77,6 +77,19 @@ Route::group(['prefix'=>'admin','middleware'=>['role:Admin','auth']],function(){
 Route::group(['prefix'=>'HOD','middleware' => ['role:HOD']], function () {
     //
     Route::get('/HOD', [App\Http\Controllers\HodController::class, 'dashboard'])->middleware(['auth'])->name('HOD');
+
+    Route::get('/profile', [App\Http\Controllers\HodController::class, 'userAccount'])->name('hod.profile');
+
+
+    Route::post('/profile/account/{id}', [App\Http\Controllers\HodController::class, 'updateAccount'])->name('update.profile');
+
+    Route::get('change-password',  [App\Http\Controllers\HodController::class, 'changePassword'])->name('HOD.change.password.form');
+    Route::post('change-password',[App\Http\Controllers\HodController::class, 'changPasswordStore'])->name('change.password');
+
+
+
+
+
     //Route::get('/fuelrequests', [App\Http\Controllers\HodController::class, 'index'])->middleware(['auth'])->name('HOD');
 
    Route::resource('/HOD-fuelrequests',\App\Http\Controllers\HOD\FuelrequestController::class);

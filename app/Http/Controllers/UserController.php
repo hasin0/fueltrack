@@ -92,15 +92,17 @@ class UserController extends Controller
 
 
         ]);
-        // dd($request->all());
+
+
+
+
+
+
+
         $data=$request->all();
-
-        // $data['department_id']=$request->department_id;
-
         $data['password']=Hash::make($request->password);
         // dd($data);
         $status=User::create($data);
-
         $status->assignRole($request->input('roles'));
 
         // dd($status);
@@ -111,6 +113,34 @@ class UserController extends Controller
             request()->session()->flash('error','Error occurred while adding user');
         }
         return redirect()->route('users.index');
+
+
+
+
+
+
+
+
+
+        // dd($request->all());
+        // $data=$request->all();
+
+        // // $data['department_id']=$request->department_id;
+
+        // $data['password']=Hash::make($request->password);
+        // // dd($data);
+        // $status=User::create($data);
+
+        // $status->assignRole($request->input('roles'));
+
+        // // dd($status);
+        // if($status){
+        //     request()->session()->flash('success','Successfully added user');
+        // }
+        // else{
+        //     request()->session()->flash('error','Error occurred while adding user');
+        // }
+        // return redirect()->route('users.index');
     }
 
 
@@ -206,8 +236,27 @@ class UserController extends Controller
 
 
         ]);
+
+
+
+
+
+
+
+        $data=$request->all();
+        // dd($data);
+
+        $status=$user->fill($data)->save();
+        if($status){
+            request()->session()->flash('success','Successfully updated');
+        }
+        else{
+            request()->session()->flash('error','Error occured while updating');
+        }
+        return redirect()->route('users.index');
+
         // dd($request->all());
-        $input=$request->all();
+       // $input=$request->all();
         // dd($data);
 
         // if(!empty($input['password'])){
@@ -220,13 +269,13 @@ class UserController extends Controller
         // $input['department_id']=$request->department_id;
 
 
-        $user->update($input);
-        DB::table('model_has_roles')->where('model_id',$id)->delete();
+        //$user->update($input);
+       // DB::table('model_has_roles')->where('model_id',$id)->delete();
 
-        $user->assignRole($request->input('roles'));
+       // $user->assignRole($request->input('roles'));
 
-        return redirect()->route('users.index')
-                        ->with('success','User updated successfully');
+       // return redirect()->route('users.index')
+           //             ->with('success','User updated successfully');
 
         // $status=$user->fill($data)->save();
         // if($status){

@@ -9,7 +9,7 @@ use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Hash;
 
 
 class HodController extends Controller
@@ -51,146 +51,95 @@ class HodController extends Controller
 
 
 
-//     public function index()
-//     {
-//     //     $tasks = Task::with("type", "city", "operator")
-//     //  ->whereCityId($city->id)->whereTypeId($type->id)->get();
+    public function userAccount(){
+        $user=Auth::user();
+        return view('HOD.layouts.users.profile',compact('user'));
+    }
 
-//            $vehicle=Vehicle::all();
-//            $user=Auth::user();
-//            //dd($user);
-//         //$fuelrequest=fuelrequest::where('vehicle_id','active')->get();//limit(3)->orderBy('id','DESC')->get();
 
-// //    $fuelrequest =DB::table('fuelrequests')
-// //    ->join('vehicles','department_id', '=', 'vehicles.department_id')
-// //    ->join('users','users.id', '=', 'fuelrequests.user_id')
-// //    ->join('departments','departments.name', '=','departments.name')
+    public function updateAccount(Request $request, $id)
+    {
 
-// //    ->select('users.*','fuelrequests.*','vehicles.*','departments.*')
-// //    ->where('users.id', '=', 1)
+        $user=User::findOrFail($id);
+        $data=$request->all();
+        $status=$user->fill($data)->save();
+        if($status){
+            request()->session()->flash('success','Successfully updated your profile');
+        }
+        else{
+            request()->session()->flash('error','Please try again!');
+        }
+        return redirect()->back();
 
-// //    ->first();
+// return $request->all();
 
+//         $hashpassword=Auth::user()->password;
 
+//         if ($request->oldpassword==null && $request->newpassword==null) {
+//             User::where('id',$id)->update(['name'=>$request->name,'phone'=>$request->phone]);
 
 
+//         }
+//         else {
+//             if (\Hash::check($request->oldpassword,$hashpassword)) {
 
-//     $fuelrequest =fuelrequest::with(['vehicles','user'])->get();//whereVehicleId($vehicle->id)->whereUserId($user->id)->get();
+//                 if (!\Hash::check($request->newpassword, $hashpassword)) {
 
-//     // $fuelrequest=DB::table('fuelrequests')->select('id','vehicle_id')->get();//where('id')->get();
+//                     User::where('id',$id)->update(['name'=>$request->name,'phone'=>$request->phone,'password'=>$request->newpassword]);
 
-// // dd($fuelrequest);
 
+//                     return back()->with('sucess','account successfully updated');
+//                     # code...
+//                 }
+//                 else {
+//                     return back()->with('error','account not successfully updated');
+//                 }
 
 
+//                 # code...($hash)
+//             }
+//             else {
+//                 return back()->with('error','old password does not match ');
+//             }
+//         }
 
 
 
-//         return view('HOD.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
-//         //
-//     }
 
 
 
-//     public function create()
-//     {
 
-//         // $brand=Brand::get();
-//          $vehicle=Vehicle::where('status','active')->get();
-//                // dd($vehicle);
 
+    }
 
-//         return view('HOD.layouts.fuelrequests.create')->with('vehicle',$vehicle);//->with('brands',$brand);;
 
-//         //
-//     }
+    public function changePassword(){
 
 
+        return view('HOD.layouts.users.userPasswordChange');//,compact('user'));
+    }
 
-//     public function store(Request $request)
-//     {
-//        // return $request->all();
 
-//         // 'user_id','',
-//         // '',
-//         // '',
-//         // 'order_number','
-//         // ',
 
 
-//         $this->validate($request,[
-//             'present_km'=>'numeric|required',
-//             'liters_km'=>'numeric|required',
+    public function changPasswordStore(Request $request)
+    {
+        $request->validate([
+            // 'current_password' => ['required', new MatchOldPassword],
+            'new_password' => ['required'],
+            'new_confirm_password' => ['same:new_password'],
+        ]);
 
-//             'last_fuel_qty'=>'numeric|required',
-//             'last_km'=>'numeric|required',
-//             'last_km_when_fueling'=>'numeric|required',
-//             //'vehicle_id'=>'exists:vehicles,id,fueltank|required',
-//                //'vehicle_id'=>'exists:vehicles,id|required',
-//            // 'vehicle_id'=>'exists:vehicles,id|required',
+        User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
 
-//             'km_used'=>'numeric|required',
-//             // 'HOD_approval'=>'required|in:active,inactive',
-//             // 'Admin_approval'=>'required|in:active,inactive',
-//             // 'Fuel_station_approval'=>'required|in:issued,Notissued',
+        return redirect()->back();
 
-//             'Fuel_station'=>'required',
-//          ]);
 
-//          $data['order_number']='ORD-'.strtoupper(Str::random(10));
+        // return redirect()->route('user.account')->with('success','Password successfully changed');
+    }
 
-//          $data=$request->all();
-//          $data['user_id']=auth()->id();
-//          $data['order_number']='ORD-'.strtoupper(Str::random(10));
 
 
-
-
-//          $data['km_used']=$data['last_km']+$data['liters_km'];
-
-//          //
-
-
-
-
-
-//          $vehicle=$data['vehicle_id'];
-
-
-
-
-
-
-
-
-
-
-//          $data=fuelrequest::create($data);
-
-//      $data->vehicles()->attach($vehicle);
-
-
-
-
-
-
-
-
-
-//          if ($data) {
-//             return redirect()->route('fuelrequests.index', ['parameterKey' => 'success']);
-//             # code...
-//          }else {
-//             return redirect()->back()->withErrors('someting went wrong')->withInput();
-//          }
-
-
-
-
-
-
-
-//     }
 
 
 
