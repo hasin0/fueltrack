@@ -37,9 +37,8 @@ class HomeController extends Controller
             return redirect()->route('HOD');
 
 
-            return redirect()->route('HOD');
         }elseif (Auth::user()->hasRole('Driver')) {
-            return view('backend.layouts.index');
+            return redirect()->route('Driver');
 
     }else {
         return view('home');

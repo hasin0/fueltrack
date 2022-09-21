@@ -100,6 +100,45 @@ Route::group(['prefix'=>'HOD','middleware' => ['role:HOD']], function () {
 
 
 
+
+
+
+
+
+
+
+// Driver. ROUTE
+
+Route::group(['prefix'=>'Driver','middleware' => ['role:Driver']], function () {
+    //
+    Route::get('/Driver', [App\Http\Controllers\DriverController::class, 'dashboard'])->middleware(['auth'])->name('Driver');
+
+    Route::get('/profile', [App\Http\Controllers\DriverController::class, 'userAccount'])->name('Driver.profile');
+
+
+    Route::post('/profile/account/{id}', [App\Http\Controllers\DriverController::class, 'updateAccount'])->name('update.profile');
+
+    Route::get('change-password',  [App\Http\Controllers\DriverController::class, 'changePassword'])->name('Driver.change.password.form');
+    Route::post('change-password',[App\Http\Controllers\DriverController::class, 'changPasswordStore'])->name('Driver.change.password');
+
+
+
+
+
+    //Route::get('/fuelrequests', [App\Http\Controllers\HodController::class, 'index'])->middleware(['auth'])->name('HOD');
+
+   Route::resource('/Driver-fuelrequests',\App\Http\Controllers\Driver\FuelrequestController::class);
+
+
+//    Route::resource('/HOD-fuelrequests',\App\Http\Controllers\HOD\FuelrequestController::class);
+
+
+
+
+});
+
+
+
 // Route::group(['middleware' => ['auth']], function() {
 //     Route::resource('roles', RoleController::class);
 //     // Route::resource('users', UserController::class);
