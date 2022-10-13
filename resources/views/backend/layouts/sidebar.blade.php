@@ -220,10 +220,33 @@
 
 {{--
     <li class="nav-item">
-        <a class="nav-link" href="{{route('roles.index')}}">
+        <a class="nav-link" href="">
+
+
             <i class="fas fa-users"></i>
-            <span>role</span></a>
+            <span>Reports</span></a>
     </li> --}}
+
+
+
+
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwos" aria-expanded="true" aria-controls="collapseTwos">
+          <i class="fas fa-image"></i>
+          <span>REPORTS</span>
+        </a>
+        <div id="collapseTwos" class="collapse" aria-labelledby="headingTwos" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Vehicles Options:</h6>
+            <a class="collapse-item" href="{{route('user.report')}}">USER LIST</a>
+            <a class="collapse-item" href="{{route('fuelrequests.report')}}">FUELREQUEST</a>
+          </div>
+        </div>
+      </li>
+
+
+
 
 
 

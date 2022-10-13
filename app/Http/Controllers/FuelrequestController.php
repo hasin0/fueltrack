@@ -7,6 +7,10 @@ use App\Models\Vehicle;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+
+use App\Exports\FuelrequestExport;
+use PDF;
 
 
 use Illuminate\Http\Request;
@@ -435,4 +439,85 @@ class FuelrequestController extends Controller
         }
         return redirect()->route('fuelrequests.index');
     }
+
+
+
+
+
+    public function report(Request $req)
+    {
+        $method = $req->method();
+
+        if ($req->isMethod('post'))
+        {
+            $from = $req->input('from');
+            $to   = $req->input('to');
+            if ($req->has('search'))
+            {
+                // select search
+                $search = fuelrequest::whereDate('created_at', [$from, $to])->with(['department','vehicles'])->get();
+
+                // $department = department::all();//whereDate('created_at', [$from, $to])->with(['department'])->get();
+
+
+                //  DB::table('users')->where('created_at',array($from, $to))->get();
+                //select("SELECT * FROM users WHERE created_at BETWEEN '$from' AND '$to'");
+                // return view('import',['ViewsPage' => $search]);
+                // $users = User::with(['department'])->get();
+
+
+                // DB::table('users')
+                // ->whereBetween('created_at', array($from, $to))
+                // ->get();
+
+
+                // dd($search);
+
+                return view('backend.layouts.fuelrequests.import')->with('search',$search);//->with('department',$department);//->with('roles',$roles)->with('department',$department);
+
+            }
+            elseif ($req->has('exportPDF'))
+            {
+                // select PDF
+                $PDFReport =  fuelrequest::whereDate('created_at', [$from, $to])->with(['department'])->get();
+                // User::select('*')->where('created_at','>=',$this->from)->where('created_at','<=', $this->to)->with(['department'])->get();// DB::select("SELECT * FROM users WHERE created_at BETWEEN '$from' AND '$to'");
+                $pdf = PDF::loadView('backend.layouts.fuelrequests.PDF_report', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
+                return $pdf->download('PDF_report.pdf');
+            }
+
+
+                elseif($req->has('exportExcel'))
+
+                // select Excel
+                return Excel::download(new FuelrequestExport($from, $to), 'Excel-reports.xlsx');
+            {
+        }
+        }
+            else
+        {
+            //select all
+            $ViewsPage = fuelrequest::with(['department','vehicles'])->get();
+            // dd($ViewsPage);
+            // return view('import',['ViewsPage' => $ViewsPage]);
+
+            return view('backend.layouts.fuelrequests.import')->with('ViewsPage',$ViewsPage);//->with('roles',$roles)->with('department',$department);
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

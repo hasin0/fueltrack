@@ -49,7 +49,7 @@ services:
     volumes:
             - dbdata:/var/lib/mysql
             # - ./mysql/my.cnf:/etc/mysql/my.cnf
-    container_name: mysql_db2
+    container_name: mysql_db1
     restart: unless-stopped
     tty: true
     ports:
@@ -72,7 +72,7 @@ services:
       - PMA_ARBITRARY=1
 
 
-    #   - PMA_HOST=db
+      - PMA_HOST=mysql
     #   - PMA_USER=root
     #   - PMA_PASSWORD=root
     #   - PMA_PORT=3306

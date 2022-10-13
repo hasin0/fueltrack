@@ -33,6 +33,8 @@
               <th>fueltank</th>
               <th>department</th>
               <th>order_number</th>
+              <th>TAG-NO</th>
+
               <th>Fuel_station</th>
               <th>Admin_approval</th>
               <th>HOD_approval</th>
@@ -56,6 +58,8 @@
               <th>fueltank</th>
               <th>department</th>
               <th>order_number</th>
+              <th>TAG-NO</th>
+
               <th>Fuel_station</th>
               <th>Admin_approval</th>
               <th>HOD_approval</th>
@@ -91,8 +95,11 @@
                     {{-- <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank - $fuelrequests->last_km_when_fueling)}}  @endforeach</td> --}}
 
                     <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank)}}  @endforeach</td>
+
                     <td>@foreach($fuelrequests->vehicles as $data){{($data->department->name)}} @endforeach</td>
                     <td>{{$fuelrequests->order_number}}</td>
+                    <td>@foreach($fuelrequests->vehicles as $data){{($data->tag_no)}}  @endforeach</td>
+
                     <td>{{$fuelrequests->Fuel_station}}</td>
 
 

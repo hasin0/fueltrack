@@ -52,6 +52,21 @@ Route::group(['prefix'=>'admin','middleware'=>['role:Admin','auth']],function(){
 
  Route::post('user_status',[\App\Http\Controllers\UserController::class,'userStatus'])->name('user.status');
 
+//View Page
+
+Route::get('usersreports',[\App\Http\Controllers\UserController::class,'report'])->name('user.report');
+
+Route::post('usersreports',[\App\Http\Controllers\UserController::class,'report'])->name('user.report');
+
+
+
+
+Route::get('fuelrequestreports',[\App\Http\Controllers\FuelrequestController::class,'report'])->name('fuelrequests.report');
+
+Route::post('fuelrequestreports',[\App\Http\Controllers\FuelrequestController::class,'report'])->name('fuelrequests.report');
+
+// Route::get('ViewPages', 'ViewController@index');
+// Route::post('ViewPages', 'ViewController@index');
 
 
 

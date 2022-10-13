@@ -7,10 +7,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Models\fuelrequest;
 use App\Models\department;
+// use DB;
+// use PDF;
+use PDF;
 
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+
+use App\Exports\UsersExport;
+
 
 
 
@@ -306,4 +313,93 @@ class UserController extends Controller
         }
         return redirect()->route('users.index');
     }
+
+
+
+
+
+    public function report(Request $req)
+    {
+        $method = $req->method();
+
+        if ($req->isMethod('post'))
+        {
+            $from = $req->input('from');
+            $to   = $req->input('to');
+            if ($req->has('search'))
+            {
+                // select search
+                $search = User::whereDate('created_at', [$from, $to])->with(['department'])->get();
+
+                $department = department::all();//whereDate('created_at', [$from, $to])->with(['department'])->get();
+
+
+                //  DB::table('users')->where('created_at',array($from, $to))->get();
+                //select("SELECT * FROM users WHERE created_at BETWEEN '$from' AND '$to'");
+                // return view('import',['ViewsPage' => $search]);
+                // $users = User::with(['department'])->get();
+
+
+                // DB::table('users')
+                // ->whereBetween('created_at', array($from, $to))
+                // ->get();
+
+
+                // dd($search);
+
+                return view('backend.layouts.users.import')->with('ViewsPage',$search)->with('department',$department);//->with('roles',$roles)->with('department',$department);
+
+            }
+            elseif ($req->has('exportPDF'))
+            {
+                // select PDF
+                $PDFReport =  User::whereDate('created_at', [$from, $to])->with(['department'])->get();
+                // User::select('*')->where('created_at','>=',$this->from)->where('created_at','<=', $this->to)->with(['department'])->get();// DB::select("SELECT * FROM users WHERE created_at BETWEEN '$from' AND '$to'");
+                $pdf = PDF::loadView('backend.layouts.users.PDF_report', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
+                return $pdf->download('PDF_report.pdf');
+            }
+
+
+                elseif($req->has('exportExcel'))
+
+                // select Excel
+                return Excel::download(new UsersExport($from, $to), 'Excel-reports.xlsx');
+            {
+        }
+        }
+            else
+        {
+            //select all
+            $ViewsPage = User::with(['department'])->get();
+            // dd($ViewsPage);
+            // return view('import',['ViewsPage' => $ViewsPage]);
+
+            return view('backend.layouts.users.import')->with('ViewsPage',$ViewsPage);//->with('roles',$roles)->with('department',$department);
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
