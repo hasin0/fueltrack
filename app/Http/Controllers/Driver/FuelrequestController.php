@@ -3,15 +3,21 @@
 namespace App\Http\Controllers\Driver;
 
 use App\Http\Controllers\Controller;
+use App\Mail\FuelrequestMail;
 use Illuminate\Http\Request;
 
 use App\Models\fuelrequest;
 use App\Models\Vehicle;
 use App\Models\department;
+use App\Models\Role;
+use Auth;
+
 
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Mail;
+
 
 class FuelrequestController extends Controller
 {
@@ -19,14 +25,52 @@ class FuelrequestController extends Controller
     public function index()
     {
 
+            //$user=auth()->user();
             $user=auth()->user();
 
+
+
+        //  $user=User::where('department_id',$user->department_id)->whereHas(
+        //     'roles', function($q){
+        //         $q->where('name', 'HOD');
+        //     }
+        // )->get('email');
+
+
+            
+
+        
+        
+        //get();//('roles')
+   
+        //    $user = User::whereHas(
+        //     'roles', function($q){
+        //         $q->where('name', 'HOD');
+        //     }
+        // )->get();
+           // $role=Role::with('users')->where('department_id',$user->department_id)->get();
+            
+
+            // $get_hod_for_the_user = vw_user_roleuser_role::where('department_id', $get_user_department)->where('role_id', '=', 4)->pluck('name','user_id');
+        //   return  $user->role;
+
           //  $user=User::where('department_id',$user->department_id)->get();
-          //  dd($user);
+          //  
         // for the whole department count for HODs
         //   $fuelrequest=fuelrequest::where('department_id',$user->department_id)->get();//with(['fuelrequests','department'])->get();
+        //$user = User::role('HOD')->get();
+        // $user = User::where('department_id', $user->department_id)->where('role_id', '=', 2)->pluck('name');
+    //    dd($user);
+
+           
+
+       
+
+        // $department=department::where('id',$user->department_id)->get();
+        //dd($department);
 
 
+        // $brand=Brand::get();
 
           // indiviual fuelrequest only
 
@@ -219,6 +263,7 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->get();//->wi
         // '',
         // 'order_number','
         // ',
+            
 
 
         $this->validate($request,[
@@ -249,7 +294,7 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->get();//->wi
 
          $data['user_id']=auth()->id();
 
-         $data['order_number']='ORD-'.strtoupper(Str::random(10));
+        //  $data['order_number']='ORD-'.strtoupper(Str::random(10));
 
 
 
@@ -271,11 +316,34 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->get();//->wi
 
 
 
+        // $userEmail = Auth::user()->email; //get the id of the department that loggedin
+         //dd($data);
+                 
+
+         $user=auth()->user();
+
+
+         $userEmail=User::where('department_id',$user->department_id)->whereHas(
+            'roles', function($q){
+                $q->where('name', 'HOD','Admin');
+            }
+        )->get('email');
+
+
+        
+
+            $userAdmin=User::role('Admin')->get();
 
 
          $data=fuelrequest::create($data);
 
      $data->vehicles()->attach($vehicle);
+
+     
+
+      Mail::to($userEmail,$userAdmin)->send(new FuelrequestMail($data) );//->cc($userAdmin);
+      
+            // dd('mail is sent');
 
 
     //  foreach ($data->vehicles as $veH  ) {
@@ -293,6 +361,7 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->get();//->wi
 
 
          if ($data) {
+           
             return redirect()->route('Driver-fuelrequests.index', ['parameterKey' => 'success']);
             # code...
          }else {

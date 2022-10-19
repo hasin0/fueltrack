@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\fuelrequest;
 use App\Models\Vehicle;
 use App\Models\department;
+use App\Mail\FuelrequestMail;
 
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -23,6 +24,19 @@ class FuelrequestController extends Controller
     {
 
             $user=auth()->user();
+            
+            // $userEmail=User::role('Admin')->get();
+            // where('id',$user->department_id)->whereHas(
+            //     'roles', function($q){
+            //         $q->where('name', 'Admin');
+            //     }
+            // )->get('email');
+
+                    //  dd($userEmail);
+
+
+
+            
 
           //  $user=User::where('department_id',$user->department_id)->get();
           //  dd($user);
@@ -73,7 +87,6 @@ class FuelrequestController extends Controller
 
     //   $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
 
-        //  dd($vehicle);
         return view('HOD.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);//->with('fuelrequestC',$fuelrequestC);
         //
     }
@@ -108,11 +121,38 @@ class FuelrequestController extends Controller
     public function HodStatus(Request $request)
     {
 
+        $user=auth()->user();
+
+
+        //  $userEmail=User::where('department_id',$user->department_id)->whereHas(
+        //     'roles', function($q){
+        //         $q->where('name', 'HOD');
+        //     }
+        // )->get('email');
+        
+
+
+
+
+
+
         //dd($request->all());
 
         if ($request->mode == 'true') {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['HOD_approval'=>'active']);
+            $data=DB::table('fuelrequests')->where('id', $request->id)->update(['HOD_approval'=>'active']);
             # code...
+            // $userEmail=User::where('id',$user->department_id)->whereHas(
+            //     'roles', function($q){
+            //         $q->where('name', 'Admin');
+            //     }
+            // )->get('email');
+
+
+            $userEmail=User::role('Admin')->get();
+
+
+            Mail::to($userEmail)->send(new FuelrequestMail($data) );
+
         }
         else {
             DB::table('fuelrequests')->where('id', $request->id)->update(['HOD_approval'=>'inactive']);

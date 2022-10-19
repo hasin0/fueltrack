@@ -34,8 +34,8 @@ class UserController extends Controller
     public function index()
     {
 
-        //$users = User::with(['fuelrequests'])->get();
-        //dd($users);
+        $users = User::with(['roles','department'])->get();
+        // $user->role->name
             // $fuelrequest = fuelrequest::with(['vehicles','user'])->get();
           //  $users= User::with(['department'])->get();
 
@@ -45,7 +45,6 @@ class UserController extends Controller
 
 
          // $users = User::with(['fuelrequests','department'])->get();
-          $users = User::with(['department'])->get();
 
 
           //$users->hasRole('HOD');
@@ -111,6 +110,7 @@ class UserController extends Controller
         // dd($data);
         $status=User::create($data);
         $status->assignRole($request->input('roles'));
+        
 
         // dd($status);
         if($status){
@@ -212,7 +212,8 @@ class UserController extends Controller
     {
         //
         $user=User::findOrFail($id);
-        $roles = Role::findOrFail($id);
+        $roles = Role::get();
+
         $department=department::findOrFail($id);
        // dd($department);
         return view('backend.layouts.users.edit')->with('user',$user)->with('roles',$roles)->with('department',$department);
@@ -251,15 +252,26 @@ class UserController extends Controller
 
 
         $data=$request->all();
+
+        $user->update($data);
+      //  DB::table('model_has_roles')->where('model_id',$id)->delete();
+
+        DB::table('role_user')->where('role_id',$id)->delete();
+
+    
+        $user->syncRoles($request->input('roles'));
+       // $data=$request->all();
+
         // dd($data);
 
-        $status=$user->fill($data)->save();
-        if($status){
-            request()->session()->flash('success','Successfully updated');
-        }
-        else{
-            request()->session()->flash('error','Error occured while updating');
-        }
+        // $status=$user->fill($data)->save();
+        
+        // if($status){
+        //     request()->session()->flash('success','Successfully updated');
+        // }
+        // else{
+        //     request()->session()->flash('error','Error occured while updating');
+        // }
         return redirect()->route('users.index');
 
         // dd($request->all());

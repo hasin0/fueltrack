@@ -48,7 +48,7 @@ class FuelrequestController extends Controller
 
 
 
-     $fuelrequest = fuelrequest::with(['vehicles','user'])->get();
+     //$fuelrequest = fuelrequest::with(['vehicles','user'])->get();
      //dd($fuelrequest);
     //  $fuelrequest = fuelrequest::find(1);
     //  return $fuelrequest;
@@ -66,7 +66,7 @@ class FuelrequestController extends Controller
 
 
 
-       // $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
+        $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
 
         //  dd($vehicle);
         return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
@@ -473,7 +473,7 @@ class FuelrequestController extends Controller
 
                 // dd($search);
 
-                return view('backend.layouts.fuelrequests.import')->with('search',$search);//->with('department',$department);//->with('roles',$roles)->with('department',$department);
+                return view('backend.layouts.fuelrequests.import')->with('ViewsPage',$search);//->with('department',$department);//->with('roles',$roles)->with('department',$department);
 
             }
             elseif ($req->has('exportPDF'))

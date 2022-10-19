@@ -106,9 +106,9 @@
         $roles=DB::table('roles')->select('id')->where('id',$role->id)->get();
         // dd($roles);
         @endphp --}}
-        @php
+        {{-- @php
         $roles=DB::table('roles')->select('name')->get();
-        @endphp
+        @endphp --}}
         {{-- <div class="form-group">
 
                 @foreach($roles as $role)
@@ -121,20 +121,20 @@
           </div> --}}
 
 
-
-
           <div class="form-group">
-            <label for="roles">Role</label>
-            {{-- {{$brands}} --}}
+            <strong>Role:</strong>
+            <br/>
+            @foreach($roles as $value)
+                <label>{{ Form::checkbox('roles[]', $value->id, false, array('class' => 'name')) }}
+                {{ $value->name }}</label>
+            <br/>
+            @endforeach
+        </div>
 
-            <select name="roles" class="form-control">
-                {{-- <option value="">--Select vehicle--</option> --}}
-               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
-               @foreach($roles as $role )
-                <option value="{{$role->name}}">{{$role->name}}</option>
-               @endforeach
-            </select>
-          </div>
+
+
+
+      
 
           <div class="form-group">
             <label for="status" class="col-form-label">Status</label>
