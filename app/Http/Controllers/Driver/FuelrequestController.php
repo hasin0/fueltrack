@@ -341,7 +341,13 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->get();//->wi
 
      
 
-      Mail::to($userEmail,$userAdmin)->send(new FuelrequestMail($data) );//->cc($userAdmin);
+    //   Mail::to($userEmail,$userAdmin)->
+    //   send(new FuelrequestMail($data) );//->cc($userAdmin);
+
+      Mail::to($userEmail)
+    ->cc($userAdmin)
+    // ->bcc($evenMoreUsers)
+    ->send(new FuelrequestMail($data));
       
             // dd('mail is sent');
 
