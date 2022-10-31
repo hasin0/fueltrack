@@ -92,7 +92,7 @@
                     <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank)}}  @endforeach</td>
                     <td>@foreach($fuelrequests->vehicles as $data){{($data->department->name)}} @endforeach</td>
                     <td>{{$fuelrequests->order_number}}</td>
-                    <td>{{$fuelrequests->Fuel_station}}</td>
+                    <td>{{$fuelrequests->fuelstation->name}}</td>
 
 
 

@@ -85,7 +85,7 @@ class UsersTableSeeder extends Seeder
                 'photo'=>'photo',
                 'sap'=>'3212',
                 'status'=>'active',
-                // 'department'=>'admin',
+                'department_id'=>1,
         ]);
 
         $role = Role::create(['name' => 'Admin']);

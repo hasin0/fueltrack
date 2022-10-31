@@ -219,21 +219,19 @@
 
 
 
-
           <div class="form-group">
-            <label for="Fuel_station" class="col-form-label">Fuel-station <span class="text-danger">*</span></label>
-            <select name="Fuel_station" class="form-control">
-                <option value="">--Select--</option>
+            <label for="fuelstation">fuelstation</label>
+            {{-- {{$brands}} --}}
 
-                <option value="Total-station">Total-station</option>
-                <option value="NNPC-station">NNPC-station</option>
-                <option value="Petrolcam-station">Petrolcam-station</option>
-
+            <select name="fuelstation_id" class="form-control">
+                <option value="">--Select fuelstation--</option>
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($fuelstation as $fuelstations )
+                <option value="{{$fuelstations->id}}"> {{$fuelstations->name}}</option>
+               @endforeach
             </select>
-            @error('Fuel_station')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
           </div>
+
 
 
 

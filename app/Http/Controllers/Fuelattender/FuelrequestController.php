@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Driver;
+namespace App\Http\Controllers\Fuelattender;
 
 use App\Http\Controllers\Controller;
-use App\Mail\FuelrequestMail;
 use Illuminate\Http\Request;
+
 
 use App\Models\fuelrequest;
 use App\Models\Vehicle;
@@ -20,15 +20,22 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Mail;
 
-
 class FuelrequestController extends Controller
 {
-    //
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
 
             //$user=auth()->user();
             $user=auth()->user();
+
+            $fuelstation=Fuelstation::with(['fuelrequest'])->get();
+
+            dd($fuelstation);
 
 
 
@@ -76,14 +83,16 @@ class FuelrequestController extends Controller
 
           // indiviual fuelrequest only
 
-$fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->with(['fuelstation'])->get();
+          $fuelrequest=fuelrequest::where('id',$user->fuelstation_id)->get();//with(['fuelrequests','department'])->get();
+
+
+// $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->with(['fuelstation'])->get();
 
      //$user=User::where('department_id',$user->department_id)->with(['fuelrequests','department'])->get();
 
 
     //  $user=User::where('department_id',$user->department_id)->with(['fuelrequests','department'])->get();
 
-    //   dd($fuelrequest);
     //  $fuelrequest = fuelrequest::find(1);
     //  return $fuelrequest;
 
@@ -117,7 +126,7 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->with(['fuels
     //   $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
 
         //  dd($vehicle);
-        return view('Driver.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);//->with('fuelrequestC',$fuelrequestC);
+        return view('FuelStationAttender.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);//->with('fuelrequestC',$fuelrequestC);
         //
     }
 
@@ -172,25 +181,25 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->with(['fuels
 
 
 
-    // public function FSAStatus(Request $request)
-    // {
+    public function fuelattenderStatus(Request $request)
+    {
 
-    //     //dd($request->all());
+        //dd($request->all());
 
-    //     if ($request->mode == 'true') {
-    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'issued']);
-    //         # code...
-    //     }
-    //     else {
-    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'Notissued']);
+        if ($request->mode == 'true') {
+            DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'issued']);
+            # code...
+        }
+        else {
+            DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'Notissued']);
 
-    //         # code...
-    //     }
+            # code...
+        }
 
-    //     return response()->json(['msg'=>'Successfully updated status','status'=>true]);
+        return response()->json(['msg'=>'Successfully updated status','status'=>true]);
 
 
-    // }
+    }
 
 
 
@@ -246,7 +255,7 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->with(['fuels
             //    dd($vehicle);
 
 
-        return view('Driver.layouts.fuelrequests.create')->with('fuelstation',$fuelstation)->with('vehicle',$vehicle)->with('department',$department);;//->with('brands',$brand);;
+        return view('FuelStationAttender.layouts.fuelrequests.create')->with('fuelstation',$fuelstation)->with('vehicle',$vehicle)->with('department',$department);;//->with('brands',$brand);;
 
         //
     }
@@ -414,7 +423,7 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->with(['fuels
         $fuelrequests=fuelrequest::findOrFail($id);
         if ($fuelrequests) {
 
-            return view('Driver.layouts.fuelrequests.edit')->with('fuelstation',$fuelstation)->with('fuelrequests',$fuelrequests)->with('vehicle',$vehicle);
+            return view('FuelStationAttender.layouts.fuelrequests.edit')->with('fuelstation',$fuelstation)->with('fuelrequests',$fuelrequests)->with('vehicle',$vehicle);
 
             # code...
 

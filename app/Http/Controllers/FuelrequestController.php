@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 use App\Exports\FuelrequestExport;
+use App\Models\Fuelstation;
 use PDF;
 
 
@@ -187,10 +188,12 @@ class FuelrequestController extends Controller
 
         // $brand=Brand::get();
          $vehicle=Vehicle::where('status','active')->get();
+         $fuelstation=Fuelstation::all();//where('status','active')->get();
+
                // dd($vehicle);
 
 
-        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle);//->with('brands',$brand);;
+        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle)->with('fuelstation',$fuelstation);;
 
         //
     }
@@ -228,7 +231,7 @@ class FuelrequestController extends Controller
             // 'Admin_approval'=>'required|in:active,inactive',
             // 'Fuel_station_approval'=>'required|in:issued,Notissued',
 
-            'Fuel_station'=>'required',
+            'fuelstation_id'=>'required',
          ]);
 
          $data['order_number']='ORD-'.strtoupper(Str::random(10));
@@ -237,6 +240,7 @@ class FuelrequestController extends Controller
          $data['user_id']=auth()->id();
          $data['order_number']='ORD-'.strtoupper(Str::random(10));
 
+         $data['fuelstation_id']=$request->fuelstation_id;
 
 
 

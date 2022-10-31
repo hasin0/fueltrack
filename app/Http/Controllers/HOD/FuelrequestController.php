@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\fuelrequest;
 use App\Models\Vehicle;
 use App\Models\department;
+use App\Models\Fuelstation;
+
 use App\Mail\FuelrequestMail;
 
 use App\Models\User;
@@ -236,13 +238,14 @@ class FuelrequestController extends Controller
         $department=department::where('id',$user->department_id)->get();
         //dd($department);
 
+        $fuelstation=Fuelstation::all();//where('status','active')->get();
 
         // $brand=Brand::get();
          $vehicle=Vehicle::where('department_id',$user->department_id)->get();
             //    dd($vehicle);
 
 
-        return view('HOD.layouts.fuelrequests.create')->with('vehicle',$vehicle)->with('department',$department);;//->with('brands',$brand);;
+        return view('HOD.layouts.fuelrequests.create')->with('fuelstation',$fuelstation)->with('vehicle',$vehicle)->with('department',$department);//->with('brands',$brand);;
 
         //
     }

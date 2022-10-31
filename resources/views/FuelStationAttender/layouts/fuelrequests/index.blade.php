@@ -1,4 +1,4 @@
-@extends('Driver.layouts.master')
+@extends('FuelStationAttender.layouts.master')
 @section('title','E-SHOP || fuelrequests Page')
 @section('main-contents')
  <!-- DataTales Example -->
@@ -10,7 +10,7 @@
      </div>
     <div class="card-header py-3">
       <h6 class="m-0 font-weight-bold text-primary float-left">fuelrequests List</h6>
-      <a href="{{route('Driver-fuelrequests.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add fuelrequests</a>
+      <a href="{{route('fuelattender-fuelrequests.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add fuelrequests</a>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -36,7 +36,7 @@
               <th>Fuel_station</th>
               <th>Admin_approval</th>
               <th>HOD_approval</th>
-              <th>Fuel_station_approval</th>
+              <th>FuelStationAttender_approval</th>
               <th>Action</th>
 
 
@@ -59,7 +59,7 @@
               <th>Fuel_station</th>
               <th>Admin_approval</th>
               <th>HOD_approval</th>
-              <th>Fuel_station_approval</th>
+              <th>FuelStationAttender_approval</th>
               <th>Action</th>
 
               </tr>
@@ -70,8 +70,6 @@
             @foreach($fuelrequest as $fuelrequests)
 
              @php
-          //  $fuelstations=DB::table('fuelstations')->select('name')->where('id',$fuelrequests->fuelstation_id)->get();
-
             $vehicle_fueltank=DB::table('vehicles')->where('id',$fuelrequests->vehicle_id)->pluck('fueltank');
             @endphp
 
@@ -95,11 +93,6 @@
                     <td>@foreach($fuelrequests->vehicles as $data){{($data->department->name)}} @endforeach</td>
                     <td>{{$fuelrequests->order_number}}</td>
                     <td>{{$fuelrequests->fuelstation->name}}</td>
-                    {{-- <td>@foreach($fuelstations as $fuelstation) {{$fuelstations->name}} @endforeach</td> --}}
-
-                    {{-- $comment->post->title; --}}
-
-                    {{-- <td>{{$fuelrequests->Fuel_station}}</td> --}}
 
 
 
@@ -120,7 +113,7 @@
                     </td>
 
                     <td>
-                        <input value="{{$fuelrequests->id}}" name="toogle2" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $fuelrequests->HOD_approval =='active' ? 'checked' : '' }}>
+                        <input value="{{$fuelrequests->id}}" name="toogle2" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $fuelrequests->FuelStationAttender_approval =='active' ? 'checked' : '' }}>
 
                     </td>
 
@@ -131,8 +124,8 @@
                     </td>
 
                     <td>
-                        <a href="{{route('Driver-fuelrequests.edit',$fuelrequests->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                        <form method="POST" action="{{route('Driver-fuelrequests.destroy',[$fuelrequests->id])}}">
+                        <a href="{{route('fuelattender-fuelrequests.edit',$fuelrequests->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                        <form metFuelStationAttender="POST" action="{{route('fuelattender-fuelrequests.destroy',[$fuelrequests->id])}}">
                           @csrf
                           @method('delete')
                               <button class="btn btn-danger btn-sm dltBtn" data-id={{$fuelrequests->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
@@ -149,9 +142,9 @@
                               </button>
                             </div>
                             <div class="modal-body">
-                              <form method="post" action="{{ route('vehicle.destroy',$user->id) }}">
+                              <form metFuelStationAttender="post" action="{{ route('vehicle.destroy',$user->id) }}">
                                 @csrf
-                                @method('delete')
+                                @metFuelStationAttender('delete')
                                 <button type="submit" class="btn btn-danger" style="margin:auto; text-align:center">Parmanent delete user</button>
                               </form>
                             </div>
@@ -368,7 +361,7 @@
         //  alert(id);
 
           $.ajax({
-              url:"{{route('hod.status')}}",
+              url:"{{route('fuelattender.status')}}",
 
               type: "POST",
               // dataType: "json",

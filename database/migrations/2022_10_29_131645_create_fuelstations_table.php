@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDepartments extends Migration
+class CreateFuelstationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,16 @@ class CreateDepartments extends Migration
      */
     public function up()
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::create('fuelstations', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedBigInteger('user_id')->index()->nullable();
+
+
             $table->timestamps();
-            // $table->unique('name');
 
 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE')->onUpdate('CASCADE');;
 
         });
     }
@@ -31,6 +34,6 @@ class CreateDepartments extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('fuelstations');
     }
 }

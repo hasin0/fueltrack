@@ -1,8 +1,8 @@
-@extends('backend.layouts.master')
+@extends('FuelStationAttender.layouts.master')
 
 @section('title','E-SHOP || fuelrequests Create')
 
-@section('main-content')
+@section('main-contents')
 
 <div class="card">
     <h5 class="card-header">Requestfuels</h5>
@@ -33,7 +33,7 @@
 
 
 
-      <form method="post" action="{{route('fuelrequests.store')}}">
+      <form method="post" action="{{route('fuelattender-fuelrequests.store')}}">
         {{csrf_field()}}
         <div class="form-group">
           <label for="inputTitle" class="col-form-label">present_km <span class="text-danger">*</span></label>
@@ -106,7 +106,29 @@
                 <option value="">--Select vehicle--</option>
                {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
                @foreach($vehicle as $vehicles )
-                <option value="{{$vehicles->id}}">Car-Tag {{$vehicles->tag_no}} :{{$vehicles->fueltank}}Liters: {{$vehicles->department}}</option>
+                <option value="{{$vehicles->id}}">Car-Tag :{{$vehicles->tag_no}} fueltankLiters:{{$vehicles->fueltank}} Department:{{$vehicles->department->name}}</option>
+               @endforeach
+            </select>
+          </div>
+
+
+
+
+
+
+
+
+
+
+          <div class="form-group">
+            <label for="department_id">department</label>
+            {{-- {{$brands}} --}}
+
+            <select name="department_id" class="form-control">
+                {{-- <option value="">--Select vehicle--</option> --}}
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($department as $department )
+                <option value="{{$department->id}}"> {{$department->name}}</option>
                @endforeach
             </select>
           </div>
@@ -153,12 +175,12 @@
 {{--
 
           <div class="form-group">
-            <label for="HOD_approval" class="col-form-label">HOD_approval <span class="text-danger">*</span></label>
-            <select name="HOD_approval" class="form-control">
+            <label for="FuelStationAttender_approval" class="col-form-label">FuelStationAttender_approval <span class="text-danger">*</span></label>
+            <select name="FuelStationAttender_approval" class="form-control">
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
             </select>
-            @error('HOD_approval')
+            @error('FuelStationAttender_approval')
             <span class="text-danger">{{$message}}</span>
             @enderror
           </div>
@@ -198,23 +220,6 @@
 
 
 
-          {{-- <div class="form-group">
-            <label for="Fuel_station" class="col-form-label">Fuel-station <span class="text-danger">*</span></label>
-            <select name="Fuel_station" class="form-control">
-                <option value="">--Select--</option>
-
-                <option value="Total-station">Total-station</option>
-                <option value="NNPC-station">NNPC-station</option>
-                <option value="Petrolcam-station">Petrolcam-station</option>
-
-            </select>
-            @error('Fuel_station')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-          </div> --}}
-
-
-
           <div class="form-group">
             <label for="fuelstation">fuelstation</label>
             {{-- {{$brands}} --}}
@@ -227,8 +232,6 @@
                @endforeach
             </select>
           </div>
-
-
 
 
 

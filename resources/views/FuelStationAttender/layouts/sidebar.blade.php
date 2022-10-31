@@ -1,30 +1,30 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('admin')}}">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('FuelStationAttender')}}">
       <div class="sidebar-brand-icon rotate-n-15">
         <i class="fas fa-laugh-wink"></i>
       </div>
-      <div class="sidebar-brand-text mx-3">Admin</div>
+      <div class="sidebar-brand-text mx-3">FuelStationAttender</div>
     </a>
 
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    {{-- <li class="nav-item active">
       <a class="nav-link" href="{{route('admin')}}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
-    </li>
+    </li> --}}
 
     <!-- Divider -->
     <hr class="sidebar-divider">
 
     <!-- Heading -->
-    <div class="sidebar-heading">
+    {{-- <div class="sidebar-heading">
         Vehicles
-    </div>
+    </div> --}}
 
     <!-- Nav Item - Pages Collapse Menu -->
     <!-- Nav Item - Charts -->
@@ -38,7 +38,7 @@
 
 
 
-    <li class="nav-item">
+    {{-- <li class="nav-item">
       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
         <i class="fas fa-image"></i>
         <span>Vehicles</span>
@@ -50,7 +50,7 @@
           <a class="collapse-item" href="{{route('vehicle.create')}}">Add Vehicles</a>
         </div>
       </div>
-    </li>
+    </li> --}}
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -68,8 +68,8 @@
         <div id="categoryCollapse" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">FuelTrack Options:</h6>
-            <a class="collapse-item" href="{{route('fuelrequests.index')}}">FuelTrack</a>
-            <a class="collapse-item" href="{{route('fuelrequests.create')}}">Requestfuel</a>
+            <a class="collapse-item" href="{{route('fuelattender-fuelrequests.index')}}">FuelTrack</a>
+            <a class="collapse-item" href="{{route('fuelattender-fuelrequests.create')}}">Requestfuel</a>
           </div>
         </div>
     </li>
@@ -141,9 +141,9 @@
     <hr class="sidebar-divider">
 
     <!-- Heading -->
-    <div class="sidebar-heading">
+    {{-- <div class="sidebar-heading">
       Posts
-    </div>
+    </div> --}}
 
     <!-- Posts -->
     {{-- <li class="nav-item">
@@ -202,9 +202,9 @@
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
      <!-- Heading -->
-    <div class="sidebar-heading">
+    {{-- <div class="sidebar-heading">
         General Settings
-    </div>
+    </div> --}}
     {{-- <li class="nav-item">
       <a class="nav-link" href="{{route('coupon.index')}}">
           <i class="fas fa-table"></i>
@@ -212,50 +212,18 @@
     </li>--}}
 
 
+    {{-- <li class="nav-item">
+        <a class="nav-link" href="{{route('roles.index')}}">
+            <i class="fas fa-users"></i>
+            <span>role</span></a>
+    </li> --}}
+
+{{--
     <li class="nav-item">
         <a class="nav-link" href="{{route('roles.index')}}">
             <i class="fas fa-users"></i>
             <span>role</span></a>
-            
-    </li>
-
-
-    <li class="nav-item">
-      <a class="nav-link" href="{{route('fuelstation.index')}}">
-          <i class="fas fa-users"></i>
-          <span>fuelstation</span></a>
-          
-  </li>
-
-{{--
-    <li class="nav-item">
-        <a class="nav-link" href="">
-
-
-            <i class="fas fa-users"></i>
-            <span>Reports</span></a>
     </li> --}}
-
-
-
-
-
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwos" aria-expanded="true" aria-controls="collapseTwos">
-          <i class="fas fa-image"></i>
-          <span>REPORTS</span>
-        </a>
-        <div id="collapseTwos" class="collapse" aria-labelledby="headingTwos" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Vehicles Options:</h6>
-            <a class="collapse-item" href="{{route('user.report')}}">USER LIST</a>
-            <a class="collapse-item" href="{{route('fuelrequests.report')}}">FUELREQUEST</a>
-          </div>
-        </div>
-      </li>
-
-
-
 
 
 
@@ -265,9 +233,13 @@
 
      <!-- Users -->
     <li class="nav-item">
-        <a class="nav-link" href="{{route('users.index')}}">
+        <a class="nav-link" href="{{route('FuelStationAttender.profile')}}">
             <i class="fas fa-users"></i>
-            <span>Users</span></a>
+            <span>User Profile</span></a>
+
+        <a class="nav-link" href="{{route('FuelStationAttender.change.password.form')}}">
+            <i class="fas fa-users"></i>
+            <span>change Password</span></a>
     </li>
      <!-- General settings -->
        {{-- <li class="nav-item">

@@ -100,7 +100,7 @@
                     <td>{{$fuelrequests->order_number}}</td>
                     <td>@foreach($fuelrequests->vehicles as $data){{($data->tag_no)}}  @endforeach</td>
 
-                    <td>{{$fuelrequests->Fuel_station}}</td>
+                    <td>{{$fuelrequests->fuelstation->name}}</td>
 
 
 
