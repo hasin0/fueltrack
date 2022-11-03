@@ -85,7 +85,7 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->with(['fuels
 
     //   dd($fuelrequest);
     //  $fuelrequest = fuelrequest::find(1);
-    //  return $fuelrequest;
+    //  returnss$fuelrequest;
 
     // $fuelrequest = fuelrequest::find(1);
 

@@ -14,7 +14,7 @@
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        @if(count($fuelrequest)>0)
+        @if(count($fuelstation)>0)
 
 
 
@@ -67,11 +67,11 @@
 
 
           <tbody>
-            @foreach($fuelrequest as $fuelrequests)
+            @foreach($fuelstation as $fuelrequests)
 
-             @php
+             {{-- @php
             $vehicle_fueltank=DB::table('vehicles')->where('id',$fuelrequests->vehicle_id)->pluck('fueltank');
-            @endphp
+            @endphp --}}
 
 
 
@@ -89,10 +89,11 @@
                     <td>{{$fuelrequests->km_used}}</td>
                     {{-- <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank - $fuelrequests->last_km_when_fueling)}}  @endforeach</td> --}}
 
-                    <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank)}}  @endforeach</td>
-                    <td>@foreach($fuelrequests->vehicles as $data){{($data->department->name)}} @endforeach</td>
+                     <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank)}}  @endforeach</td>
+                    <td>@foreach($fuelrequests->vehicles as $data){{($data->department->name)}} @endforeach</td> 
+
                     <td>{{$fuelrequests->order_number}}</td>
-                    <td>{{$fuelrequests->fuelstation->name}}</td>
+                    <td>{{$fuelrequests->name}}</td>
 
 
 

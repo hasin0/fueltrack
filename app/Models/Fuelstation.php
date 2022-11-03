@@ -18,7 +18,7 @@ class Fuelstation extends Model
 public function fuelrequest()
 {
 
-    return $this->belongsTo(fuelrequest::class,'fuelstation_id');
+    return $this->hasMany(fuelrequest::class,'fuelstation_id');
 }
 
 

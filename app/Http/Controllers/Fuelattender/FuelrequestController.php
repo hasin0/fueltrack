@@ -12,13 +12,16 @@ use App\Models\department;
 use App\Models\Fuelstation;
 
 use App\Models\Role;
-use Auth;
+// use Auth;
 
 
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 use Mail;
+use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Php;
 
 class FuelrequestController extends Controller
 {
@@ -30,103 +33,49 @@ class FuelrequestController extends Controller
     public function index()
     {
 
-            //$user=auth()->user();
-            $user=auth()->user();
-
-            $fuelstation=Fuelstation::with(['fuelrequest'])->get();
-
-            dd($fuelstation);
-
-
-
-        //  $user=User::where('department_id',$user->department_id)->whereHas(
-        //     'roles', function($q){
-        //         $q->where('name', 'HOD');
-        //     }
-        // )->get('email');
-
-
-            
-
-        
-        
-        //get();//('roles')
-   
-        //    $user = User::whereHas(
-        //     'roles', function($q){
-        //         $q->where('name', 'HOD');
-        //     }
-        // )->get();
-           // $role=Role::with('users')->where('department_id',$user->department_id)->get();
-            
-
-            // $get_hod_for_the_user = vw_user_roleuser_role::where('department_id', $get_user_department)->where('role_id', '=', 4)->pluck('name','user_id');
-        //   return  $user->role;
-
-          //  $user=User::where('department_id',$user->department_id)->get();
-          //  
-        // for the whole department count for HODs
-        //   $fuelrequest=fuelrequest::where('department_id',$user->department_id)->get();//with(['fuelrequests','department'])->get();
-        //$user = User::role('HOD')->get();
-        // $user = User::where('department_id', $user->department_id)->where('role_id', '=', 2)->pluck('name');
-    //    dd($user);
-
+     
+             $user=auth()->user();
            
 
-       
-
-        // $department=department::where('id',$user->department_id)->get();
-        //dd($department);
-
-
-        // $brand=Brand::get();
-
-          // indiviual fuelrequest only
-
-          $fuelrequest=fuelrequest::where('id',$user->fuelstation_id)->get();//with(['fuelrequests','department'])->get();
-
-
-// $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->with(['fuelstation'])->get();
-
-     //$user=User::where('department_id',$user->department_id)->with(['fuelrequests','department'])->get();
-
-
-    //  $user=User::where('department_id',$user->department_id)->with(['fuelrequests','department'])->get();
-
-    //  $fuelrequest = fuelrequest::find(1);
-    //  return $fuelrequest;
-
-    // $fuelrequest = fuelrequest::find(1);
-
-    // $fuelrequest->vehicles();
-
-    //  foreach ($fuelrequest->vehicles as $veH  ) {
-
-    //   return  $veH->department_id; //- $fuelrequest['liters_km'];
-
-
-    //     # code...
-    // }
-
-    //user->department_id;
-
-
-     //return  $fuelrequest->vehicles();//->attach($vehicle);
-
-
-     //return $fuelrequest->vehicle;
-     // $fuelrequest;
 
 
 
+            $fuelstationid = DB::table('fuelstations')->where(['user_id'=>auth()->user()->id])->get();
 
 
+            $array = collect($fuelstationid)->map(function($obj){
+                return (array) $obj;
+              })->toArray();
+
+        // $vehicle=$data['vehicle_id'];
+
+                              
+                    foreach ($array as $fuelstationids) {
 
 
-    //   $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
+                foreach($fuelstationids as $fuelstationsss){
+                    
 
-        //  dd($vehicle);
-        return view('FuelStationAttender.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);//->with('fuelrequestC',$fuelrequestC);
+
+                    //return $fillstation->order_number;
+                    // return ($fuelstationsss);
+               }
+                  
+        }
+
+          
+
+            $fuelstationw=Fuelstation::where('user_id',$user)->get('id');
+            // $fuelrequest=fuelrequest::where('user_id',$user->user_id)->get();
+             $fuelstation=fuelrequest::where('fuelstation_id',$fuelstationids)->with(['user','vehicles'])->get();
+ 
+   
+
+//  dd($fuelstation);
+
+
+          
+        return view('FuelStationAttender.layouts.fuelrequests.index',compact('fuelstation'));//->with('fuelstation',$fuelstation);//->with('fuelrequestC',$fuelrequestC);
         //
     }
 
@@ -403,6 +352,7 @@ class FuelrequestController extends Controller
      */
     public function show($id)
     {
+
         //
     }
 
