@@ -14,43 +14,7 @@
     </div>
     <div class="card-body">
       <div class="table-responsive">
-        @if(count($fuelrequest)>0)
-
-
-        <br>
-            <form action="{{route('fuelrequests.report')}}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="container">
-                <div class="row">
-                <label for="from" class="col-form-label">From</label>
-                    <div class="col-md-2">
-                    <input type="date" class="form-control input-sm" id="from" name="from">
-                    </div>
-                    <label for="from" class="col-form-label">To</label>
-                    <div class="col-md-2">
-                        <input type="date" class="form-control input-sm" id="to" name="to">
-                    </div>
-
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-primary btn-sm" name="search" >Search</button>
-                        <button type="submit" class="btn btn-primary btn-sm" name="exportExcel" >Export excel</button>
-                        <button type="submit" class="btn btn-primary btn-sm" name="exportPDF" >Export PDF</button>
-
-
-                    </div>
-
-
-
-
-
-
-
-
-
-                </div>
-            </div>
-            </form>
-            <br>
+      
 
 
 
@@ -107,18 +71,18 @@
 
 
           <tbody>
-            @foreach($fuelrequest as $fuelrequests)
+            @foreach($fuelrequests as $fuelrequests)
 
-             @php
+             {{-- @php
             $vehicle_fueltank=DB::table('vehicles')->where('id',$fuelrequests->vehicle_id)->pluck('fueltank');
 
-            @endphp
+            @endphp --}}
 
 
 
                 <tr>
                     <td>{{$fuelrequests->id}}</td>
-                    <td><a href="{{route('fuelrequests.show',$fuelrequests->id)}}">{{$fuelrequests->user->name}}/{{$fuelrequests->user->phone}}</a></td>
+                    <td>{{$fuelrequests->user->name}}/{{$fuelrequests->user->phone}}</td>
 
 
                     <td>{{$fuelrequests->present_km}}</td>
@@ -199,9 +163,7 @@
           </tbody>
         </table>
         {{-- <span style="float:right">{{$fuelrequests->links()}}</span> --}}
-        @else
           <h6 class="text-center">No vehicle found!!! Please create fuelrequests</h6>
-        @endif
       </div>
     </div>
 </div>

@@ -45,7 +45,7 @@ class HomeController extends Controller
 
 }
     else {
-        return view('home');
+        return view('404');
     }
 
         //return view('home');

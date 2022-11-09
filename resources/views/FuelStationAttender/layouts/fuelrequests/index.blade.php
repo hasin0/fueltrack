@@ -267,37 +267,37 @@
 
 
 <script>
-    // $(function() {
-    //   $('input[name=toogle]').change(function() {
-    //       var mode = $(this).prop('checked'); //== true ? 1 : 0;
-    //      // alert(mode)
-    //       var id = $(this).val();
-    //     //  alert(id);
+    $(function() {
+      $('input[name=toogle]').change(function() {
+          var mode = $(this).prop('checked'); //== true ? 1 : 0;
+         // alert(mode)
+          var id = $(this).val();
+        //  alert(id);
 
-    //       $.ajax({
-    //           url:"{{route('vehicle.status')}}",
+          $.ajax({
+              url:"{{route('vehicle.status')}}",
 
-    //           type: "POST",
-    //           // dataType: "json",
-    //           data:{
-    //               // 'status': status, 'vehicle_id': vehicle_id
-    //               _token:'{{csrf_token()}}',
-    //               mode:mode,
-    //               id:id,
-    //           },
-    //           success:function(response){
-    //               if (response.status) {
+              type: "POST",
+              // dataType: "json",
+              data:{
+                  // 'status': status, 'vehicle_id': vehicle_id
+                  _token:'{{csrf_token()}}',
+                  mode:mode,
+                  id:id,
+              },
+              success:function(response){
+                  if (response.status) {
 
-    //                   alert(response.msg);
+                      alert(response.msg);
 
-    //               }
-    //               else {
-    //                   alert('Please wait for approval')
-    //               }
-    //           }
-    //       });
-    //   })
-    // })
+                  }
+                  else {
+                      alert('Please wait for approval')
+                  }
+              }
+          });
+      })
+    })
 
   </script>
 
@@ -405,7 +405,7 @@
         //  alert(id);
 
           $.ajax({
-              url:"{{route('FSA.status')}}",
+              url:"{{route('fuelattender.status')}}",
 
               type: "POST",
               // dataType: "json",

@@ -86,6 +86,16 @@ Route::post('fuelrequestreports',[\App\Http\Controllers\FuelrequestController::c
  Route::resource('roles', RoleController::class);
  //Route::resource('users', UserController::class);
 
+
+ Route::get('/profile', [App\Http\Controllers\AdminController::class, 'userAccount'])->name('admin.profile');
+//  admin-profile
+
+ Route::post('/profile/account/{id}', [App\Http\Controllers\AdminController::class, 'updateAccount'])->name('update.profile');
+
+ Route::get('change-password',  [App\Http\Controllers\AdminController::class, 'changePassword'])->name('change.password.form');
+ Route::post('change-password',[App\Http\Controllers\AdminController::class, 'changPasswordStore'])->name('change.password');
+
+
 });
 
 
@@ -178,9 +188,9 @@ Route::group(['prefix'=>'fuelattender','middleware' => ['role:FuelStationAttende
 
     //Route::get('/fuelrequests', [App\Http\Controllers\HodController::class, 'index'])->middleware(['auth'])->name('HOD');
 
-   Route::resource('/fuelattender-fuelrequests',\App\Http\Controllers\Fuelattender\FuelrequestController::class);
+   Route::resource('/fuelattender-fuelrequests',\App\Http\Controllers\Fuelattender\FuelrequestController::class,['only' => ['index']]);
 
-   Route::post('HOD_approval',[\App\Http\Controllers\Fuelattender\FuelrequestController::class,'fuelattenderStatus'])->name('fuelattender.status');
+   Route::post('FuelStationAttender_approval',[\App\Http\Controllers\Fuelattender\FuelrequestController::class,'fuelattenderStatus'])->name('fuelattender.status');
 
 //    Route::resource('/HOD-fuelrequests',\App\Http\Controllers\HOD\FuelrequestController::class);
 

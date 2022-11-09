@@ -39,7 +39,7 @@
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">FuelStations</div>
-            {{--                  <div class="h5 mb-0 font-weight-bold text-gray-800">{{\App\Models\Product::countActiveProduct()}}</div> --}}
+            <div class="h5 mb-0 font-weight-bold text-gray-800">{{\App\Models\Fuelstation::all()->count()}}</div>
 
               </div>
               <div class="col-auto">
@@ -57,10 +57,11 @@
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
                 <div class="text-xs font-weight-bold text-info text-uppercase mb-1">FuelTracks</div>
+                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{\App\Models\fuelrequest::all()->count()}}</div>
+
                 <div class="row no-gutters align-items-center">
                   <div class="col-auto">
 
-     {{-- <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{\App\Models\Order::countActiveOrder()}}</div> --}}
 
 
                   </div>
@@ -100,13 +101,15 @@
         <div class="card shadow mb-4">
           <!-- Card Header - Dropdown -->
           <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Department vehicle with highest fuelrequest </h6>
 
           </div>
           <!-- Card Body -->
           <div class="card-body">
             <div class="chart-area">
-              <canvas id="myAreaChart"></canvas>
+
+              <h6>test</h6>
+              {{-- <canvas id="myAreaChart"></canvas> --}}
             </div>
           </div>
         </div>

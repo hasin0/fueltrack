@@ -1,10 +1,17 @@
-<x-guest-layout>
+{{-- <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
                 <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
             </a>
-        </x-slot>
+        </x-slot> --}}
+
+
+        <head>
+            <title>E-SHOP || Login Page</title>
+            @include('backend.layouts.head')
+          
+          </head>
 
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
@@ -44,5 +51,5 @@
                 </x-button>
             </div>
         </form>
-    </x-auth-card>
-</x-guest-layout>
+    {{-- </x-auth-card>
+</x-guest-layout> --}}

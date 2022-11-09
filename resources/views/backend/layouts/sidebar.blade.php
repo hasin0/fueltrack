@@ -213,6 +213,17 @@
 
 
     <li class="nav-item">
+      <a class="nav-link" href="{{route('admin.profile')}}">
+          <i class="fas fa-users"></i>
+          <span>User Profile</span></a>
+
+      <a class="nav-link" href="{{route('change.password.form')}}">
+          <i class="fas fa-users"></i>
+          <span>change Password</span></a>
+  </li>
+
+
+    <li class="nav-item">
         <a class="nav-link" href="{{route('roles.index')}}">
             <i class="fas fa-users"></i>
             <span>role</span></a>
@@ -257,17 +268,37 @@
 
 
 
+      <li class="nav-item">
+        <a class="nav-link" href="{{route('users.index')}}">
+            <i class="fas fa-users"></i>
+            <span>Users</span></a>
+    </li>
+{{-- 
+<form method="POST" action="{{ route('logout') }}">
+                            @csrf
 
-
-
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </x-dropdown-link>
+                        </form> --}}
 
 
 
      <!-- Users -->
     <li class="nav-item">
-        <a class="nav-link" href="{{route('users.index')}}">
-            <i class="fas fa-users"></i>
-            <span>Users</span></a>
+      <form method="POST" action="{{ route('logout') }}">
+        @csrf
+
+        <x-dropdown-link :href="route('logout')"
+                onclick="event.preventDefault();
+                            this.closest('form').submit();">
+            {{ __('Log Out') }}
+        </x-dropdown-link>
+    </form> 
+
+
     </li>
      <!-- General settings -->
        {{-- <li class="nav-item">

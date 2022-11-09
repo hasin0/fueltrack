@@ -67,9 +67,12 @@ class FuelrequestController extends Controller
 
 
 
+        // $fuelrequest=fuelrequest::all()->sum('km_used');
+
         $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
 
-        //  dd($vehicle);
+
+        //   dd($fuelrequest);
         return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
         //
     }
@@ -305,7 +308,17 @@ class FuelrequestController extends Controller
      */
     public function show($id)
     {
-        //
+
+         $fuelrequests=fuelrequest::where('id',$id)->get();
+
+//  dd($fuelrequests);
+
+return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
+
+
+        //   return view('backend.layouts.fuelrequests.show')->with('fuelrequest',$fuelrequest);
+
+
     }
 
     /**
@@ -459,23 +472,35 @@ class FuelrequestController extends Controller
             if ($req->has('search'))
             {
                 // select search
-                $search = fuelrequest::whereDate('created_at', [$from, $to])->with(['department','vehicles'])->get();
+                // $search = fuelrequest::whereBetween('created_at', [$from, $to])->with(['department','vehicles'])->get();
 
                 // $department = department::all();//whereDate('created_at', [$from, $to])->with(['department'])->get();
 
-
+                // $search =DB::table('fuelrequests')->where('created_at',$from,$to);
                 //  DB::table('users')->where('created_at',array($from, $to))->get();
                 //select("SELECT * FROM users WHERE created_at BETWEEN '$from' AND '$to'");
                 // return view('import',['ViewsPage' => $search]);
                 // $users = User::with(['department'])->get();
-
+                // $search = DB::table('fuelrequests')
+                // ->whereDate('created_at', array($from, $to))
+                // ->get();
 
                 // DB::table('users')
                 // ->whereBetween('created_at', array($from, $to))
                 // ->get();
 
+                $search =fuelrequest::whereBetween(DB::raw('DATE(`created_at`)'),
+    [$req->from,$req->to])->with(['department','vehicles'])->get();
 
-                // dd($search);
+
+                // $search = fuelrequest::where('created_at', '>=', $from)
+                //            ->where('created_at', '<=', $to)
+                //            ->get();
+                
+
+                //   dd($search);
+                //  dd($to);
+
 
                 return view('backend.layouts.fuelrequests.import')->with('ViewsPage',$search);//->with('department',$department);//->with('roles',$roles)->with('department',$department);
 
@@ -483,7 +508,11 @@ class FuelrequestController extends Controller
             elseif ($req->has('exportPDF'))
             {
                 // select PDF
-                $PDFReport =  fuelrequest::whereDate('created_at', [$from, $to])->with(['department'])->get();
+                $PDFReport =fuelrequest::whereBetween(DB::raw('DATE(`created_at`)'),
+                [$req->from,$req->to])->with(['department','vehicles'])->get();
+            
+            // dd($PDFReport);
+                // fuelrequest::whereDate('created_at', [$from, $to])->with(['department'])->get();
                 // User::select('*')->where('created_at','>=',$this->from)->where('created_at','<=', $this->to)->with(['department'])->get();// DB::select("SELECT * FROM users WHERE created_at BETWEEN '$from' AND '$to'");
                 $pdf = PDF::loadView('backend.layouts.fuelrequests.PDF_report', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
                 return $pdf->download('PDF_report.pdf');
@@ -493,7 +522,9 @@ class FuelrequestController extends Controller
                 elseif($req->has('exportExcel'))
 
                 // select Excel
-                return Excel::download(new FuelrequestExport($from, $to), 'Excel-reports.xlsx');
+            return  Excel::download(new FuelrequestExport($from, $to), 'Excel-reports.xlsx');
+
+                // dd($req->has('exportExcel'));
             {
         }
         }

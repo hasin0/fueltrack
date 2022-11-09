@@ -69,7 +69,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">FuelTrack Options:</h6>
             <a class="collapse-item" href="{{route('fuelattender-fuelrequests.index')}}">FuelTrack</a>
-            <a class="collapse-item" href="{{route('fuelattender-fuelrequests.create')}}">Requestfuel</a>
+            {{-- <a class="collapse-item" href="{{route('fuelattender-fuelrequests.create')}}">Requestfuel</a> --}}
           </div>
         </div>
     </li>

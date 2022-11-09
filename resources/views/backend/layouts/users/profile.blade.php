@@ -6,9 +6,9 @@
 
 <div class="card shadow mb-4">
     <div class="row">
-        <div class="col-md-12">
+        {{-- <div class="col-md-12">
            @include('backend.layouts.notification')
-        </div>
+        </div> --}}
     </div>
    <div class="card-header py-3">
      <h4 class=" font-weight-bold">Profile</h4>
@@ -36,7 +36,7 @@
                   </div>
             </div>
             <div class="col-md-8">
-                <form class="border px-4 pt-2 pb-3" method="POST" action="{{route('profile-update',$profile->id)}}">
+                <form class="border px-4 pt-2 pb-3" method="POST" action="{{route('update.profile',$profile->id)}}">
                     @csrf
                     <div class="form-group">
                         <label for="inputTitle" class="col-form-label">Name</label>

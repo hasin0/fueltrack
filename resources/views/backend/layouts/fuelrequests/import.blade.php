@@ -1,4 +1,6 @@
-
+@extends('backend.layouts.master')
+@section('title','E-SHOP || fuelrequests Page')
+@section('main-content')
 <!DOCTYPE html>
 <html>
 <head>
@@ -128,4 +130,5 @@
 </div>
 </body>
 </html>
+@endsection
 

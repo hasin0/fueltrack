@@ -10,6 +10,8 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Illuminate\Support\Facades\DB;
+
 
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -40,12 +42,13 @@ WithHeadings
 
     public function query()
     {
-       return   fuelrequest::query()->whereDate('created_at', [ $this->from, $this->to ]);//->with(['department'])->get();
+    //    return   fuelrequest::query()->whereDate('created_at', [ $this->from, $this->to ]);//->with(['department'])->get();
        //User::select('*')->where('created_at','>=',$this->from)->where('created_at','<=', $this->to)->with(['department'])->get();
 
        //  return  dd(User::with(['department'])->get());
 
-
+       return  fuelrequest::whereBetween(DB::raw('DATE(`created_at`)'),
+       [$this->from,$this->to])->with(['vehicles']);
        // return   $users = User::with(['department'])->get();
 
     }
@@ -72,8 +75,18 @@ WithHeadings
        $fuelrequests->last_km_when_fueling,
        $fuelrequests->km_used,
 
-       $fuelrequests->created_at
 
+
+       $fuelrequests->department->name,///$fuelrequests->user->phone,
+       $fuelrequests->order_number,
+
+    //    @foreach($ViewsPages->vehicles as $data)($data->department->name)@endforeach,
+    //    $fuelrequests->vehicle()->tag_no,
+    //    $fuelrequests->vehicle()->fueltank,
+
+
+
+       $fuelrequests->created_at,
 
 
        ];
@@ -111,9 +124,14 @@ WithHeadings
             'last_km',
             'last_km_when_fueling',
             'km_used',
+            
+             'department',
+            'order-number',
+            // 'car-tag',
+            // 'fueltank',
+
             'created_at',
-            // 'created_at',
-            // 'created_at',
+
 
        ];
    }
