@@ -254,7 +254,7 @@
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwos" aria-expanded="true" aria-controls="collapseTwos">
           <i class="fas fa-image"></i>
-          <span>REPORTS</span>
+          <span>REPORTS </span>
         </a>
         <div id="collapseTwos" class="collapse" aria-labelledby="headingTwos" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
@@ -274,9 +274,9 @@
             <span>Users</span></a>
     </li>
 {{-- 
-<form method="POST" action="{{ route('logout') }}">
+<form methodxcc="POST" action="{{ route('logout') }}">
                             @csrf
-ssss
+ssssss
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
