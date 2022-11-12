@@ -505,7 +505,7 @@ $departments = [
                 <tr>
                   <th>S.N.</th>
                   <th>Name/phone</th>
-    
+
                   <th>present_km</th>
                   <th>liters_km</th>
                   <th>last_fuel_qty</th>
@@ -516,21 +516,21 @@ $departments = [
                   <th>department</th>
                   <th>order_number</th>
                   <th>TAG-NO</th>
-    
+
                   <th>Fuel_station</th>
                   <th>Admin_approval</th>
                   <th>HOD_approval</th>
                   <th>Fuel_station_approval</th>
                   <th>Action</th>
-    
-    
+
+
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                    <th>S.N.</th>
                    <th>Name/phone</th>
-    
+
                   <th>present_km</th>
                   <th>liters_km</th>
                   <th>last_fuel_qty</th>
@@ -541,33 +541,33 @@ $departments = [
                   <th>department</th>
                   <th>order_number</th>
                   <th>TAG-NO</th>
-    
+
                   <th>Fuel_station</th>
                   <th>Admin_approval</th>
                   <th>HOD_approval</th>
                   <th>Fuel_station_approval</th>
                   <th>Action</th>
-    
+
                   </tr>
               </tfoot>
-    
-    
+
+
               <tbody>
                 @foreach($fuelrequest as $fuelrequests)
-    
+
                  @php
                 $vehicle_fueltank=DB::table('vehicles')->where('id',$fuelrequests->vehicle_id)->pluck('fueltank');
-    
+
                 @endphp
-    
-    
-    
+
+
+
                     <tr>
                         <td>{{$fuelrequests->id}}</td>
-    
+
                         <td>{{$fuelrequests->user->name}}/{{$fuelrequests->user->phone}}</td>
-    
-    
+
+
                         <td>{{$fuelrequests->present_km}}</td>
                         <td>{{$fuelrequests->liters_km}}</td>
                         <td>{{$fuelrequests->last_fuel_qty}}</td>
@@ -575,20 +575,20 @@ $departments = [
                         <td>{{$fuelrequests->last_km_when_fueling}}</td>
                         <td>{{$fuelrequests->km_used}}</td>
                         {{-- <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank - $fuelrequests->last_km_when_fueling)}}  @endforeach</td> --}}
-    
+
                         <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank)}}  @endforeach</td>
-    
+
                         <td>@foreach($fuelrequests->vehicles as $data){{($data->department->name)}} @endforeach</td>
                         <td>{{$fuelrequests->order_number}}</td>
                         <td>@foreach($fuelrequests->vehicles as $data){{($data->tag_no)}}  @endforeach</td>
-    
+
                         <td>{{$fuelrequests->Fuel_station}}</td>
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
                         {{-- <td>
                             @if($fuelrequests->photo)
                                 <img src="{{$fuelrequests->photo}}" class="img-fluid zoom" style="max-width:80px" alt="{{$fuelrequests->photo}}">
@@ -596,23 +596,23 @@ $departments = [
                                 <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid zoom" style="max-width:100%" alt="avatar.png">
                             @endif
                         </td> --}}
-    
+
                         <td>
                             <input value="{{$fuelrequests->id}}" name="toogle1" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $fuelrequests->Admin_approval =='active' ? 'checked' : '' }}>
-    
+
                         </td>
-    
+
                         <td>
                             <input value="{{$fuelrequests->id}}" name="toogle2" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $fuelrequests->HOD_approval =='active' ? 'checked' : '' }}>
-    
+
                         </td>
-    
-    
+
+
                         <td>
                             <input value="{{$fuelrequests->id}}" name="toogle3" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="issued" data-off="Notissued" {{ $fuelrequests->Fuel_station_approval =='issued' ? 'checked' : '' }}>
-    
+
                         </td>
-    
+
                         <td>
                             <a href="{{route('fuelrequests.edit',$fuelrequests->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
                             <form method="POST" action="{{route('fuelrequests.destroy',[$fuelrequests->id])}}">
@@ -1159,3 +1159,7 @@ $departments = [
 
 
 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
+
+
+https://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@github.com/hasin0/fueltrack.git
+<!--  -->
