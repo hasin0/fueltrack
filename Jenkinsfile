@@ -7,6 +7,8 @@ pipeline {
         stage('Build') {
             steps {
 
+                                echo 'building'
+
 
 
 
@@ -23,13 +25,12 @@ pipeline {
         //  sh './scripts/jenkins-build.sh'
         //         // sh 'cp .env.example .env'
         //         // sh 'php artisan key:generate'
-                echo "====++++building++++===="
             }
         }
         stage('Test') {
             steps {
                 // sh './vendor/bin/phpunit'
-                                echo "====++++Testing++++===="
+                                echo 'test'
 
             }
         }
