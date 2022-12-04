@@ -85,6 +85,12 @@ WithHeadings
     //    $fuelrequests->vehicle()->fueltank,
 
 
+       $fuelrequests->vehicles->pluck('tag_no')->implode(', '),
+       $fuelrequests->vehicles->pluck('name')->implode(', '),
+
+       $fuelrequests->vehicles->pluck('fueltank')->implode(', '),
+
+
 
        $fuelrequests->created_at,
 
@@ -124,11 +130,13 @@ WithHeadings
             'last_km',
             'last_km_when_fueling',
             'km_used',
-            
+
              'department',
             'order-number',
-            // 'car-tag',
-            // 'fueltank',
+            'car-tag',
+            'name',
+
+            'fueltank',
 
             'created_at',
 
