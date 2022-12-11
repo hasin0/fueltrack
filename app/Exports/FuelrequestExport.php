@@ -92,7 +92,10 @@ WithHeadings
 
 
 
-       $fuelrequests->created_at,
+       $fuelrequests->created_at->toDatestring(),
+
+
+       //$fuelrequests->created_at wite time stamps
 
 
        ];
