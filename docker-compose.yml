@@ -26,6 +26,8 @@ services:
     container_name: fuettrack
     restart: unless-stopped
     tty: true
+    ports:
+      - 8088:83
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
@@ -225,3 +227,4 @@ volumes:
 # volumes:
 #   db:
 #     driver: local
+# docker run -it -p 8080:80 fueltrack-app
