@@ -1,9 +1,9 @@
 pipeline {
     agent {
-        docker {
-            image 'php:7.4-fpm'
-            args '-v "$PWD":/var/www/html'
-        }
+        // docker {
+        //     image 'php:7.4-fpm'
+        //     args '-v "$PWD":/var/www/html'
+        // }
     }
     stages {
         stage('Build') {
