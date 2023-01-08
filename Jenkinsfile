@@ -1,6 +1,5 @@
 pipeline {
-        agent any
-
+    agent any
     stages {
         stage('Build') {
             steps {
@@ -14,11 +13,11 @@ pipeline {
                 sh 'phpunit'
             }
         }
-        // stage('Deploy') {
-        //     steps {
-        //         sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . myuser@myserver:/var/www/html'
-        //     }
-        // }
+        stage('Deploy') {
+            steps {
+                sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . myuser@myserver:/var/www/html'
+            }
+        }
     }
 }
 
