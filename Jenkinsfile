@@ -12,12 +12,15 @@ pipeline {
                 sh 'composer install --no-interaction'
             }
         }
-        stage('Run Tests') {
-            steps {
-                //sh 'phpunit'
-                echo "testing"
-            }
-        }    stages {
+       stage('Run Tests') {
+    steps {
+        script {
+            //sh 'phpunit'
+            echo "testing"
+        }
+    }
+}
+   stages {
         stage('Deploy to Server') {
             steps {
                 sshagent(['my-ssh-key']) {
@@ -33,21 +36,7 @@ pipeline {
         }
     }
 
-        // stage('Deploy to Server') {
-        //     steps {
-        //         sshagent(['my-ssh-key']) {
-        //             // sh 'rsync -avz --exclude-from=.rsyncignore /path/to/laravel-app/ user@server:/path/to/deployment/'
-        //             sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
 
-        //          composer install --no-interaction --no-dev; \
-
-        //          php artisan migrate --force; \
-        //          php artisan cache:clear; \
-        //          php artisan config:cache; \
-        //           '
-        //         }
-        //     }
-        // }
     }
 }
 
