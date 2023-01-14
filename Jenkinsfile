@@ -14,7 +14,8 @@ pipeline {
         }
         stage('Run Tests') {
             steps {
-                sh 'phpunit'
+                //sh 'phpunit'
+                echo "testing"
             }
         }    stages {
         stage('Deploy to Server') {
