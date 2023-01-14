@@ -15,7 +15,9 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . myuser@myserver:/var/www/html'
+
+                echo "deploying "
+                // sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . myuser@myserver:/var/www/html'
             }
         }
     }
