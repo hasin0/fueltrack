@@ -4,27 +4,27 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'composer update --ignore-platform-req=ext-gd'
-                                // sh 'composer install --ignore-platform-req=ext-gd'
+                //    sh 'composer install --ignore-platform-req=ext-gd'
 
                 // sh 'php artisan key:generate'
             }
         }
         stage('Test') {
             steps {
-                sh 'phpunit'
-                // echo "testing"
+                // sh 'phpunit'
+                echo "testing"
             }
         }
         stage('Deploy') {
             steps {
 
                 echo "deploying "
-                // sh 'scp target/*.war ubuntu@54.158.64.65:/var/www/html/fueltrack'
-                // sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack'
-                // sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && composer install --no-interaction"'
-                // sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && php artisan migrate --force"'
-                // sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && php artisan cache:clear"'
-                // sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && php artisan config:cache"'
+                sh 'scp target/*.war ubuntu@54.158.64.65:/var/www/html/fueltrack'
+                sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack'
+                sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && composer install --ignore-platform-req=ext-gd"'
+                sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && php artisan migrate --force"'
+                sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && php artisan cache:clear"'
+                sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && php artisan config:cache"'
             }
         }
     }
