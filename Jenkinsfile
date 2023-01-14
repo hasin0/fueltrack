@@ -19,11 +19,9 @@ pipeline {
             steps {
 
 
-                  sh 'scp target/*.war ubuntu@54.158.64.65:/var/www/html/fueltrack'
+                //   sh 'scp target/*.war ubuntu@54.158.64.65:/var/www/html/fueltrack'
                     sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
-
-                     sh composer install --no-interaction; \
-
+                     sh composer install --ignore-platform-req=ext-gd; \
                      php artisan migrate --force; \
                      php artisan cache:clear; \
                      php artisan config:cache; \
