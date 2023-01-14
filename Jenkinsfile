@@ -11,8 +11,8 @@ pipeline {
         }
         stage('Test') {
             steps {
-                // sh 'phpunit'
-                echo "testing"
+                sh 'phpunit'
+                // echo "testing"
             }
         }
         stage('Deploy') {
