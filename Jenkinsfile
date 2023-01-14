@@ -54,9 +54,9 @@ stage('Deploy to Server') {
 
 
 
+jenkins key
 
-
-
+// ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCxfHgdN9eVG1HhQzNCoryNYCAX3AnGPGhjyo82LIOZuN9VsLTCZwnxXBWNZSD13UWy1ekOVeW03oStFfCOw7CQmM3QQavINCqyS2d7XcxcDtQ7fmBDVBobKitohe+ksI9u3mEftucVetd9qQGkvSspX/BaUZNgrVjojPZkA7fn/2L/5SmuVxmE3P++ozMpYFj/IN9yIj6sehyrXO9MfEvnkG1oXkfLl4SVf1P0HA+LcLKo8lQPrkcs0hq+e/zC2RAvM8EZ8j9Xz3ghxbb/+Qyjfv5LVWNUpZ58qjoTOl0uSPTKwqLVyTaIGKUyBdPcx7gbtiBZGHX7pw12Ak+sWwsTy4SAmklpT8ivaIygNkPIZxzrU5AI/TxTWQoO7DyTZveRhOlSc9ERMTbgpAEEipAw6ZaZAv6sGt7j06Ofo1kt1Fqe2a+0CUfSW1b5kEKMVTzeiqgAmgCPBtke6esQK41OWrKzgqO3HXkr8hKwSrNh8drgq6FcKrmDpbbI5ATlRss= jenkins@ip-172-31-95-149
 
 
 
