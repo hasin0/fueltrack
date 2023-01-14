@@ -18,15 +18,15 @@ pipeline {
         stage('Deploy') {
             steps {
 
-                // echo "deploying "
-                sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
+                echo "deploying "
+                // sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
 
-                 sh composer install --no-interaction; \
+                //  sh composer install --no-interaction; \
 
-                 php artisan migrate --force; \
-                 php artisan cache:clear; \
-                 php artisan config:cache; \
-                //  '
+                //  php artisan migrate --force; \
+                //  php artisan cache:clear; \
+                //  php artisan config:cache; \
+                // //  '
             }
         }
     }
