@@ -24,13 +24,13 @@ pipeline {
         stage('Deploy to Server') {
             steps {
                 sshagent(['my-ssh-key']) {
-                    script {
+
                         sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
                             composer install --no-interaction --no-dev; \
                             php artisan migrate --force; \
                             php artisan cache:clear; \
                             php artisan config:cache;'
-                    }
+
                 }
             }
         }
