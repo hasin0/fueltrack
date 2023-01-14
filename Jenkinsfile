@@ -1,25 +1,93 @@
 pipeline {
     agent any
-    stages {
-        stage('Build') {
-            steps {
-                // sh 'composer install --no-scripts'
-                //  sh 'composer install --no-interaction'
-echo "building"
-                // sh 'php artisan key:generate'
-                // sh 'php artisan migrate --force'
-            }
-        }
-        stage('Test') {
-            steps {
-                // sh 'phpunit'
-                echo "testing"
-            }
-        }
-        stage('Deploy') {
-            steps {
 
-                echo "deploying "
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/hasin0/fueltrack.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'composer install --no-interaction'
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                sh 'phpunit'
+            }
+        }
+        stage('Deploy to Server') {
+            steps {
+                sshagent(['my-ssh-key']) {
+                    // sh 'rsync -avz --exclude-from=.rsyncignore /path/to/laravel-app/ user@server:/path/to/deployment/'
+                    sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
+
+                 sh composer install --no-interaction; \
+
+                 php artisan migrate --force; \
+                 php artisan cache:clear; \
+                 php artisan config:cache; \
+                  '
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// freestyle projects pipelines
+
+
+// pipeline {
+//     agent any
+//     stages {
+//         stage('Build') {
+//             steps {
+//                 // sh 'composer install --no-scripts'
+//                 //  sh 'composer install --no-interaction'
+// echo "building"
+//                 // sh 'php artisan key:generate'
+//                 // sh 'php artisan migrate --force'
+//             }
+//         }
+//         stage('Test') {
+//             steps {
+//                 // sh 'phpunit'
+//                 echo "testing"
+//             }
+//         }
+//         stage('Deploy') {
+//             steps {
+
+//                 // echo "deploying "
+
+                //  sh 'scp target/*.war ubuntu@54.158.64.65:/var/www/html/fueltrack'
                 // sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
 
                 //  sh composer install --no-interaction; \
@@ -27,19 +95,19 @@ echo "building"
                 //  php artisan migrate --force; \
                 //  php artisan cache:clear; \
                 //  php artisan config:cache; \
-                // //  '
+                //   '
 
-                   script {
-                    def changes = changedFiles(includePaths: ['/var/www/html/fueltrack'], ignoreDeletes: true)
-                    changes.each {
-                        // sh "scp ${it.path} user@host:/path/to/deploy"
-                          echo "deploying "
-                    }
-                 }
-            }
-        }
-    }
-}
+//                 //    script {
+//                 //     def changes = changedFiles(includePaths: ['/var/www/html/fueltrack'], ignoreDeletes: true)
+//                 //     changes.each {
+//                 //         // sh "scp ${it.path} user@host:/path/to/deploy"
+//                 //           echo "deploying "
+//                 //     }
+//                 //  }
+//             }
+//         }
+//     }
+// }
 
 
 
