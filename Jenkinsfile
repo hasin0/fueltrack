@@ -23,7 +23,7 @@ pipeline {
                     // sh 'rsync -avz --exclude-from=.rsyncignore /path/to/laravel-app/ user@server:/path/to/deployment/'
                     sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
 
-                 sh composer install --no-interaction; \
+                 composer install --no-interaction --no-dev; \
 
                  php artisan migrate --force; \
                  php artisan cache:clear; \
