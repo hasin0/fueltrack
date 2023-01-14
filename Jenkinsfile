@@ -22,7 +22,7 @@ pipeline {
 }
 stage('Deploy to Server') {
             steps {
-                sshagent(['my-ssh-key']) {
+                sshagent(['id_rsa.pub']) {
 
                         sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
                             composer install --no-interaction --no-dev; \
