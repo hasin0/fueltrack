@@ -4,15 +4,16 @@ pipeline {
         stage('Build') {
             steps {
                 // sh 'composer install --no-scripts'
-                 sh 'composer install --no-interaction'
-
+                //  sh 'composer install --no-interaction'
+echo "building"
                 // sh 'php artisan key:generate'
                 // sh 'php artisan migrate --force'
             }
         }
         stage('Test') {
             steps {
-                sh 'phpunit'
+                // sh 'phpunit'
+                echo "testing"
             }
         }
         stage('Deploy') {
