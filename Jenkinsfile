@@ -3,9 +3,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'composer install --no-scripts'
-                sh 'php artisan key:generate'
-                sh 'php artisan migrate --force'
+                // sh 'composer install --no-scripts'
+                 sh 'composer install --no-interaction'
+
+                // sh 'php artisan key:generate'
+                // sh 'php artisan migrate --force'
             }
         }
         stage('Test') {
@@ -17,7 +19,14 @@ pipeline {
             steps {
 
                 echo "deploying "
-                // sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . myuser@myserver:/var/www/html'
+                // sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
+
+                //  sh composer install --no-interaction; \
+
+                //  php artisan migrate --force; \
+                //  php artisan cache:clear; \
+                //  php artisan config:cache; \
+                //  '
             }
         }
     }
