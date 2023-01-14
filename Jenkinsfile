@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'composer install --no-interaction'
+                sh 'composer install --ignore-platform-req=ext-gd'
                 // sh 'php artisan key:generate'
             }
         }
