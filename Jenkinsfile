@@ -28,6 +28,14 @@ echo "building"
                 //  php artisan cache:clear; \
                 //  php artisan config:cache; \
                 // //  '
+
+                   script {
+                    def changes = changedFiles(includePaths: ['/var/www/html/fueltrack'], ignoreDeletes: true)
+                    changes.each {
+                        // sh "scp ${it.path} user@host:/path/to/deploy"
+                          echo "deploying "
+                    }
+                 }
             }
         }
     }
