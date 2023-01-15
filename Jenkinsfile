@@ -20,7 +20,7 @@ pipeline {
 
 
 
-      sh ' ssh jenkins@ec2-54-158-64-65 "cd /var/www/html/fueltrack; \
+      sh ' ssh jenkins@54-158-64-65 "cd /var/www/html/fueltrack; \
             git pull origin main; \
             composer install --ignore-platform-req=ext-gd; \
             php artisan migrate --force; \
