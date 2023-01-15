@@ -3,15 +3,10 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                // sh 'composer update --ignore-platform-req=ext-gd'
+                sh 'composer install --ignore-platform-req=ext-gd'
                 //    sh 'composer install --ignore-platform-req=ext-gd'
 
                 // sh 'php artisan key:generate'
-                 sh 'composer install --ignore-platform-req=ext-gd'
-                sh 'php artisan key:generate'
-
-
-
             }
         }
         stage('Test') {
@@ -26,15 +21,15 @@ pipeline {
 
                 sh '''
     ssh ubuntu@ec2-54-158-64-65 "cd /var/www/html/fueltrack; \
-
+    git pull origin main; \
+    composer install --ignore-platform-req=ext-gd; \
     php artisan migrate --force; \
     php artisan cache:clear; \
     php artisan config:cache; \
     "'
 '''
 
-//  git pull origin main; \
-//     composer install --ignore-platform-req=ext-gd; \
+
 
                 // sh 'ubuntu@ec2-54-158-64-65 "cd /var/www/html/fueltrack; \
 
