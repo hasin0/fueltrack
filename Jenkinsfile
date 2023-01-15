@@ -31,6 +31,19 @@ pipeline {
                 "'
 
 
+            }
+        }
+    }
+}
+
+
+
+
+// ssh -i "webserveky.pem" ubuntu@ec2-54-158-64-65.compute-1.amazonaws.com
+
+
+
+
                 //   sh 'scp target/*.war ubuntu@54.158.64.65:/var/www/html/fueltrack'
                     // sh 'rsync -avz -e "ssh -p22" --exclude-from="rsync-exclude.txt" . ubuntu@54.158.64.65:/var/www/html/fueltrack; \
                     //  sh composer install --ignore-platform-req=ext-gd; \
@@ -46,19 +59,6 @@ pipeline {
                 // sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && php artisan migrate --force"'
                 // sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && php artisan cache:clear"'
                 // sh 'ssh ubuntu@54.158.64.65 "cd /var/www/html/fueltrack && php artisan config:cache"'
-            }
-        }
-    }
-}
-
-
-
-
-// ssh -i "webserveky.pem" ubuntu@ec2-54-158-64-65.compute-1.amazonaws.com
-
-
-
-
 
 
 
