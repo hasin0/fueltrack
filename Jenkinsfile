@@ -19,13 +19,13 @@ pipeline {
             steps {
 
 
-                sh '
-    ssh ubuntu@ec2-54-158-64-65 "cd /var/www/html/fueltrack; \
-    git pull origin main; \
-    composer install --ignore-platform-req=ext-gd; \
-    php artisan migrate --force; \
-    php artisan cache:clear; \
-    php artisan config:cache; \
+
+      sh ' ssh ubuntu@ec2-54-158-64-65 "cd /var/www/html/fueltrack; \
+            git pull origin main; \
+            composer install --ignore-platform-req=ext-gd; \
+            php artisan migrate --force; \
+            php artisan cache:clear; \
+            php artisan config:cache; \
     "'
 
 
