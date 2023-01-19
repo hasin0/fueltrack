@@ -20,7 +20,7 @@ pipeline {
 
 
 
-      sh ' ssh -i "webserveky.pem" root@ec2-54.89.212.150.compute-1.amazonaws.com"cd /var/www/html/fueltrack; \
+      sh ' ssh -i "webserveky.pem" ubuntu@ec2-54.89.212.150.compute-1.amazonaws.com"cd /var/www/html/fueltrack; \
             git pull origin main; \
             composer install --ignore-platform-req=ext-gd; \
             php artisan migrate --force; \
