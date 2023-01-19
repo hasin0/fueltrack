@@ -20,13 +20,23 @@ pipeline {
 
 
 
-      sh ' ssh -i  ec2-user@54.89.212.150 "cd /var/www/html/fueltrack; \
+                     sh 'ssh -i webserveky.pem ec2-user@54.89.212.150 "cd /var/www/html/fueltrack; \
             git pull origin main; \
             composer install --ignore-platform-req=ext-gd; \
             php artisan migrate --force; \
             php artisan cache:clear; \
             php artisan config:cache; \
     "'
+
+
+
+    //   sh ' ssh -i  ec2-user@54.89.212.150 "cd /var/www/html/fueltrack; \
+    //         git pull origin main; \
+    //         composer install --ignore-platform-req=ext-gd; \
+    //         php artisan migrate --force; \
+    //         php artisan cache:clear; \
+    //         php artisan config:cache; \
+    // "'
 
 
 
