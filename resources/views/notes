@@ -1291,6 +1291,13 @@ tttttttttttttttttttttttttttttttttttttttttttttttest
     }
 
 
+    how to push docker to dockerhub
+
+    sudo docker tag c2f97395de0e hasino2258/fueltrack:v1 or latest
+
+
+sudo docker push hasino2258/fueltrack:v1
+
 
 
 
