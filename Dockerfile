@@ -35,10 +35,10 @@ RUN composer update --ignore-platform-reqs
 RUN chown -R www-data:www-data /var/www/html/fueltrack
 
 # Expose the necessary ports
-EXPOSE 9000
+EXPOSE 9001
 
 # Start the PHP-FPM service
-CMD php artisan serve --host=127.0.0.1: --port 9000
+CMD php artisan serve --host=0.0.0.0: --port 9001
 
 
 

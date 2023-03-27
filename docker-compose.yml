@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - 8088:83
+      - 9001:9001
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev

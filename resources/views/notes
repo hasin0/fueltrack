@@ -1298,6 +1298,8 @@ df
 
 sudo docker push hasino2258/fueltrack:v1
 
+docker build -t myimage:latest .
+docker run -d -p 8080:80 nginx:latest
 
 
 
