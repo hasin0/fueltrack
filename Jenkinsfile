@@ -1,61 +1,125 @@
 pipeline {
     agent any
+    environment {
+    DOCKERHUB_CREDENTIALS = credentials('docker-hub cred')
+    }
     stages {
-        stage('Build') {
-            steps {
-                sh 'composer install --ignore-platform-req=ext-gd'
-                //    sh 'composer install --ignore-platform-req=ext-gd'
-
-                // sh 'php artisan key:generate'
+        stage('SCM Checkout') {
+            steps{
+            git 'https://github.com/hasin0/fueltrack.git'
             }
         }
-        stage('Test') {
+
+        stage('Build docker image') {
             steps {
-                // sh 'phpunit'
-                echo "testing"
+                sh 'docker build -t hasino2258/fueltrack:$BUILD_NUMBER .'
             }
         }
-        stage('Deploy') {
-            steps {
-
-
-
-                     sh 'ssh -i  ubuntu@54.89.212.150 "cd /var/www/html/fueltrack; \
-            git pull origin main; \
-            composer install --ignore-platform-req=ext-gd; \
-            php artisan migrate --force; \
-            php artisan cache:clear; \
-            php artisan config:cache; \
-    "'
-
-
-
-    //   sh ' ssh -i  ec2-user@54.89.212.150 "cd /var/www/html/fueltrack; \
-    //         git pull origin main; \
-    //         composer install --ignore-platform-req=ext-gd; \
-    //         php artisan migrate --force; \
-    //         php artisan cache:clear; \
-    //         php artisan config:cache; \
-    // "'
-
-
-
-                // sh 'ubuntu@ec2-54-158-64-65 "cd /var/www/html/fueltrack;   -i "webserveky.pem"\
-
-                //   git pull origin main; \
-                //   composer install --ignore-platform-req=ext-gd; \
-                //    php artisan migrate --force; \
-                //    php artisan cache:clear; \
-                //    php artisan config:cache; \
-
-
-                // "'
-
-
+        stage('login to dockerhub') {
+            steps{
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
+        }
+        stage('push image') {
+            steps{
+                sh 'docker push hasino2258/fueltrack:$BUILD_NUMBER'
+            }
+        }
+}
+post {
+        always {
+            sh 'docker logout'
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// pipeline {
+//     agent any
+//     stages {
+//         stage('Build') {
+//             steps {
+//                 sh 'composer install --ignore-platform-req=ext-gd'
+//                 //    sh 'composer install --ignore-platform-req=ext-gd'
+
+//                 // sh 'php artisan key:generate'
+//             }
+//         }
+//         stage('Test') {
+//             steps {
+//                 // sh 'phpunit'
+//                 echo "testing"
+//             }
+//         }
+//         stage('Deploy') {
+//             steps {
+
+
+
+//                      sh 'ssh -i  ubuntu@54.89.212.150 "cd /var/www/html/fueltrack; \
+//             git pull origin main; \
+//             composer install --ignore-platform-req=ext-gd; \
+//             php artisan migrate --force; \
+//             php artisan cache:clear; \
+//             php artisan config:cache; \
+//     "'
+
+
+
+//     //   sh ' ssh -i  ec2-user@54.89.212.150 "cd /var/www/html/fueltrack; \
+//     //         git pull origin main; \
+//     //         composer install --ignore-platform-req=ext-gd; \
+//     //         php artisan migrate --force; \
+//     //         php artisan cache:clear; \
+//     //         php artisan config:cache; \
+//     // "'
+
+
+
+//                 // sh 'ubuntu@ec2-54-158-64-65 "cd /var/www/html/fueltrack;   -i "webserveky.pem"\
+
+//                 //   git pull origin main; \
+//                 //   composer install --ignore-platform-req=ext-gd; \
+//                 //    php artisan migrate --force; \
+//                 //    php artisan cache:clear; \
+//                 //    php artisan config:cache; \
+
+
+//                 // "'
+
+
+//             }
+//         }
+//     }
+// }
 
 
 
