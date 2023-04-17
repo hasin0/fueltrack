@@ -1,37 +1,85 @@
 pipeline {
-    agent any
-    environment {
-    DOCKERHUB_CREDENTIALS = credentials('docker-cred')
-    }
-    stages {
-        stage('SCM Checkout') {
-            steps{
-            git 'https://github.com/hasin0/fueltrack.git'
-            }
-        }
+environment {
+registry = "https://hub.docker.com/repository/docker/hasino2258/fueltrack/general"
+registryCredential = 'docker-cred'
+dockerImage = ''
+}
+agent any
+stages {
+stage('Cloning our Git') {
+steps {
+git 'https://github.com/hasin0/fueltrack.git'
+}
+}
+stage('Building our image') {
+steps{
+script {
+dockerImage = docker.build registry + ":$BUILD_NUMBER"
+}
+}
+}
+stage('Deploy our image') {
+steps{
+script {
+docker.withRegistry( '', registryCredential ) {
+dockerImage.push()
+}
+}
+}
+}
+stage('Cleaning up') {
+steps{
+sh "docker rmi $registry:$BUILD_NUMBER"
+}
+}
+}
+}
 
-        stage('Build docker image') {
-            steps {
-                sh 'docker build -t hasino2258/fueltrack:$BUILD_NUMBER .'
-            }
-        }
-        stage('login to dockerhub') {
-            steps{
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-            }
-        }
-        stage('push image') {
-            steps{
-                sh 'docker push hasino2258/fueltrack:$BUILD_NUMBER'
-            }
-        }
-}
-post {
-        always {
-            sh 'docker logout'
-        }
-    }
-}
+
+
+
+
+
+
+
+
+
+
+
+// pipeline {
+//     agent any
+//     environment {
+//     DOCKERHUB_CREDENTIALS = credentials('docker-cred')
+//     }
+//     stages {
+//         stage('SCM Checkout') {
+//             steps{
+//             git 'https://github.com/hasin0/fueltrack.git'
+//             }
+//         }
+
+//         stage('Build docker image') {
+//             steps {
+//                 sh 'docker build -t hasino2258/fueltrack:$BUILD_NUMBER .'
+//             }
+//         }
+//         stage('login to dockerhub') {
+//             steps{
+//                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+//             }
+//         }
+//         stage('push image') {
+//             steps{
+//                 sh 'docker push hasino2258/fueltrack:$BUILD_NUMBER'
+//             }
+//         }
+// }
+// post {
+//         always {
+//             sh 'docker logout'
+//         }
+//     }
+// }
 
 
 
