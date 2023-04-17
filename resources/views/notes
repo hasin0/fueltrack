@@ -1293,19 +1293,25 @@ df
 
     how to push docker to dockerhub
 
-    sudo docker tag c2f97395de0e hasino2258/fueltrack:v1 or latest c
+    sudo docker tag a2ae7188d4ba hasino2258/fueltrack:2.1 or latest c
 
 
-sudo docker push hasino2258/fueltrack:v1
+sudo docker push hasino2258/fueltrack:2.1
 
-docker build -t myimage:latest .
-docker run -d -p 8080:80 nginx:latest
-
-
+docker build -t fueltrack:2.1 .
+docker run -d -p 9001:9001 fueltrack-app:latest
 
 
+php artisan db:seed --class=DepartmentTableSeeder
+
+php artisan db:seed --class=VehicleSeeder
 
 
+
+php artisan db:seed --class=FuelstationSeeder
+
+php artisan db:seed --class=PermissionTableSeeder
+php artisan db:seed --class=UsersTableSeeder
 
 
 
