@@ -2,15 +2,15 @@ version: '3.8'
 services:
 
 
- jenkins:
-    container_name: jenkins
-    restart: always
-    image: jenkins/jenkins
-    ports:
-      - 8080:8080
-      - 50000:50000
-    volumes:
-       - dbdata:/var/jenkins_home jenkins
+#  jenkins:
+#     container_name: jenkins
+#     restart: always
+#     image: jenkins/jenkins
+#     ports:
+#       - 8080:8080
+#       - 50000:50000
+#     volumes:
+#        - dbdata:/var/jenkins_home jenkins
 
 #  volumes:
 #    /home/ubuntu/fueltrack:
