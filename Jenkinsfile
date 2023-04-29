@@ -31,12 +31,12 @@ node {
                 echo " Push Docker Build to DockerHub"
     }
 
-    stage('Delete image') {
-        /* This deletes the previously built image */
+    // stage('Delete image') {
+    //     /* This deletes the previously built image */
 
-        sh "docker rmi hasino2258/fueltrack:${env.BUILD_NUMBER}"
-        sh "docker rmi hasino2258/fueltrack:latest"
-    }
+    //     sh "docker rmi hasino2258/fueltrack:${env.BUILD_NUMBER}"
+    //     sh "docker rmi hasino2258/fueltrack:latest"
+    // }
 
     stage('DeployToProduction') {
             steps {
