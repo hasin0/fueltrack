@@ -1,53 +1,69 @@
-node {
-    def app
+pipeline {
+    agent any
 
-    stage('Clone repository') {
-        /* Cloning the Repository to our Workspace */
-
-        checkout scm
-    }
-
-    stage('Build image') {
-        /* This builds the actual image */
-
-        app = docker.build("hasino2258/fueltrack")
-    }
-
-    // stage('Test image') {
-
-    //     app.inside {
-    //         echo "Tests passed"
-    //     }
-    // }
-
-    stage('Push image') {
-        /*
-			You would need to first register with DockerHub before you can push images to your account
-		*/
-        docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
-            app.push("${env.BUILD_NUMBER}")
-            app.push("latest")
-            }
-                echo " Push Docker Build to DockerHub"
-    }
-
-    // stage('Delete image') {
-    //     /* This deletes the previously built image */
-
-    //     sh "docker rmi hasino2258/fueltrack:${env.BUILD_NUMBER}"
-    //     sh "docker rmi hasino2258/fueltrack:latest"
-    // }
-
-    stage('DeployToProduction') {
+    stages {
+        stage('Clone repository') {
             steps {
-                kubeconfig(caCertificate: 'MIIDBjCCAe6gAwIBAgIBATANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5pa3ViZUNBMB4XDTIzMDExMDExMzU0MloXDTMzMDEwODExMzU0MlowFTETMBEGA1UEAxMKbWluaWt1YmVDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAN13VUtS8xsEgqHY5St4GrNXXd4icg83G7ocCroRSrZUEPPElr7IwZx1E25BtVfrWXfwLufuOTr3l4G66xlqzleFsDo11ojF3TruZARv2YJ4eVFgYDpYiFm8TL4b1L/NPhoXD8ubpVpLABw2pFjxrKLke02RdC4qPWqisNjhDKDRRmy6hCo/8/Ky8538lCksIfHvFsTOvVVdGCjP51/nnVQcszhSrcIQ6z2Mu69bvXzFXsQvOsHPDL1Ca0o4hKF23sMNIpXLiL5jpedu6gL0C0OKGLFuhX081xdiCOL/JrR6KsRUndZjwawFAzmMWUxvgy329ZrGbgd6yHTdZJC0A6cCAwEAAaNhMF8wDgYDVR0PAQH/BAQDAgKkMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTqjX0tENDwiiMuUVqGWbMuJj2fLDANBgkqhkiG9w0BAQsFAAOCAQEAPx67dN9SXCUwQaHcIOu1YhEbdxXWSRoNilmXznoCKNhfTOz2is0uwPRSnRnsXwrdf8WdO01eYct3p+u53HiC8Cm0JqMVdk0M8X/1FxN/qyiQ55lp5Mooi9Z/lCBTqDuPrbnomFfguiUCO4mBgYNDa0k5rJvOtXr0RukXLcrkO0YNZ7D+7/EeLANTyyrUnTvZy7xWt8EzapRcBvGpeC4KBU1hH5rJ6EMmufvmFo0E6+kDv1MOl5ngfw03zK5MX60py9dY+5bnncq21ctNSc4Ft4M0cRDf1j5uo9SEeWc7eeL9SbS50YjDwO6cedFi/hIlppWNrM5gdoKKusB9O7gJnA==', credentialsId: 'kubernetess', serverUrl: 'https://192.168.49.2:8443') {
-    // some block
-                 sh 'kubectl apply -f fueltrack-depl.yaml'
-                //  sh 'kubectl apply -f app-service.yaml'
-                 sh 'kubectl rollout restart deployment train-schedule'
-}
+                /* Cloning the Repository to our Workspace */
+                checkout scm
             }
         }
+
+        stage('Build image') {
+            steps {
+                /* This builds the actual image */
+                script {
+                    docker.build("hasino2258/fueltrack")
+                }
+            }
+        }
+
+        // stage('Test image') {
+        //     steps {
+        //         script {
+        //             /* Run tests on the built image */
+        //             sh "docker run hasino2258/fueltrack npm run test"
+        //         }
+        //     }
+        // }
+
+        stage('Push image') {
+            steps {
+                script {
+                    /*
+                        You would need to first register with DockerHub before you can push images to your account
+                    */
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
+                        def app = docker.image("hasino2258/fueltrack")
+
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Production') {
+            environment {
+                KUBECONFIG = credentials('kubernetess')
+            }
+
+            steps {
+                script {
+                    /*
+                        Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
+                    */
+                    sh 'kubectl apply -f fueltrack-depl.yaml'
+                    // sh 'kubectl apply -f app-service.yaml'
+
+                    /*
+                        Restart the deployment to update the Kubernetes pods
+                    */
+                    sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
+                }
+            }
+        }
+    }
 }
 
 
