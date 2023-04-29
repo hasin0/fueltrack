@@ -75,7 +75,7 @@ pipeline {
                     // sh 'kubectl apply -f app-service.yaml'
 
                     /*
-                        Restart the deployment to update the Kubernetes pods
+                        Restart the deployment to update the Kubernetes pod
                     */
                     sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
                 }
