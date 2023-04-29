@@ -38,16 +38,16 @@ node {
     //     sh "docker rmi hasino2258/fueltrack:latest"
     // }
 
-//     stage('DeployToProduction') {
-//             steps {
-//                 kubeconfig(caCertificate: 'MIIDBjCCAe6gAwIBAgIBATANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5pa3ViZUNBMB4XDTIzMDExMDExMzU0MloXDTMzMDEwODExMzU0MlowFTETMBEGA1UEAxMKbWluaWt1YmVDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAN13VUtS8xsEgqHY5St4GrNXXd4icg83G7ocCroRSrZUEPPElr7IwZx1E25BtVfrWXfwLufuOTr3l4G66xlqzleFsDo11ojF3TruZARv2YJ4eVFgYDpYiFm8TL4b1L/NPhoXD8ubpVpLABw2pFjxrKLke02RdC4qPWqisNjhDKDRRmy6hCo/8/Ky8538lCksIfHvFsTOvVVdGCjP51/nnVQcszhSrcIQ6z2Mu69bvXzFXsQvOsHPDL1Ca0o4hKF23sMNIpXLiL5jpedu6gL0C0OKGLFuhX081xdiCOL/JrR6KsRUndZjwawFAzmMWUxvgy329ZrGbgd6yHTdZJC0A6cCAwEAAaNhMF8wDgYDVR0PAQH/BAQDAgKkMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTqjX0tENDwiiMuUVqGWbMuJj2fLDANBgkqhkiG9w0BAQsFAAOCAQEAPx67dN9SXCUwQaHcIOu1YhEbdxXWSRoNilmXznoCKNhfTOz2is0uwPRSnRnsXwrdf8WdO01eYct3p+u53HiC8Cm0JqMVdk0M8X/1FxN/qyiQ55lp5Mooi9Z/lCBTqDuPrbnomFfguiUCO4mBgYNDa0k5rJvOtXr0RukXLcrkO0YNZ7D+7/EeLANTyyrUnTvZy7xWt8EzapRcBvGpeC4KBU1hH5rJ6EMmufvmFo0E6+kDv1MOl5ngfw03zK5MX60py9dY+5bnncq21ctNSc4Ft4M0cRDf1j5uo9SEeWc7eeL9SbS50YjDwO6cedFi/hIlppWNrM5gdoKKusB9O7gJnA==', credentialsId: 'kubernetes', serverUrl: 'https://192.168.49.2:8443') {
-//     // some block
-//                  sh 'kubectl apply -f deployment.yaml'
-//                  sh 'kubectl apply -f app-service.yaml'
-//                  sh 'kubectl rollout restart deployment train-schedule'
-// }
-//             }
-//         }
+    stage('DeployToProduction') {
+            steps {
+                kubeconfig(caCertificate: 'MIIDBjCCAe6gAwIBAgIBATANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5pa3ViZUNBMB4XDTIzMDExMDExMzU0MloXDTMzMDEwODExMzU0MlowFTETMBEGA1UEAxMKbWluaWt1YmVDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAN13VUtS8xsEgqHY5St4GrNXXd4icg83G7ocCroRSrZUEPPElr7IwZx1E25BtVfrWXfwLufuOTr3l4G66xlqzleFsDo11ojF3TruZARv2YJ4eVFgYDpYiFm8TL4b1L/NPhoXD8ubpVpLABw2pFjxrKLke02RdC4qPWqisNjhDKDRRmy6hCo/8/Ky8538lCksIfHvFsTOvVVdGCjP51/nnVQcszhSrcIQ6z2Mu69bvXzFXsQvOsHPDL1Ca0o4hKF23sMNIpXLiL5jpedu6gL0C0OKGLFuhX081xdiCOL/JrR6KsRUndZjwawFAzmMWUxvgy329ZrGbgd6yHTdZJC0A6cCAwEAAaNhMF8wDgYDVR0PAQH/BAQDAgKkMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBTqjX0tENDwiiMuUVqGWbMuJj2fLDANBgkqhkiG9w0BAQsFAAOCAQEAPx67dN9SXCUwQaHcIOu1YhEbdxXWSRoNilmXznoCKNhfTOz2is0uwPRSnRnsXwrdf8WdO01eYct3p+u53HiC8Cm0JqMVdk0M8X/1FxN/qyiQ55lp5Mooi9Z/lCBTqDuPrbnomFfguiUCO4mBgYNDa0k5rJvOtXr0RukXLcrkO0YNZ7D+7/EeLANTyyrUnTvZy7xWt8EzapRcBvGpeC4KBU1hH5rJ6EMmufvmFo0E6+kDv1MOl5ngfw03zK5MX60py9dY+5bnncq21ctNSc4Ft4M0cRDf1j5uo9SEeWc7eeL9SbS50YjDwO6cedFi/hIlppWNrM5gdoKKusB9O7gJnA==', credentialsId: 'kubernetess', serverUrl: 'https://192.168.49.2:8443') {
+    // some block
+                 sh 'kubectl apply -f fueltrack-depl.yaml'
+                //  sh 'kubectl apply -f app-service.yaml'
+                 sh 'kubectl rollout restart deployment train-schedule'
+}
+            }
+        }
 }
 
 
