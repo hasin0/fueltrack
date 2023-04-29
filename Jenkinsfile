@@ -50,6 +50,13 @@ pipeline {
 
             steps {
                 script {
+                    /* Install kubectl if it's not already installed */
+                    sh "if ! command -v kubectl &> /dev/null; then \
+                          curl -LO 'https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl'; \
+                          chmod u+x ./kubectl; \
+                          sudo mv ./kubectl /usr/local/bin/kubectl; \
+                      fi"
+
                     /*
                         Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
                     */
@@ -65,6 +72,7 @@ pipeline {
         }
     }
 }
+
 
 
 
