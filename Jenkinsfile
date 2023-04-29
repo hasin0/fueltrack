@@ -43,15 +43,25 @@ pipeline {
             }
         }
 
+        stage('Add jenkins to docker group') {
+            steps {
+                sh 'sudo usermod -aG docker jenkins'
+            }
+        }
+
         stage('Deploy to Production') {
             environment {
                 KUBECONFIG = credentials('kubernetess')
-                PATH = "${PATH}:/usr/local/bin/kubectl"
-
             }
 
             steps {
                 script {
+                    /*
+                        Download and install kubectl
+                    */
+                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
+                    sh 'chmod u+x ./kubectl && mv ./kubectl /usr/local/bin/kubectl'
+
                     /*
                         Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
                     */
@@ -61,12 +71,13 @@ pipeline {
                     /*
                         Restart the deployment to update the Kubernetes pods
                     */
-                    sh 'kubectl rollout restart deployment fueltrack-depl'
+                    sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
                 }
             }
         }
     }
 }
+
 
 
 
@@ -166,24 +177,6 @@ pipeline {
 
 
 
-
-// MIIDBjCCAe6gAwIBAgIBATANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
-// a3ViZUNBMB4XDTIzMDExMDExMzU0MloXDTMzMDEwODExMzU0MlowFTETMBEGA1UE
-// AxMKbWluaWt1YmVDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAN13
-// VUtS8xsEgqHY5St4GrNXXd4icg83G7ocCroRSrZUEPPElr7IwZx1E25BtVfrWXfw
-// LufuOTr3l4G66xlqzleFsDo11ojF3TruZARv2YJ4eVFgYDpYiFm8TL4b1L/NPhoX
-// D8ubpVpLABw2pFjxrKLke02RdC4qPWqisNjhDKDRRmy6hCo/8/Ky8538lCksIfHv
-// FsTOvVVdGCjP51/nnVQcszhSrcIQ6z2Mu69bvXzFXsQvOsHPDL1Ca0o4hKF23sMN
-// IpXLiL5jpedu6gL0C0OKGLFuhX081xdiCOL/JrR6KsRUndZjwawFAzmMWUxvgy32
-// 9ZrGbgd6yHTdZJC0A6cCAwEAAaNhMF8wDgYDVR0PAQH/BAQDAgKkMB0GA1UdJQQW
-// MBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQW
-// BBTqjX0tENDwiiMuUVqGWbMuJj2fLDANBgkqhkiG9w0BAQsFAAOCAQEAPx67dN9S
-// XCUwQaHcIOu1YhEbdxXWSRoNilmXznoCKNhfTOz2is0uwPRSnRnsXwrdf8WdO01e
-// Yct3p+u53HiC8Cm0JqMVdk0M8X/1FxN/qyiQ55lp5Mooi9Z/lCBTqDuPrbnomFfg
-// uiUCO4mBgYNDa0k5rJvOtXr0RukXLcrkO0YNZ7D+7/EeLANTyyrUnTvZy7xWt8Ez
-// apRcBvGpeC4KBU1hH5rJ6EMmufvmFo0E6+kDv1MOl5ngfw03zK5MX60py9dY+5bn
-// ncq21ctNSc4Ft4M0cRDf1j5uo9SEeWc7eeL9SbS50YjDwO6cedFi/hIlppWNrM5g
-// doKKusB9O7gJnA==
 
 
 
