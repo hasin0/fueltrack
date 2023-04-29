@@ -46,17 +46,12 @@ pipeline {
         stage('Deploy to Production') {
             environment {
                 KUBECONFIG = credentials('kubernetess')
+                PATH = "${PATH}:/usr/local/bin/kubectl"
+
             }
 
             steps {
                 script {
-                    /* Install kubectl if it's not already installed */
-                    sh "if ! command -v kubectl &> /dev/null; then \
-                          curl -LO 'https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl'; \
-                          chmod u+x ./kubectl; \
-                          sudo mv ./kubectl /usr/local/bin/kubectl; \
-                      fi"
-
                     /*
                         Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
                     */
@@ -66,12 +61,107 @@ pipeline {
                     /*
                         Restart the deployment to update the Kubernetes pods
                     */
-                    sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
+                    sh 'kubectl rollout restart deployment fueltrack-depl'
                 }
             }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// pipeline {
+//     agent any
+
+//     stages {
+//         stage('Clone repository') {
+//             steps {
+//                 /* Cloning the Repository to our Workspace */
+//                 checkout scm
+//             }
+//         }
+
+//         stage('Build image') {
+//             steps {
+//                 /* This builds the actual image */
+//                 script {
+//                     docker.build("hasino2258/fueltrack")
+//                 }
+//             }
+//         }
+
+//         // stage('Test image') {
+//         //     steps {
+//         //         script {
+//         //             /* Run tests on the built image */
+//         //             sh "docker run hasino2258/fueltrack npm run test"
+//         //         }
+//         //     }
+//         // }
+
+//         stage('Push image') {
+//             steps {
+//                 script {
+//                     /*
+//                         You would need to first register with DockerHub before you can push images to your account
+//                     */
+//                     docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
+//                         def app = docker.image("hasino2258/fueltrack")
+
+//                         app.push("${env.BUILD_NUMBER}")
+//                         app.push("latest")
+//                     }
+//                 }
+//             }
+//         }
+
+//         stage('Deploy to Production') {
+//             environment {
+//                 KUBECONFIG = credentials('kubernetess')
+//             }
+
+//             steps {
+//                 script {
+//                     /* Install kubectl if it's not already installed */
+//                     sh "if ! command -v kubectl &> /dev/null; then \
+//                           curl -LO 'https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl'; \
+//                           chmod u+x ./kubectl; \
+//                           sudo mv ./kubectl /usr/local/bin/kubectl; \
+//                       fi"
+
+//                     /*
+//                         Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
+//                     */
+//                     sh 'kubectl apply -f fueltrack-depl.yaml'
+//                     // sh 'kubectl apply -f app-service.yaml'
+
+//                     /*
+//                         Restart the deployment to update the Kubernetes pods
+//                     */
+//                     sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
+//                 }
+//             }
+//         }
+//     }
+// }
 
 
 
