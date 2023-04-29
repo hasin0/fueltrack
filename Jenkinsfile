@@ -43,11 +43,11 @@ pipeline {
             }
         }
 
-        stage('Add jenkins to docker group') {
-            steps {
-                sh 'sudo usermod -aG docker jenkins'
-            }
-        }
+        // stage('Add jenkins to docker group') {
+        //     steps {
+        //         sh 'sudo usermod -aG docker jenkins'
+        //     }
+        // }
 
         stage('Deploy to Production') {
             environment {
@@ -58,9 +58,15 @@ pipeline {
                 script {
                     /*
                         Download and install kubectl
-                    */
-                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
-                    sh 'chmod u+x ./kubectl && mv ./kubectl /usr/local/bin/kubectl'
+                    // */
+                    // sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
+                    // sh 'chmod u+x ./kubectl && mv ./kubectl /usr/local/bin/kubectl'
+
+
+                            sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
+                            sh 'chmod u+x ./kubectl'
+                            sh './kubectl get pods'
+
 
                     /*
                         Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
