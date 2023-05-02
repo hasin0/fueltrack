@@ -1,0 +1,300 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: fueltrack-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath:
+    path: /data/fueltrack
+
+
+
+
+---
+
+
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fueltrack-pvc
+  namespace: fueltrack
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: standard
+
+
+
+
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fueltrack-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fueltrack
+  template:
+    metadata:
+      labels:
+        app: fueltrack
+    spec:
+      containers:
+      - name: fueltrack
+        image: hasino2258/fueltrack:latest
+        ports:
+        - containerPort: 9001
+        envFrom:
+        - configMapRef:
+            name: fueltrack-configmap
+        env:
+        - name: MYSQL_DATABASE
+          value: fueltrack
+        - name: MYSQL_HOST
+          value: mysql-service
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_PASSWORD
+        volumeMounts:
+        - name: fueltrack-volume
+          mountPath: data/fueltrack
+      volumes:
+      - name: fueltrack-volume
+        persistentVolumeClaim:
+          claimName: fueltrack-pvc
+
+
+
+
+
+
+
+
+
+
+
+
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: fueltrack-pvc
+#   namespace: fueltrack
+# spec:
+#   accessModes:
+#   - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 2Gi
+#   selector:
+#     matchLabels:
+#       app: fueltrack
+#   storageClassName: standard
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: fueltrack-deployment
+# spec:
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: fueltrack
+#   template:
+#     metadata:
+#       labels:
+#         app: fueltrack
+#     spec:
+#       containers:
+#       - name: fueltrack
+#         image: hasino2258/fueltrack:2.1
+#         ports:
+#         - containerPort: 9001
+#         envFrom:
+#         - configMapRef:
+#             name: fueltrack-configmap
+#         env:
+
+#         - name: MYSQL_DATABASE
+#           value: fueltrack
+
+#         - name: MYSQL_HOST
+#           value: mysql-service
+#         - name: MYSQL_PORT
+#           value: "3306"
+#         - name: MYSQL_USER
+#           valueFrom:
+#             secretKeyRef:
+#               name: mysql-secret
+#               key: MYSQL_USER
+#         - name: MYSQL_PASSWORD
+#           valueFrom:
+#             secretKeyRef:
+#               name: mysql-secret
+#               key: MYSQL_PASSWORD
+
+
+
+
+
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: fueltrack-deployment
+#   namespace: fueltrack # namespace specified here
+#   labels:
+#     app: fueltrack
+# spec:
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: fueltrack
+#   template:
+#     metadata:
+#       labels:
+#         app: fueltrack
+#     spec:
+#       # volumes:
+#       # - name: fueltrack-pv
+#       #   persistentVolumeClaim:
+#       #     claimName: fueltrack-pvc
+#       containers:
+#       - name: fueltrack
+#         image: hasino2258/fueltrack:2.1
+#         ports:
+#         - containerPort: 9001
+#         envFrom:
+#         - configMapRef:
+#             name: fueltrack-configmap
+#             # volumeMounts:
+#             # - name: fueltrack-pv
+#             #   mountPath: /var/www/html/storage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: fueltrack-deployment
+# spec:
+#   replicas: 3
+#   selector:
+#     matchLabels:
+#       app: fueltrack
+#   template:
+#     metadata:
+#       labels:
+#         app: fueltrack
+#     spec:
+#       containers:
+#       - name: fueltrack
+#         image: hasino2258/fueltrack:v2
+#         ports:
+#         - containerPort: 9001
+#         envFrom:
+#         - configMapRef:
+#             name: fueltrack-configmap
+#             env:
+#             - name: MYSQL_HOST
+#               value: mysql-service
+#             - name: MYSQL_PORT
+#               value: 3306
+#             - name: MYSQL_USER
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mysql-secret
+#                   key: username
+#             - name: MYSQL_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mysql-secret
+#                   key: password
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fueltrack-service
+spec:
+  selector:
+    app: fueltrack
+  type: LoadBalancer
+  ports:
+  - name: http
+    # - protocol: tcp
+    port: 80
+    targetPort: 9001
+    # nodePort: 30000
+
+
+
+
+
+
+
+
+
+
+
