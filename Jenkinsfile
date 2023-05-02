@@ -69,7 +69,7 @@ pipeline {
                 Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
             */
             // sh 'kubectl apply -f fueltrack-depl.yaml'
-              sh '/usr/local/bin/kubectl apply -f fueltrack-depl.yaml'
+sh '/usr/bin/kubectl apply -f fueltrack-depl.yaml'
 
 
             /*
