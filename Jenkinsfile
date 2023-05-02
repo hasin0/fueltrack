@@ -53,7 +53,7 @@ pipeline {
             environment {
                 KUBECONFIG = "/path/to/your/kubeconfig"
 
-                KUBECONFIG = credentials('kubernetess')
+                // KUBECONFIG = credentials('kubernetess')
 
             }
 
