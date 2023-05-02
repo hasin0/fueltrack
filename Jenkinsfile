@@ -56,28 +56,20 @@ pipeline {
 
             steps {
                 script {
-                    /*
-                        Download and install kubectl
-                    // */
-                    // sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
-                    // sh 'chmod u+x ./kubectl && mv ./kubectl /usr/local/bin/kubectl'
-
-
-                            sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
-                            sh 'chmod u+x ./kubectl'
-                            sh './kubectl get pods'
-
+                   Download and install kubectl
+                    */
+                    sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
+                    sh 'chmod u+x ./kubectl && mv ./kubectl /usr/local/bin/kubectl'
 
                     /*
                         Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
                     */
-                    sh 'kubectl apply -f fueltrack-depl.yaml'
-                    // sh 'kubectl apply -f app-service.yaml'
+                    sh '/usr/local/bin/kubectl apply -f fueltrack-depl.yaml'
 
                     /*
                         Restart the deployment to update the Kubernetes pod
                     */
-                    sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
+                    sh '/usr/local/bin/kubectl rollout restart deployment fueltrack-depl.yaml'
                 }
             }
         }
