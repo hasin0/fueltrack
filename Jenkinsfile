@@ -51,7 +51,10 @@ pipeline {
 
         stage('Deploy to Production') {
             environment {
+                KUBECONFIG = "/path/to/your/kubeconfig"
+
                 KUBECONFIG = credentials('kubernetess')
+
             }
 
             steps {
@@ -65,12 +68,17 @@ pipeline {
             /*
                 Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
             */
-            sh 'kubectl apply -f fueltrack-depl.yaml'
+            // sh 'kubectl apply -f fueltrack-depl.yaml'
+              sh '/usr/local/bin/kubectl apply -f fueltrack-depl.yaml'
+
 
             /*
                 Restart the deployment to update the Kubernetes pod
             */
-            sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
+            // sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
+             sh '/usr/local/bin/kubectl rollout restart deployment fueltrack-depl.yaml'
+
+
                 }
             }
         }
