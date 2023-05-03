@@ -52,6 +52,8 @@ pipeline {
         stage('Deploy to Production') {
             environment {
                 KUBECONFIG = "/path/to/your/kubeconfig"
+                PATH = "${PATH}:/usr/local/bin"
+
 
                 // KUBECONFIG = credentials('kubernetess')
 
