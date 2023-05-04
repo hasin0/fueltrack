@@ -1,37 +1,5 @@
 pipeline {
-    agent {
-        kubernetes {
-            cloud 'kubernetes'
-            label 'my-pod-label'
-            defaultContainer 'jnlp'
-            yaml """
-                apiVersion: v1
-                kind: Pod
-                metadata:
-                    namespace: fueltrack
-
-                    labels:
-                        app: fueltrack
-                spec:
-                    containers:
-                    - name: jnlp
-                      image: jenkins/jnlp-slave:3.35-5-alpine
-                      command:
-                      - cat
-                      tty: true
-                    - name: docker
-                      image: docker:20.10.8
-                      command:
-                      - cat
-                      tty: true
-                    - name: kubectl
-                      image: bitnami/kubectl:1.20.11
-                      command:
-                      - cat
-                      tty: true
-            """
-        }
-    }
+    agent any
 
     stages {
         stage('Clone repository') {
@@ -50,15 +18,6 @@ pipeline {
             }
         }
 
-        // stage('Test image') {
-        //     steps {
-        //         script {
-        //             /* Run tests on the built image */
-        //             sh "docker run hasino2258/fueltrack npm run test"
-        //         }
-        //     }
-        // }
-
         stage('Push image') {
             steps {
                 script {
@@ -75,24 +34,18 @@ pipeline {
             }
         }
 
-        // stage('Add jenkins to docker group') {
-        //     steps {
-        //         sh 'sudo usermod -aG docker jenkins'
-        //     }
-        // }
-
         stage('Deploy to Production') {
+            environment {
+                KUBECONFIG = "/path/to/your/kubeconfig"
+                PATH = "${PATH}:/usr/local/bin"
+            }
+
             steps {
                 script {
                     /*
                         Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
                     */
-                    sh 'kubectl apply -f fueltrack-depl.yaml'
-
-                    /*
-                        Restart the deployment to update the Kubernetes pod
-                    */
-                    sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
+                    sh 'kubectl apply -f fueltrack-depl.yaml -f fueltrack-svc.yaml'
                 }
             }
         }
