@@ -1,5 +1,35 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            cloud 'kubernetes'
+            label 'my-pod-label'
+            defaultContainer 'jnlp'
+            yaml """
+                apiVersion: v1
+                kind: Pod
+                metadata:
+                    labels:
+                        app: fueltrack
+                spec:
+                    containers:
+                    - name: jnlp
+                      image: jenkins/jnlp-slave:3.35-5-alpine
+                      command:
+                      - cat
+                      tty: true
+                    - name: docker
+                      image: docker:20.10.8
+                      command:
+                      - cat
+                      tty: true
+                    - name: kubectl
+                      image: bitnami/kubectl:1.20.11
+                      command:
+                      - cat
+                      tty: true
+            """
+        }
+    }
 
     stages {
         stage('Clone repository') {
@@ -50,42 +80,127 @@ pipeline {
         // }
 
         stage('Deploy to Production') {
-            environment {
-                KUBECONFIG = "/path/to/your/kubeconfig"
-                PATH = "${PATH}:/usr/local/bin"
-
-
-                // KUBECONFIG = credentials('kubernetess')
-
-            }
-
             steps {
                 script {
-       /*
-                Download and install kubectl
-            */
-            // sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
-            // sh 'chmod u+x kubectl && sudo mv kubectl /usr/local/bin/'
+                    /*
+                        Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
+                    */
+                    sh 'kubectl apply -f fueltrack-depl.yaml'
 
-            /*
-                Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
-            */
-            // sh 'kubectl apply -f fueltrack-depl.yaml'
-sh '/usr/bin/kubectl apply -f fueltrack-depl.yaml'
-
-
-            /*
-                Restart the deployment to update the Kubernetes pod
-            */
-            // sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
-             sh '/usr/local/bin/kubectl rollout restart deployment fueltrack-depl.yaml'
-
-
+                    /*
+                        Restart the deployment to update the Kubernetes pod
+                    */
+                    sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
                 }
             }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// pipeline {
+//     agent any
+
+//     stages {
+//         stage('Clone repository') {
+//             steps {
+//                 /* Cloning the Repository to our Workspace */
+//                 checkout scm
+//             }
+//         }
+
+//         stage('Build image') {
+//             steps {
+//                 /* This builds the actual image */
+//                 script {
+//                     docker.build("hasino2258/fueltrack")
+//                 }
+//             }
+//         }
+
+//         // stage('Test image') {
+//         //     steps {
+//         //         script {
+//         //             /* Run tests on the built image */
+//         //             sh "docker run hasino2258/fueltrack npm run test"
+//         //         }
+//         //     }
+//         // }
+
+//         stage('Push image') {
+//             steps {
+//                 script {
+//                     /*
+//                         You would need to first register with DockerHub before you can push images to your account
+//                     */
+//                     docker.withRegistry('https://registry.hub.docker.com', 'docker-cred') {
+//                         def app = docker.image("hasino2258/fueltrack")
+
+//                         app.push("${env.BUILD_NUMBER}")
+//                         app.push("latest")
+//                     }
+//                 }
+//             }
+//         }
+
+//         // stage('Add jenkins to docker group') {
+//         //     steps {
+//         //         sh 'sudo usermod -aG docker jenkins'
+//         //     }
+//         // }
+
+//         stage('Deploy to Production') {
+//             environment {
+//                 KUBECONFIG = "/path/to/your/kubeconfig"
+//                 PATH = "${PATH}:/usr/local/bin"
+
+
+//                 // KUBECONFIG = credentials('kubernetess')
+
+//             }
+
+//             steps {
+//                 script {
+//        /*
+//                 Download and install kubectl
+//             */
+//             // sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
+//             // sh 'chmod u+x kubectl && sudo mv kubectl /usr/local/bin/'
+
+//             /*
+//                 Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
+//             */
+//             // sh 'kubectl apply -f fueltrack-depl.yaml'
+// sh '/usr/bin/kubectl apply -f fueltrack-depl.yaml'
+
+
+//             /*
+//                 Restart the deployment to update the Kubernetes pod
+//             */
+//             // sh 'kubectl rollout restart deployment fueltrack-depl.yaml'
+//              sh '/usr/local/bin/kubectl rollout restart deployment fueltrack-depl.yaml'
+
+
+//                 }
+//             }
+//         }
+//     }
+// }
 
 
 
