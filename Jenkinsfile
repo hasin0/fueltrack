@@ -8,6 +8,8 @@ pipeline {
                 apiVersion: v1
                 kind: Pod
                 metadata:
+                    namespace: fueltrack
+
                     labels:
                         app: fueltrack
                 spec:
