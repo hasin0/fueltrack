@@ -34,18 +34,35 @@ pipeline {
             }
         }
 
+        // stage('delete docker images'){
+        //     steps{
+        //         script{
+
+
+        //             sh "docker rmi"
+        //         }
+        //     }
+        // }
+
         stage('Deploy to Production') {
-            environment {
-                KUBECONFIG = "/path/to/your/kubeconfig"
-                PATH = "${PATH}:/usr/local/bin"
-            }
+            // environment {
+            //     KUBECONFIG = "/path/to/your/kubeconfig"
+            //     PATH = "${PATH}:/usr/local/bin"
+            // }
 
             steps {
                 script {
                     /*
                         Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
                     */
-                    sh 'kubectl apply -f fueltrack-depl.yaml -f fueltrack-svc.yaml'
+                    // sh 'kubectl apply -f fueltrack-depl.yaml -f fueltrack-svc.yaml'
+
+                    sh """
+                    cat fueltrack-depl.yaml
+
+
+
+                    """
                 }
             }
         }
@@ -132,7 +149,7 @@ pipeline {
 //             steps {
 //                 script {
 //        /*
-//                 Download and install kubectl
+//                 Download and install kubectl sudo chmod 666 /usr/local/bin/kubectl
 //             */
 //             // sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
 //             // sh 'chmod u+x kubectl && sudo mv kubectl /usr/local/bin/'
