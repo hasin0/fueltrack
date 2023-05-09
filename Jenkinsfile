@@ -44,7 +44,7 @@ pipeline {
         //     }
         // }
 
-        stage('Deploy to Production') {
+        stage('Trigger ManifestUpdate') {
             // environment {
             //     KUBECONFIG = "/path/to/your/kubeconfig"
             //     PATH = "${PATH}:/usr/local/bin"
@@ -52,17 +52,10 @@ pipeline {
 
             steps {
                 script {
-                    /*
-                        Apply the Kubernetes deployment and service manifests to the Kubernetes cluster
-                    */
-                    // sh 'kubectl apply -f fueltrack-depl.yaml -f fueltrack-svc.yaml'
 
-                    sh """
-                    cat fueltrack-depl.yaml
+                       echo "triggering updatemanifest-fueltrack-k8s-job"
+                       build job: 'fueltrack-k8s', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
 
-
-
-                    """
                 }
             }
         }

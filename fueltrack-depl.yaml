@@ -34,9 +34,9 @@ spec:
 
 
 
+# /var/www/html/fueltrack/storage/framework/sessions
 
-
-
+# /fueltrack/storage/framework/sessions
 ---
 apiVersion: apps/v1
 kind: Deployment

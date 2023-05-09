@@ -1591,3 +1591,5 @@ pipeline {
         }
     }
 }
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "Nodeport"}}'
+kubectl port-forward svc/argocd-server -n argocd 8181:443
