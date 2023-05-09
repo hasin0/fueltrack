@@ -44,7 +44,7 @@ pipeline {
         //     }
         //
         stage('Trigger updatemanifest-fueltrack-k8s-job') {
-                echo "triggering updatemanifestjob"
+                // echo "triggering updatemanifestjob"
                 build job: 'fueltrack-k8s', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
         }
     }
