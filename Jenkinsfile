@@ -42,10 +42,22 @@ pipeline {
         //             sh "docker rmi"
         //         }
         //     }
-        //
-        stage('Trigger updatemanifest-fueltrack-k8s-job') {
-                // echo "triggering updatemanifestjob"
-                build job: 'fueltrack-k8s', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+        // }
+
+        stage('Trigger ManifestUpdate') {
+            // environment {
+            //     KUBECONFIG = "/path/to/your/kubeconfig"
+            //     PATH = "${PATH}:/usr/local/bin"
+            // }
+
+            steps {
+                script {
+
+                       echo "triggering updatemanifest-fueltrack-k8s-job"
+                       build job: 'fueltrack-k8s', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+
+                }
+            }
         }
     }
 }
@@ -55,8 +67,6 @@ pipeline {
 
 
 
-//  echo "triggering updatemanifest-fueltrack-k8s-job"
-// build job: 'fueltrack-k8s', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
 
 
 
