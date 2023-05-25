@@ -46,7 +46,7 @@ class VehicleController extends Controller
     //    dd($vehicle);
 
 
-        $vehicle=Vehicle::orderBy('id','DESC')->paginate(10);
+        $vehicle=Vehicle::orderBy('id','DESC')->paginate(50);
 
 
     // $vehicle = Vehicle::find(1);
@@ -163,10 +163,12 @@ class VehicleController extends Controller
      */
     public function edit($id)
     {
+        $department=department::all();
+
         $vehicle=Vehicle::findOrFail($id);
         if ($vehicle) {
 
-            return view('backend.layouts.vehicles.edit')->with('vehicle',$vehicle);
+            return view('backend.layouts.vehicles.edit')->with('vehicle',$vehicle)->with('department',$department);
 
             # code...
 

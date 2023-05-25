@@ -27,7 +27,7 @@
               <th>S.N.</th>
               <th>Name</th>
               <th>fuelattender</th>
-              
+
               {{-- <th>Status</th> --}}
               <th>Action</th>
             </tr>
@@ -37,7 +37,7 @@
                 <th>S.N.</th>
                 <th>Name</th>
                 <th>fuelattender</th>
-            
+
                 {{-- <th>Status</th> --}}
                 <th>Action</th>
               </tr>
@@ -52,7 +52,7 @@
                     <td>{{$fuelstations->user}}</td>
                     {{-- <td>@foreach($fuelstations->user as $data){{($data->name)}}  @endforeach</td> --}}
 
-                   
+
 
 
 
@@ -63,13 +63,13 @@
                             <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid zoom" style="max-width:100%" alt="avatar.png">
                         @endif
                     </td> --}}
-{{-- 
+{{--
                     <td>
                         <input value="{{$fuelstations->id}}" name="toogle" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $fuelstations->status =='active' ? 'checked' : '' }}>
 
                     --}}
 
-                    <td> 
+                    <td>
                         <a href="{{route('fuelstation.edit',$fuelstations->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
                         <form method="POST" action="{{route('fuelstation.destroy',[$fuelstations->id])}}">
                           @csrf
@@ -210,7 +210,7 @@
       })
   </script>
 
-{{-- 
+{{--
 <script>
     $(function() {
       $('input[name=toogle]').change(function() {

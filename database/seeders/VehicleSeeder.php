@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\department;
+use App\Models\Vehicle;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -17,57 +18,49 @@ class VehicleSeeder extends Seeder
     public function run()
     {
 
-       // $department = department::all()->pluck('id')->toArray();
+       $departments = department::all();
+       $departmentCount = $departments->count();
+       foreach ($departments as $department) {
+        for ($i = 1; $i <= 25; $i++) { // Create 25 cars for each department
+            $plateNo = 'ABC' . $i . '-' . $department->id; // Append department ID as a unique identifier
+            $tagNo = 'TAG' . $i;
+            $fueltank = rand(50, 70); // Generate a random fuel tank value between 50 and 70
+
+            Vehicle::create([
+                'name' => 'Car ' . $i,
+                'model' => 'Model ' . $i,
+                'plate_no' => $plateNo,
+                'tag_no' => $tagNo,
+                'fueltank' => $fueltank,
+                'status' => 'active',
+                'department_id' => $department->id,
+            ]);
+        }
+    }
+
         // foreach(DB::table('departments')->get() as $department) { DB::table('vehicles')->insert(['department_id' => $department->id]); }
 
-        DB::table('vehicles')->insert([
-            //admin
-
-            [
-                'name'=>'toyota',
-                'model'=>'coroller',
-                'plate_no'=>'wesd34',
-                'tag_no'=>'34',
-                'fueltank'=>'45',
-                'status'=>'active',
-                'department_id' =>department::all()//->id
-
-
-
-
-            ],
-
-
-            //driver
-
-            [
-                'name'=>'Benz',
-                'model'=>'Gwagon',
-                'plate_no'=>'sdwe23',
-                'tag_no'=>'12',
-                'fueltank'=>'56',
-                'status'=>'active',
-                'department_id' =>department::all()//->id
-
-            ],
-
-            //HOD
-
-
-            [
-                'name'=>'toyota',
-                'model'=>'mazda',
-                'plate_no'=>'ers34',
-                'tag_no'=>'90',
-                'fueltank'=>'78',
-                'status'=>'active',
-               // 'department_id'=>'3',
-               'department_id' =>department::all()
-
-            ]
-         ]);
-
         //
+        // foreach ($department as $department) {
+        //     for ($i = 1; $i <= 25; $i++) { // Create 10 cars for each department
+
+
+        //         $plateNo = 'ABC' . $i . '-' . $department->id; // Append department ID as a unique identifier
+        //         $tagNo = 'TAG' . $i;
+        //         $fueltank = rand(50, 70); // Generate a random fuel tank value between 50 and 70
+
+
+        //         Vehicle::create([
+        //             'name' => 'Car ' . $i,
+        //             'model' => 'Model ' . $i,
+        //             'plate_no' => $plateNo,
+        //             'tag_no' => $tagNo,
+        //             'fueltank' => $fueltank,
+        //             'status' => 'active',
+        //             'department_id' => $department->id,
+        //         ]);
+        //     }
+        // }
     }
 }
 

@@ -21,12 +21,36 @@ class FuelrequestController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     *
+     *
+     *
      */
+
+     function __construct()
+     {
+          $this->middleware('permission:fuelrequests-list|fuelrequests-create|fuelrequests-edit|fuelrequests-delete', ['only' => ['index','show']]);
+        //   $this->middleware('permission:fuelrequests-create', ['only' => ['create','store']]);
+          $this->middleware('permission:fuelrequests-edit', ['only' => ['edit','update']]);
+          $this->middleware('permission:fuelrequests-delete', ['only' => ['destroy']]);
+        //   $this->middleware('permission:fuelrequests-AdminStatus', ['only' => ['AdminStatus']]);
+          $this->middleware('permission:fuelrequests-HodStatus', ['only' => ['HodStatus']]);
+        //   $this->middleware('permission:fuelrequests-FSAStatus', ['only' => ['FSAStatus']]);
+
+
+
+     }
+
+
+
+
+
+
+
     public function index()
     {
 
             $user=auth()->user();
-            
+
             // $userEmail=User::role('Admin')->get();
             // where('id',$user->department_id)->whereHas(
             //     'roles', function($q){
@@ -38,7 +62,7 @@ class FuelrequestController extends Controller
 
 
 
-            
+
 
           //  $user=User::where('department_id',$user->department_id)->get();
           //  dd($user);
@@ -131,7 +155,7 @@ class FuelrequestController extends Controller
         //         $q->where('name', 'HOD');
         //     }
         // )->get('email');
-        
+
 
 
 
@@ -283,7 +307,7 @@ class FuelrequestController extends Controller
             // 'Admin_approval'=>'required|in:active,inactive',
             // 'Fuel_station_approval'=>'required|in:issued,Notissued',
 
-            'Fuel_station'=>'required',
+            'fuelstation_id'=>'required',
          ]);
 
 
@@ -320,6 +344,7 @@ class FuelrequestController extends Controller
 
 
          $data=fuelrequest::create($data);
+
 
      $data->vehicles()->attach($vehicle);
 
@@ -373,12 +398,26 @@ class FuelrequestController extends Controller
     public function edit($id)
     {
         //
-        $vehicle=Vehicle::where('status','active')->get();
+        $user=auth()->user();
+        $userDepartmentId = $user->department_id;
+
+
+        // $vehicle=Vehicle::where('department_id',$user->department_id)->get();
+
+        // $vehicle = DB::select("SELECT * FROM vehicles WHERE department_id = ?", [$userDepartmentId]);
+        $vehicle = DB::select("SELECT vehicles.*, departments.name AS department_name FROM vehicles
+                        JOIN departments ON vehicles.department_id = departments.id
+                        WHERE vehicles.department_id = ?", [$userDepartmentId]);
+
+        // dd($vehicle);
+
 
         $fuelrequests=fuelrequest::findOrFail($id);
+        $fuelstation=Fuelstation::all();
+
         if ($fuelrequests) {
 
-            return view('HOD.layouts.fuelrequests.edit')->with('fuelrequests',$fuelrequests)->with('vehicle',$vehicle);
+            return view('HOD.layouts.fuelrequests.edit')->with('fuelrequests',$fuelrequests)->with('vehicle',$vehicle)->with('fuelstation',$fuelstation);
 
             # code...
 
@@ -415,10 +454,11 @@ class FuelrequestController extends Controller
             // 'Admin_approval'=>'required|in:active,inactive',
             // 'Fuel_station_approval'=>'required|in:issued,Notissued',
 
-            'Fuel_station'=>'required',
+            'fuelstation_id'=>'required',
          ]);
 
          $data=$request->all();
+        //  dd($data);
 
 
         //  $data['order_number']='ORD-'.strtoupper(Str::random(10));

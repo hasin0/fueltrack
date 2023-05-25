@@ -30,12 +30,27 @@ class FuelrequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+     function __construct()
+     {
+          $this->middleware('permission:fuelrequests-list|fuelrequests-create|fuelrequests-edit|fuelrequests-delete', ['only' => ['index','show']]);
+        //   $this->middleware('permission:fuelrequests-create', ['only' => ['create','store']]);
+          $this->middleware('permission:fuelrequests-edit', ['only' => ['edit','update']]);
+        //   $this->middleware('permission:fuelrequests-delete', ['only' => ['destroy']]);
+        //   $this->middleware('permission:fuelrequests-AdminStatus', ['only' => ['AdminStatus']]);
+         //  $this->middleware('permission:fuelrequests-HodStatus', ['only' => ['HodStatus']]);
+          $this->middleware('permission:fuelrequests-FSAStatus', ['only' => ['FSAStatus']]);
+
+
+
+     }
     public function index()
     {
 
-     
+
              $user=auth()->user();
-           
+
 
 
 
@@ -49,32 +64,32 @@ class FuelrequestController extends Controller
 
         // $vehicle=$data['vehicle_id'];
 
-                              
+
                     foreach ($array as $fuelstationids) {
 
 
                 foreach($fuelstationids as $fuelstationsss){
-                    
+
 
 
                     //return $fillstation->order_number;
                     // return ($fuelstationsss);
                }
-                  
+
         }
 
-          
+
 
             $fuelstationw=Fuelstation::where('user_id',$user)->get('id');
             // $fuelrequest=fuelrequest::where('user_id',$user->user_id)->get();
              $fuelstation=fuelrequest::where('fuelstation_id',$fuelstationids)->with(['user','vehicles'])->get();
- 
-   
+
+
 
 //  dd($fuelstation);
 
 
-          
+
         return view('FuelStationAttender.layouts.fuelrequests.index',compact('fuelstation'));//->with('fuelstation',$fuelstation);//->with('fuelrequestC',$fuelrequestC);
         //
     }
@@ -188,26 +203,26 @@ class FuelrequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    // public function create()
+    // {
 
 
-        $user=auth()->user();
+    //     $user=auth()->user();
 
-        $department=department::where('id',$user->department_id)->get();
+    //     $department=department::where('id',$user->department_id)->get();
 
-        $fuelstation=Fuelstation::select('id','name')->get();//where('status','active')->get();
-        // dd($fuelstation);
+    //     $fuelstation=Fuelstation::select('id','name')->get();//where('status','active')->get();
+    //     // dd($fuelstation);
 
-        // $brand=Brand::get();
-         $vehicle=Vehicle::where('department_id',$user->department_id)->get();
-            //    dd($vehicle);
+    //     // $brand=Brand::get();
+    //      $vehicle=Vehicle::where('department_id',$user->department_id)->get();
+    //         //    dd($vehicle);
 
 
-        return view('FuelStationAttender.layouts.fuelrequests.create')->with('fuelstation',$fuelstation)->with('vehicle',$vehicle)->with('department',$department);;//->with('brands',$brand);;
+    //     return view('FuelStationAttender.layouts.fuelrequests.create')->with('fuelstation',$fuelstation)->with('vehicle',$vehicle)->with('department',$department);;//->with('brands',$brand);;
 
-        //
-    }
+    //     //
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -224,7 +239,7 @@ class FuelrequestController extends Controller
         // '',
         // 'order_number','
         // ',
-            
+
 
 
         $this->validate($request,[
@@ -280,7 +295,7 @@ class FuelrequestController extends Controller
 
         // $userEmail = Auth::user()->email; //get the id of the department that loggedin
          //dd($data);
-                 
+
 
          $user=auth()->user();
 
@@ -292,7 +307,7 @@ class FuelrequestController extends Controller
         )->get('email');
 
 
-        
+
 
             $userAdmin=User::role('Admin')->get();
 
@@ -301,7 +316,7 @@ class FuelrequestController extends Controller
 
      $data->vehicles()->attach($vehicle);
 
-     
+
 
     //   Mail::to($userEmail,$userAdmin)->
     //   send(new FuelrequestMail($data) );//->cc($userAdmin);
@@ -310,7 +325,7 @@ class FuelrequestController extends Controller
     ->cc($userAdmin)
     // ->bcc($evenMoreUsers)
     ->send(new FuelrequestMail($data));
-      
+
             // dd('mail is sent');
 
 
@@ -329,7 +344,7 @@ class FuelrequestController extends Controller
 
 
          if ($data) {
-           
+
             return redirect()->route('Driver-fuelrequests.index', ['parameterKey' => 'success']);
             # code...
          }else {

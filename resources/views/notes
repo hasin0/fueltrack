@@ -1302,16 +1302,16 @@ docker build -t fueltrack:2.1 .
 docker run -d -p 9001:9001 fueltrack-app:latest
 
 
-php artisan db:seed --class=DepartmentTableSeeder
+1: php artisan db:seed --class=DepartmentTableSeeder
 
-php artisan db:seed --class=VehicleSeeder
+5.php artisan db:seed --class=VehicleSeeder
 
 
 
-php artisan db:seed --class=FuelstationSeeder
+4:php artisan db:seed --class=FuelstationSeeder
 
-php artisan db:seed --class=PermissionTableSeeder
-php artisan db:seed --class=UsersTableSeeder
+2:php artisan db:seed --class=PermissionTableSeeder
+3:php artisan db:seed --class=UsersTableSeeder
 
 
 

@@ -72,7 +72,7 @@ class FuelrequestController extends Controller
         $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
 
 
-        //   dd($fuelrequest);
+          dd($fuelrequest);
         return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
         //
     }
@@ -496,7 +496,7 @@ return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
                 // $search = fuelrequest::where('created_at', '>=', $from)
                 //            ->where('created_at', '<=', $to)
                 //            ->get();
-                
+
 
                 //   dd($search);
                 //  dd($to);
@@ -510,7 +510,7 @@ return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
                 // select PDF
                 $PDFReport =fuelrequest::whereBetween(DB::raw('DATE(`created_at`)'),
                 [$req->from,$req->to])->with(['department','vehicles'])->get();
-            
+
             // dd($PDFReport);
                 // fuelrequest::whereDate('created_at', [$from, $to])->with(['department'])->get();
                 // User::select('*')->where('created_at','>=',$this->from)->where('created_at','<=', $this->to)->with(['department'])->get();// DB::select("SELECT * FROM users WHERE created_at BETWEEN '$from' AND '$to'");

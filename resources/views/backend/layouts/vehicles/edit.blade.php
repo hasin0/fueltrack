@@ -65,33 +65,18 @@
 
 
 
-
           <div class="form-group">
-            <label for="department" class="col-form-label">Department <span class="text-danger">*</span></label>
-            <select name="department" class="form-control">
-                <option value="Admin" {{(($vehicle->department=='Admin') ? 'selected' : '')}}>Admin</option>
-                <option value="IT" {{(($vehicle->department=='IT') ? 'selected' : '')}}>IT</option>
-                <option value="HR" {{(($vehicle->department=='HR') ? 'selected' : '')}}>HR</option>
-                <option value="HSE" {{(($vehicle->department=='HSE') ? 'selected' : '')}}>HSE</option>
-                <option value="Batching plant" {{(($vehicle->department=='Batching') ? 'selected' : '')}}>Batching plant</option>
-                <option value="Legal" {{(($vehicle->department=='Legal') ? 'selected' : '')}}>Legal</option>
-                <option value="Logistic" {{(($vehicle->department=='Logistic') ? 'selected' : '')}}>Logistic</option>
-                <option value="Security" {{(($vehicle->department=='Security') ? 'selected' : '')}}>Security</option>
-                <option value="GED" {{(($vehicle->department=='GED') ? 'selected' : '')}}>GED</option>
-                <option value="Mechanical" {{(($vehicle->department=='Mechanical') ? 'selected' : '')}}>Mechanical</option>
-                <option value="Process" {{(($vehicle->department=='Process') ? 'selected' : '')}}>Process</option>
-                <option value="Electrical" {{(($vehicle->department=='Electrical') ? 'selected' : '')}}>Electrical</option>
-                <option value="Marine" {{(($vehicle->department=='Marine') ? 'selected' : '')}}>Marine</option>
-                <option value="Chemical" {{(($vehicle->department=='Chemical') ? 'selected' : '')}}>Chemical</option>
-                <option value="Warehouse" {{(($vehicle->department=='Warehouse') ? 'selected' : '')}}>Warehouse</option>
-                <option value="Marketing" {{(($vehicle->department=='Marketing') ? 'selected' : '')}}>Marketing</option>
-                <option value="Clinc"> {{(($vehicle->department=='Clinc') ? 'selected' : '')}}Clinc</option>
+            <label for="department_id">department</label>
+            {{-- {{$brands}} --}}
 
+            <select name="department_id" class="form-control">
+                {{-- <option value="">--Select vehicle--</option> --}}
+               {{-- @foreach(\App\Models\department::where('id',$department->id)->get() as $departments) --}}
+               @foreach($department as $departments )
+                <option value="{{$departments->id}}" @if($departments->id == $vehicle->department_id) selected @endif> {{$departments->name}}</option>
 
+               @endforeach
             </select>
-            @error('department')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
           </div>
 
 

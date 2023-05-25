@@ -351,7 +351,43 @@
 
 
 
+<script>
+    $(function() {
+      $('input[name=toogle2]').change(function() {
+          var mode = $(this).prop('checked'); //== true ? 1 : 0;
+         // alert(mode)
+          var id = $(this).val();
+        //  alert(id);
 
+          $.ajax({
+              url:"{{route('hods.status')}}",
+
+              type: "POST",
+              // dataType: "json",
+              data:{
+                  // 'status': status, 'vehicle_id': vehicle_id
+                  _token:'{{csrf_token()}}',
+                  mode:mode,
+                  id:id,
+              },
+              success:function(response){
+                  if (response.status) {
+
+                      alert(response.msg);
+
+                  }
+                  else {
+                      alert('Please wait for approval')
+                  }
+              }
+          });
+      })
+    })
+
+  </script>
+
+
+{{--
 <script>
     $(function() {
       $('input[name=toogle2]').change(function() {
@@ -385,7 +421,7 @@
       })
     })
 
-  </script>
+  </script> --}}
 
 
 

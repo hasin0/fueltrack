@@ -19,7 +19,7 @@ class FuelStationAttenderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     public function dashboard()
     {
        // return 'HOD dashboard';

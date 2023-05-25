@@ -17,7 +17,7 @@ class FuelstationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+
 
     public function index()
     {
@@ -80,7 +80,7 @@ class FuelstationController extends Controller
          //return $request->all();
 
          $this->validate($request,[
-          
+
             'name'=>'string|required',
             // 'status'=>'required|in:active,inactive',
             'user_id'=>'nullable',
@@ -154,7 +154,7 @@ class FuelstationController extends Controller
     {
         $fuelstation=Fuelstation::findOrFail($id);
 
-        
+
         $users = User::whereHas(
             'roles', function($q){
                 $q->where('name', 'FuelStationAttender');

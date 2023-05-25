@@ -122,7 +122,7 @@ Route::group(['prefix'=>'HOD','middleware' => ['role:HOD']], function () {
     //Route::get('/fuelrequests', [App\Http\Controllers\HodController::class, 'index'])->middleware(['auth'])->name('HOD');
 
    Route::resource('/HOD-fuelrequests',\App\Http\Controllers\HOD\FuelrequestController::class);
-    Route::post('HOD_approval',[\App\Http\Controllers\HOD\FuelrequestController::class,'HodStatus'])->name('hod.status');
+    Route::post('HOD_approval',[\App\Http\Controllers\HOD\FuelrequestController::class,'HodStatus'])->name('hods.status');
 
 
 });
@@ -190,7 +190,7 @@ Route::group(['prefix'=>'fuelattender','middleware' => ['role:FuelStationAttende
 
     //Route::get('/fuelrequests', [App\Http\Controllers\HodController::class, 'index'])->middleware(['auth'])->name('HOD');
 
-   Route::resource('/fuelattender-fuelrequests',\App\Http\Controllers\Fuelattender\FuelrequestController::class,['only' => ['index']]);
+   Route::resource('/fuelattender-fuelrequests',\App\Http\Controllers\Fuelattender\FuelrequestController::class,['only' => ['index','edit']]);
 
    Route::post('FuelStationAttender_approval',[\App\Http\Controllers\Fuelattender\FuelrequestController::class,'fuelattenderStatus'])->name('fuelattender.status');
 

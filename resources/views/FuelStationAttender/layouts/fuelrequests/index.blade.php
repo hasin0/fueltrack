@@ -10,7 +10,7 @@
      </div>
     <div class="card-header py-3">
       <h6 class="m-0 font-weight-bold text-primary float-left">fuelrequests List</h6>
-      <a href="{{route('fuelattender-fuelrequests.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add fuelrequests</a>
+      {{-- <a href="{{route('fuelattender-fuelrequests.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add fuelrequests</a> --}}
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -90,10 +90,10 @@
                     {{-- <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank - $fuelrequests->last_km_when_fueling)}}  @endforeach</td> --}}
 
                      <td>@foreach($fuelrequests->vehicles as $data){{($data->fueltank)}}  @endforeach</td>
-                    <td>@foreach($fuelrequests->vehicles as $data){{($data->department->name)}} @endforeach</td> 
+                    <td>@foreach($fuelrequests->vehicles as $data){{($data->department->name)}} @endforeach</td>
 
                     <td>{{$fuelrequests->order_number}}</td>
-                    <td>{{$fuelrequests->name}}</td>
+                    <td>{{$fuelrequests->fuelstation->name}}</td>
 
 
 
@@ -126,11 +126,11 @@
 
                     <td>
                         <a href="{{route('fuelattender-fuelrequests.edit',$fuelrequests->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                        <form metFuelStationAttender="POST" action="{{route('fuelattender-fuelrequests.destroy',[$fuelrequests->id])}}">
+                        {{-- <form method="POST" action="{{route('fuelattender-fuelrequests.destroy',[$fuelrequests->id])}}">
                           @csrf
                           @method('delete')
                               <button class="btn btn-danger btn-sm dltBtn" data-id={{$fuelrequests->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
-                        </form>
+                        </form> --}}
                     </td>
                     {{-- Delete Modal --}}
                     {{-- <div class="modal fade" id="delModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="#delModal{{$user->id}}Label" aria-hidden="true">
@@ -353,7 +353,7 @@
 
 
 
-<script>
+{{-- <script>
     $(function() {
       $('input[name=toogle2]').change(function() {
           var mode = $(this).prop('checked'); //== true ? 1 : 0;
@@ -386,7 +386,7 @@
       })
     })
 
-  </script>
+  </script> --}}
 
 
 

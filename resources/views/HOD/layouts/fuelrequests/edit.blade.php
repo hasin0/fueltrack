@@ -95,7 +95,7 @@
                {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
                @foreach($vehicle as $vehicles )
 
-                <option value="{{$vehicles->id}}">Car-Tag {{$vehicles->tag_no}} :{{$vehicles->fueltank}}Liters: {{$vehicles->department}}</option>
+                <option value="{{$vehicles->id}}" @if($fuelrequests->id == $fuelrequests->vehicle_id) selected @endif>Car-Tag {{$vehicles->tag_no}} :{{$vehicles->fueltank}}Liters: Department:{{$vehicles->department_name }}</option>
                @endforeach
             </select>
           </div>
@@ -107,94 +107,15 @@
 
 
 
-
-
-          {{-- <div class="form-group">
-            <label for="department" class="col-form-label">Department <span class="text-danger">*</span></label>
-            <select name="department" class="form-control">
-                <option value="Admin">Admin</option>
-                <option value="IT">IT</option>
-                <option value="HR">HR</option>
-                <option value="HSE">HSE</option>
-                <option value="Batching plant">Batching plant</option>
-                <option value="Legal">Legal</option>
-                <option value="Logistic">Logistic</option>
-                <option value="Security">Security</option>
-                <option value="GED">GED</option>
-                <option value="Mechanical">Mechanical</option>
-                <option value="Process">Process</option>
-                <option value="Electrical">Electrical</option>
-                <option value="Marine">Marine</option>
-                <option value="Chemical">Chemical</option>
-                <option value="Warehouse">Warehouse</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Clinc">Clinc</option>
-
-
-            </select>
-            @error('department')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-          </div> --}}
-
-
-
-{{--
-
-          <div class="form-group">
-            <label for="HOD_approval" class="col-form-label">HOD_approval <span class="text-danger">*</span></label>
-            <select name="HOD_approval" class="form-control">
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-            </select>
-            @error('HOD_approval')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-          </div>
-
-
-
-
-          <div class="form-group">
-            <label for="Admin_approval" class="col-form-label">Admin_approval <span class="text-danger">*</span></label>
-            <select name="Admin_approval" class="form-control">
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-            </select>
-            @error('Admin_approval')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-          </div>
-
-
-
-
-          <div class="form-group">
-            <label for="Fuel_station_approval" class="col-form-label">Fuel_station_approval <span class="text-danger">*</span></label>
-            <select name="Fuel_station_approval" class="form-control">
-                <option value="">--Select--</option>
-
-                <option value="issued">Issued</option>
-                <option value="Notissued">Not-Issued</option>
-            </select>
-            @error('Fuel_station_approval')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
-          </div> --}}
-
-
-
-
-
           <div class="form-group">
             <label for="fuelstation">fuelstation</label>
             {{-- {{$brands}} --}}
 
             <select name="fuelstation_id" class="form-control">
                 <option value="">--Select fuelstation--</option>
-               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               {{-- @foreach(\App\Models\Fuelstation::where('id','active')->get() as $fuelstations) --}}
                @foreach($fuelstation as $fuelstations )
-                <option value="{{$fuelstations->id}}"> {{$fuelstations->name}}</option>
+                <option value="{{$fuelstations->id}}" @if($fuelstations->id == $fuelrequests->fuelstation_id) selected @endif> {{$fuelstations->name}}</option>
                @endforeach
             </select>
           </div>
