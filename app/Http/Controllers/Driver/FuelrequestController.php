@@ -427,7 +427,9 @@ $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->with(['fuels
     public function edit($id)
     {
         //
-        $vehicle=Vehicle::where('status','active')->get();
+        $user=auth()->user();
+
+        $vehicle=Vehicle::where('department_id',$user->department_id)->get();
 
         $fuelstation=Fuelstation::select('id','name')->get();//where('status','active')->get();
 

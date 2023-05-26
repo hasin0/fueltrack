@@ -103,7 +103,18 @@
 
 
 
+          <div class="form-group">
+            <label for="department_id">department</label>
+            {{-- {{$brands}} --}}
 
+            <select name="department_id" class="form-control">
+                {{-- <option value="">--Select vehicle--</option> --}}
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($department as $department )
+                <option value="{{$department->id}}"> {{$department->name}}</option>
+               @endforeach
+            </select>
+          </div>
 
 
 
@@ -186,25 +197,18 @@
 
 
 
-
           <div class="form-group">
-            <label for="Fuel_station" class="col-form-label">Fuel-station <span class="text-danger">*</span></label>
-            <select name="Fuel_station" class="form-control">
-                <option value="">--Select--</option>
+            <label for="fuelstation">fuelstation</label>
+            {{-- {{$brands}} --}}
 
-
-
-                <option value="Total-station"  {{(($fuelrequests->Fuel_station=='Total-station') ? 'selected' : '')}}>Total-station</option>
-                <option value="NNPC-station"  {{(($fuelrequests->Fuel_station=='NNPC-station') ? 'selected' : '')}}>NNPC-station</option>
-                <option value="Petrolcam-station"  {{(($fuelrequests->Fuel_station=='Petrolcam-station') ? 'selected' : '')}}>Petrolcam-station</option>
-
+            <select name="fuelstation_id" class="form-control">
+                <option value="">--Select fuelstation--</option>
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($fuelstation as $fuelstations )
+                <option value="{{$fuelstations->id}}"> {{$fuelstations->name}}</option>
+               @endforeach
             </select>
-            @error('Fuel_station')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
           </div>
-
-
 
 
 

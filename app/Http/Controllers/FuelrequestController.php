@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\department;
+
 
 use App\Exports\FuelrequestExport;
 use App\Models\Fuelstation;
@@ -72,7 +74,7 @@ class FuelrequestController extends Controller
         $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
 
 
-          dd($fuelrequest);
+        //   dd($fuelrequest);
         return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
         //
     }
@@ -190,13 +192,15 @@ class FuelrequestController extends Controller
     {
 
         // $brand=Brand::get();
+        $department=department::all();
+
          $vehicle=Vehicle::where('status','active')->get();
          $fuelstation=Fuelstation::all();//where('status','active')->get();
 
                // dd($vehicle);
 
 
-        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle)->with('fuelstation',$fuelstation);;
+        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle)->with('fuelstation',$fuelstation)->with('department',$department);;
 
         //
     }
@@ -331,11 +335,15 @@ return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
     {
         //
         $vehicle=Vehicle::where('status','active')->get();
+        $department=department::all();
+        $fuelstation=Fuelstation::all();
+
+
 
         $fuelrequests=fuelrequest::findOrFail($id);
         if ($fuelrequests) {
 
-            return view('backend.layouts.fuelrequests.edit')->with('fuelrequests',$fuelrequests)->with('vehicle',$vehicle);
+            return view('backend.layouts.fuelrequests.edit')->with('fuelrequests',$fuelrequests)->with('vehicle',$vehicle)->with('department',$department)->with('fuelstation',$fuelstation);
 
             # code...
 

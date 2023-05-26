@@ -26,6 +26,9 @@ class FuelstationController extends Controller
 
 
  $fuelstation = Fuelstation::with(['user'])->get();
+//  DB::select("SELECT fuelstations.*, users.name AS username FROM fuelstations JOIN users ON fuelstations.user_id = users.id");
+
+
     //    dd($fuelstation);
 
 

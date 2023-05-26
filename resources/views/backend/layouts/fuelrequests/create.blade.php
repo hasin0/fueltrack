@@ -113,6 +113,18 @@
 
 
 
+          <div class="form-group">
+            <label for="department_id">department</label>
+            {{-- {{$brands}} --}}
+
+            <select name="department_id" class="form-control">
+                {{-- <option value="">--Select vehicle--</option> --}}
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($department as $department )
+                <option value="{{$department->id}}"> {{$department->name}}</option>
+               @endforeach
+            </select>
+          </div>
 
 
 
