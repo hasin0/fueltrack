@@ -251,10 +251,10 @@ class FuelrequestController extends Controller
 
 
 
-         $data['km_used']=$data['last_km']+$data['liters_km'];
+         $data['liters_km']=$data['present_km']-$data['last_km_when_fueling'];
 
          //
-
+// dd($data);
 
 
 
