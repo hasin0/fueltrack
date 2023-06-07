@@ -31,7 +31,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer update --ignore-platform-reqs
 
 # Set the correct permissions for the application files
-RUN chown -R www-data:www-data /var/www/html/fueltrack
+# RUN chown -R www-data:www-data /var/www/html/fueltrack
+RUN chmod -R 777 /var/www/html/fueltrack
+
 
 # Expose the necessary ports
 EXPOSE 9001
