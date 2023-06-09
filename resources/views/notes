@@ -1599,7 +1599,7 @@ kubectl port-forward svc/argocd-server -n argocd 8181:443
                 // echo "triggering updatemanifestjob"
                 build job: 'fueltrack-k8s', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
         }
-        <!--- sudo chmod 666 /var/run/docker.sock -- give access to docker for local system>
+        <!-- sudo chmod 666 /var/run/docker.sock -- give access to docker for local system>
 
         Installing ArgoCD in Kubernetes Cluster
 
