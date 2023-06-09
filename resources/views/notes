@@ -1600,3 +1600,12 @@ kubectl port-forward svc/argocd-server -n argocd 8181:443
                 build job: 'fueltrack-k8s', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
         }
         <!-- sudo chmod 666 /var/run/docker.sock -- give access to docker for local system>
+
+        Installing ArgoCD in Kubernetes Cluster
+
+        kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl port-forward svc/argocd-server -n argocd 6060:443
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+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  fue
