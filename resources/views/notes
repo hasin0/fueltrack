@@ -1601,7 +1601,7 @@ kubectl port-forward svc/argocd-server -n argocd 8181:443
         }
         <!-- sudo chmod 666 /var/run/docker.sock -- give access to docker for local system>
 
-        Installing ArgoCD in Kubernetes Cluster
+        Installing ArgoCD in Kubernetes Clusters
 
         kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
