@@ -36,10 +36,10 @@ RUN chmod -R 777 /var/www/html/fueltrack
 
 
 # Expose the necessary ports
-EXPOSE 9001
+EXPOSE 9091
 
 # Start the PHP-FPM service
-CMD php artisan serve --host=0.0.0.0 --port 9001
+CMD php artisan serve --host=0.0.0.0 --port 9091
 
 
 
