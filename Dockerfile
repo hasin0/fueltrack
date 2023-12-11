@@ -1,12 +1,6 @@
 # Use the official PHP image as the base image
 FROM php
 
-# Set the working directory
-WORKDIR /var/www/html/fueltrack
-
-# Copy the application files
-COPY . .
-
 # Install the necessary dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -24,22 +18,97 @@ RUN apt-get update && apt-get install -y \
     curl \
     && docker-php-ext-install mysqli pdo pdo_mysql
 
+# Set the working directory
+WORKDIR /var/www/html/fueltrack
+
+# Copy the application files including .env.example
+COPY . .
+
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Run Composer to install the PHP dependencies
-# RUN composer update --ignore-platform-reqs
+RUN composer update --ignore-platform-reqs
+
+# Copy .env.example to .env
+RUN cp .env.example .env
 
 # Set the correct permissions for the application files
-# RUN chown -R www-data:www-data /var/www/html/fueltrack
 RUN chmod -R 777 /var/www/html/fueltrack
 
+# Set the application key
+RUN php artisan key:generate
 
 # Expose the necessary ports
 EXPOSE 9001
 
 # Start the PHP-FPM service
 CMD php artisan serve --host=0.0.0.0 --port 9001
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Use the official PHP image as the base image
+# FROM php
+
+# # Set the working directory
+# WORKDIR /var/www/html/fueltrack
+
+# # Copy the application files
+# COPY . .
+
+# # Install the necessary dependencies
+# RUN apt-get update && apt-get install -y \
+#     build-essential \
+#     libpng-dev \
+#     libjpeg62-turbo-dev \
+#     libfreetype6-dev \
+#     locales \
+#     zip \
+#     jpegoptim optipng pngquant gifsicle \
+#     vim \
+#     libzip-dev \
+#     unzip \
+#     git \
+#     libonig-dev \
+#     curl \
+#     && docker-php-ext-install mysqli pdo pdo_mysql
+
+# # Install Composer
+# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# # Run Composer to install the PHP dependencies
+# # RUN composer update --ignore-platform-reqs
+
+# # Set the correct permissions for the application files
+# # RUN chown -R www-data:www-data /var/www/html/fueltrack
+# RUN chmod -R 777 /var/www/html/fueltrack
+
+
+# # Expose the necessary ports
+# EXPOSE 9001
+
+# # Start the PHP-FPM service
+# CMD php artisan serve --host=0.0.0.0 --port 9001
 
 
 
