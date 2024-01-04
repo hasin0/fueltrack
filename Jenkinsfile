@@ -169,7 +169,7 @@ pipeline {
 //         //     steps {
 //         //         script {
 //         //             /* Run tests on the built image */
-//         //             sh "docker run hasino2258/fueltrack npm run test"
+//         //         zzzzzzz    sh "docker run hasino2258/fueltrack npm run test"
 //         //         }
 //         //     }
 //         // }
