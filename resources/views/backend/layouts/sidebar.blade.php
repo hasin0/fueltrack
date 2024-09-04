@@ -227,7 +227,7 @@
         <a class="nav-link" href="{{route('roles.index')}}">
             <i class="fas fa-users"></i>
             <span>role</span></a>
-            
+
     </li>
 
 
@@ -235,7 +235,7 @@
       <a class="nav-link" href="{{route('fuelstation.index')}}">
           <i class="fas fa-users"></i>
           <span>fuelstation</span></a>
-          
+
   </li>
 
 {{--
@@ -273,7 +273,16 @@
             <i class="fas fa-users"></i>
             <span>Users</span></a>
     </li>
-{{-- 
+
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('admin.settings.update')}}">
+            <i class="fas fa-users"></i>
+            <span>Settings</span></a>
+    </li>
+
+
+
+{{--   route('admin.settings.update')
 <form methodxcc="POST" action="{{ route('logout') }}">
                             @csrf
 ssssss
@@ -296,7 +305,7 @@ ssssss
                             this.closest('form').submit();">
             {{ __('Log Out') }}
         </x-dropdown-link>
-    </form> 
+    </form>
 
 
     </li>

@@ -3,11 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fuelstation;
-use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-
-
 use Illuminate\Http\Request;
 
 class FuelstationController extends Controller
@@ -17,31 +13,10 @@ class FuelstationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-
     public function index()
     {
-       // $fuelstation = fuelstation::with(['User'])->get();
-       // dd($fuelstation);
-
-
- $fuelstation = Fuelstation::with(['user'])->get();
-//  DB::select("SELECT fuelstations.*, users.name AS username FROM fuelstations JOIN users ON fuelstations.user_id = users.id");
-
-
-    //    dd($fuelstation);
-
-
-        // $fuelstation=Fuelstation::orderBy('id','DESC')->paginate(10);
-
-
-    // $fuelstation = fuelstation::find(1);
-
-    // return $fuelstation->department->id;
-
-        //  dd($fuelstation);
-        return view('backend.layouts.fuelstations.index')->with('fuelstation',$fuelstation);
-        //
+        $fuelstation = Fuelstation::with(['user.roles'])->get();
+        return view('backend.layouts.fuelstations.index', compact('fuelstation'));
     }
 
     /**
@@ -51,22 +26,15 @@ class FuelstationController extends Controller
      */
     public function create()
     {
-        //
-        $user=auth()->user();
-
-
         $users = User::whereHas(
-            'roles', function($q){
-                $q->where('name', 'FuelStationAttender');
+            'roles',
+            function ($q) {
+                $q->where('name', 'fuelstation-attender');
             }
         )->get();
 
-        // $users=User::whereHas('roles',function($q){
-        //     $q->where('name','FuelStationAttender');
-        // });
 
-
-        return view('backend.layouts.fuelstations.create')->with('users',$users);;;
+        return view('backend.layouts.fuelstations.create', compact('users'));
     }
 
     /**
@@ -77,74 +45,36 @@ class FuelstationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'string|required',
+            'user_id' => 'nullable',
+        ]);
 
+        $data = $request->all();
+        $data['user_id'] = $request->user_id;
 
-         //return $request->all();
+        $status = Fuelstation::create($data);
 
-         $this->validate($request,[
-
-            'name'=>'string|required',
-            // 'status'=>'required|in:active,inactive',
-            'user_id'=>'nullable',
-
-
-
-
-         ]);
-         $data=$request->all();
-
-         $data['user_id']=$request->user_id;
-
-         $status=Fuelstation::create($data);
-
-         if ($status) {
-            return redirect()->route('fuelstation.index', ['parameterKey' => 'success']);
-            # code...
-         }else {
-            return redirect()->back()->withErrors('someting went wrong')->withInput();
-         }
-
-
-
-    }
-
-
-    public function fuelstationStatus(Request $request)
-    {
-
-        //dd($request->all());
-
-        if ($request->mode == 'true') {
-            DB::table('fuelstations')->where('id', $request->id)->update(['status'=>'active']);
-            # code...
+        if ($status) {
+            return redirect()->route('fuelstation.index')->with('success', 'Fuel Station successfully created');
+        } else {
+            return redirect()->back()->withErrors('Something went wrong')->withInput();
         }
-        else {
-            DB::table('fuelstations')->where('id', $request->id)->update(['status'=>'inactive']);
-
-            # code...
-        }
-
-        return response()->json(['msg'=>'Successfully updated status','status'=>true]);
-
-        // $fuelstation = fuelstation::find($request->fuelstation_id);
-
-        // $fuelstation->status = $request->status;
-        // dd($fuelstation);
-        // $fuelstation->save();
-
-        // return response()->json(['success'=>'Status change successfully.']);
     }
 
     /**
-     * Display the specified resource.
+     * Update the fuel station status.
      *
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function fuelstationStatus(Request $request)
     {
-        //
+        $fuelstation = Fuelstation::findOrFail($request->id);
+        $fuelstation->status = $request->mode == 'true' ? 'active' : 'inactive';
+        $fuelstation->save();
+
+        return response()->json(['msg' => 'Successfully updated status', 'status' => true]);
     }
 
     /**
@@ -155,27 +85,20 @@ class FuelstationController extends Controller
      */
     public function edit($id)
     {
-        $fuelstation=Fuelstation::findOrFail($id);
-
+        $fuelstation = Fuelstation::findOrFail($id);
 
         $users = User::whereHas(
-            'roles', function($q){
-                $q->where('name', 'FuelStationAttender');
+            'roles',
+            function ($q) {
+                $q->where('name', 'fuelstation-attender');
             }
         )->get();
 
-
         if ($fuelstation) {
-
-            return view('backend.layouts.fuelstations.edit')->with('users',$users)->with('fuelstation',$fuelstation);
-
-            # code...
-
+            return view('backend.layouts.fuelstations.edit', compact('users', 'fuelstation'));
+        } else {
+            return back()->with('error', 'Data not found');
         }
-        else {
-            return back()->with('error','data not found');
-        }
-        //
     }
 
     /**
@@ -187,31 +110,21 @@ class FuelstationController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $fuelstation = Fuelstation::findOrFail($id);
 
-        $fuelstation=Fuelstation::findOrFail($id);
-        $this->validate($request,[
-            'name'=>'string|required',
-            // 'status'=>'required|in:active,inactive',
-            'user_id'=>'nullable',
-
+        $this->validate($request, [
+            'name' => 'string|required',
+            'user_id' => 'nullable',
         ]);
-        $data=$request->all();
-        // $slug=Str::slug($request->title);
-        // $count=Banner::where('slug',$slug)->count();
-        // if($count>0){
-        //     $slug=$slug.'-'.date('ymdis').'-'.rand(0,999);
-        // }
-        // $data['slug']=$slug;
-        // return $slug;
-        $status=$fuelstation->fill($data)->save();
-        if($status){
-            request()->session()->flash('success','Banner successfully updated');
+
+        $data = $request->all();
+        $status = $fuelstation->fill($data)->save();
+
+        if ($status) {
+            return redirect()->route('fuelstation.index')->with('success', 'Fuel Station successfully updated');
+        } else {
+            return redirect()->back()->with('error', 'Error occurred while updating Fuel Station');
         }
-        else{
-            request()->session()->flash('error','Error occurred while updating banner');
-        }
-        return redirect()->route('fuelstation.index');
-        //
     }
 
     /**
@@ -222,16 +135,13 @@ class FuelstationController extends Controller
      */
     public function destroy($id)
     {
-        $fuelstation=Fuelstation::findOrFail($id);
-        $status=$fuelstation->delete();
-        if($status){
-            request()->session()->flash('success','Banner successfully deleted');
-        }
-        else{
+        $fuelstation = Fuelstation::findOrFail($id);
+        $status = $fuelstation->delete();
 
-            request()->session()->flash('error','Error occurred while deleting banner');
+        if ($status) {
+            return redirect()->route('fuelstation.index')->with('success', 'Fuel Station successfully deleted');
+        } else {
+            return redirect()->route('fuelstation.index')->with('error', 'Error occurred while deleting Fuel Station');
         }
-        return redirect()->route('fuelstation.index');
-        //
     }
 }

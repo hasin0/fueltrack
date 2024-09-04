@@ -16,14 +16,22 @@ class fuelrequest extends Model
     protected $dates = ['deleted_at'];
 
 
-    protected $fillable=['present_km','last_fuel_qty','last_km',
-    'last_km_when_fueling','km_used',
-     'user_id','liters_km',
-     'HOD_approval',
-     'Admin_approval',
-     'order_number','
-     Fuel_station_approval',
-     'fuelstation_id','department_id'];
+    protected $fillable = [
+        'present_km',
+        'ltr_collected',
+        'previous_km',
+        'amount',
+        'km_covered',
+        'price',
+        'AVG_KM/LTR',
+        'HOD_approval',
+        'Admin_approval',
+        'order_number',
+        'Fuel_station_approval',
+        'user_id',
+        'fuelstation_id',
+        'department_id'
+    ];
 
 
      public function vehicles(){
@@ -56,6 +64,16 @@ class fuelrequest extends Model
   {
     return $this->belongsTo(Fuelstation::class);
   }
+
+
+  public function getAvgKmPerLtrAttribute()
+{
+    if ($this->ltr_collected > 0) {
+        return $this->km_covered / $this->ltr_collected;
+    }
+    return 0; // Or any default value you prefer
+}
+
 
 }
 

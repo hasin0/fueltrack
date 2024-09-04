@@ -1,0 +1,5 @@
+{
+  "action": "edit",
+  "path": "c:\xampp\php\php.ini",
+  "content": ";extension=zip\n;extension=bz2\n;extension=curl\n;extension=fileinfo\n;extension=gd\n;extension=gettext\n;extension=iconv\n;extension=imap\n;extension=intl\n;extension=mbstring\n;extension=mysqli\n;extension=odbc\n;extension=openssl\n;extension=pdo_mysql\n;extension=pdo_pgsql\n;extension=pdo_sqlite\n;extension=pgsql\n;extension=shmop\n;extension=sodium\n;extension=sockets\n;extension=sqlite3\n;extension=sysvmsg\n;extension=sysvsem\n;extension=sysvshm\n;extension=tidy\n;extension=xmlrpc\n;extension=zip\n;extension=zlib"
+}

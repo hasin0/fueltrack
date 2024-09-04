@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\department;
+use App\Models\Setting;
+
 
 
 use App\Exports\FuelrequestExport;
@@ -50,107 +52,86 @@ class FuelrequestController extends Controller
     {
 
 
-
-     //$fuelrequest = fuelrequest::with(['vehicles','user'])->get();
-     //dd($fuelrequest);
-    //  $fuelrequest = fuelrequest::find(1);
-    //  return $fuelrequest;
+        $fuelPrice = Setting::where('key', 'fuel_price')->first(); // Fetch from settings table
 
 
-     //return  $fuelrequest->vehicles();//->attach($vehicle);
+        $fuelrequests = Fuelrequest::with('vehicles')->get();
 
 
-     //return $fuelrequest->vehicle;
-     // $fuelrequest;
-
-
-
-
-
-
-
-        // $fuelrequest=fuelrequest::all()->sum('km_used');
-
-        $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
-
-
-        //   dd($fuelrequest);
-        return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
-        //
+        // $fuelrequests = Fuelrequest::with('user')->get(); // Make sure this query works
+    return view('backend.layouts.fuelrequests.index', compact('fuelrequests','fuelPrice'));
+        // $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
+        // return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
     }
 
 
+// In your FuelRequestController
+public function adminStatus(Request $request)
+{
+    $fuelrequest = Fuelrequest::find($request->id);
+    $fuelrequest->Admin_approval = $request->mode == 'true' ? 'active' : 'inactive';
+    $fuelrequest->save();
+    return response()->json(['msg'=>'Admin approval updated successfully','status'=>true]);
+}
+
+// Similar methods for hodStatus and fsaStatus
 
 
-    public function AdminStatus(Request $request)
+    // public function AdminStatus(Request $request)
+    // {
+    //     if ($request->mode == 'true') {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Admin_approval'=>'active']);
+    //     } else {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Admin_approval'=>'inactive']);
+    //     }
+
+    //     return response()->json(['msg'=>'Successfully updated status','status'=>true]);
+    // }
+
+
+    public function hodStatus(Request $request)
     {
-
-        //dd($request->all());
-
-        if ($request->mode == 'true') {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['Admin_approval'=>'active']);
-            # code...
-        }
-        else {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['Admin_approval'=>'inactive']);
-
-            # code...
-        }
-
-        return response()->json(['msg'=>'Successfully updated status','status'=>true]);
-
-
+        $fuelrequest = Fuelrequest::find($request->id);
+        $fuelrequest->HOD_approval = $request->mode == 'true' ? 'active' : 'inactive';
+        $fuelrequest->save();
+        return response()->json(['msg'=>'HOD approval updated successfully','status'=>true]);
     }
 
 
 
+    // public function HodStatus(Request $request)
+    // {
+    //     if ($request->mode == 'true') {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['HOD_approval'=>'active']);
+    //     } else {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['HOD_approval'=>'inactive']);
+    //     }
+
+    //     return response()->json(['msg'=>'Successfully updated status','status'=>true]);
+    // }
 
 
-    public function HodStatus(Request $request)
+
+
+
+    // public function FSAStatus(Request $request)
+    // {
+    //     if ($request->mode == 'true') {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'issued']);
+    //     } else {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'Notissued']);
+    //     }
+
+    //     return response()->json(['msg'=>'Successfully updated status','status'=>true]);
+    // }
+
+    public function fsaStatus(Request $request)
     {
-
-        //dd($request->all());
-
-        if ($request->mode == 'true') {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['HOD_approval'=>'active']);
-            # code...
-        }
-        else {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['HOD_approval'=>'inactive']);
-
-            # code...
-        }
-
-        return response()->json(['msg'=>'Successfully updated status','status'=>true]);
-
-
+        $fuelrequest = Fuelrequest::find($request->id);
+        $fuelrequest->Fuel_station_approval = $request->mode == 'true' ? 'issued' : 'Notissued';
+        $fuelrequest->save();
+        return response()->json(['msg'=>'Fuel station approval updated successfully','status'=>true]);
     }
-
-
-
-
-
-    public function FSAStatus(Request $request)
-    {
-
-        //dd($request->all());
-
-        if ($request->mode == 'true') {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'issued']);
-            # code...
-        }
-        else {
-            DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'Notissued']);
-
-            # code...
-        }
-
-        return response()->json(['msg'=>'Successfully updated status','status'=>true]);
-
-
-    }
-
-
 
 
 
@@ -190,19 +171,11 @@ class FuelrequestController extends Controller
      */
     public function create()
     {
-
-        // $brand=Brand::get();
         $department=department::all();
+        $vehicle=Vehicle::where('status','active')->get();
+        $fuelstation=Fuelstation::all();
 
-         $vehicle=Vehicle::where('status','active')->get();
-         $fuelstation=Fuelstation::all();//where('status','active')->get();
-
-               // dd($vehicle);
-
-
-        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle)->with('fuelstation',$fuelstation)->with('department',$department);;
-
-        //
+        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle)->with('fuelstation',$fuelstation)->with('department',$department);
     }
 
     /**
@@ -213,31 +186,13 @@ class FuelrequestController extends Controller
      */
     public function store(Request $request)
     {
-       // return $request->all();
-
-        // 'user_id','',
-        // '',
-        // '',
-        // 'order_number','
-        // ',
-
-
         $this->validate($request,[
             'present_km'=>'numeric|required',
-            'liters_km'=>'numeric|required',
-
-            'last_fuel_qty'=>'numeric|required',
-            'last_km'=>'numeric|required',
-            'last_km_when_fueling'=>'numeric|required',
-            //'vehicle_id'=>'exists:vehicles,id,fueltank|required',
-               //'vehicle_id'=>'exists:vehicles,id|required',
-           // 'vehicle_id'=>'exists:vehicles,id|required',
-
-            'km_used'=>'numeric|required',
-            // 'HOD_approval'=>'required|in:active,inactive',
-            // 'Admin_approval'=>'required|in:active,inactive',
-            // 'Fuel_station_approval'=>'required|in:issued,Notissued',
-
+            'ltr_collected'=>'numeric|required',
+            'previous_km'=>'numeric|required',
+            // 'amount'=>'numeric|required',
+            // 'km_covered'=>'numeric|required',
+            // 'AVG_KM/LTR'=>'numeric|required',
             'fuelstation_id'=>'required',
          ]);
 
@@ -246,62 +201,37 @@ class FuelrequestController extends Controller
          $data=$request->all();
          $data['user_id']=auth()->id();
          $data['order_number']='ORD-'.strtoupper(Str::random(10));
-
          $data['fuelstation_id']=$request->fuelstation_id;
 
 
 
-         $data['liters_km']=$data['present_km']-$data['last_km_when_fueling'];
 
-         //
-// dd($data);
+// Get the global fuel price
+$fuelPrice = Setting::where('key', 'fuel_price')->first();
+$price = $fuelPrice ? $fuelPrice->value : 0; // Use 0 if price is not set
+
+// Calculate amount
+$data['amount'] = $data['ltr_collected'] * $price;
+
+         // Calculate km_covered and AVG_KM/LTR
+        //  $data['amount'] = $data['ltr_collected'] * $data['price'];
+
+         $data['km_covered'] = $data['present_km'] - $data['previous_km'];
+         $data['AVG_KM/LTR'] = $data['km_covered'] / $data['ltr_collected'];
 
 
-
+         // $data['liters_per_km']=$data['present_km']-$data['last_km_when_fueling'];
 
          $vehicle=$data['vehicle_id'];
 
-
-
-
-
-
-
-
-
-
          $data=fuelrequest::create($data);
-
-     $data->vehicles()->attach($vehicle);
-
-
-    //  foreach ($data->vehicles as $veH  ) {
-
-    //   return  $veH->fueltank - $data['liters_km'];
-
-
-    //     # code...
-    // }
-
-
-
-
-
-
+         $data->vehicles()->attach($vehicle);
 
          if ($data) {
             return redirect()->route('fuelrequests.index', ['parameterKey' => 'success']);
-            # code...
          }else {
             return redirect()->back()->withErrors('someting went wrong')->withInput();
          }
-
-
-
-
-
-
-
     }
 
     /**
@@ -312,17 +242,8 @@ class FuelrequestController extends Controller
      */
     public function show($id)
     {
-
          $fuelrequests=fuelrequest::where('id',$id)->get();
-
-//  dd($fuelrequests);
-
-return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
-
-
-        //   return view('backend.layouts.fuelrequests.show')->with('fuelrequest',$fuelrequest);
-
-
+         return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
     }
 
     /**
@@ -333,22 +254,14 @@ return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
      */
     public function edit($id)
     {
-        //
         $vehicle=Vehicle::where('status','active')->get();
         $department=department::all();
         $fuelstation=Fuelstation::all();
 
-
-
         $fuelrequests=fuelrequest::findOrFail($id);
         if ($fuelrequests) {
-
             return view('backend.layouts.fuelrequests.edit')->with('fuelrequests',$fuelrequests)->with('vehicle',$vehicle)->with('department',$department)->with('fuelstation',$fuelstation);
-
-            # code...
-
-        }
-        else {
+        } else {
             return back()->with('error','data not found');
         }
     }
@@ -366,81 +279,41 @@ return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
 
         $this->validate($request,[
             'present_km'=>'numeric|required',
-            'liters_km'=>'numeric|required',
-
-            'last_fuel_qty'=>'numeric|required',
-            'last_km'=>'numeric|required',
-            'last_km_when_fueling'=>'numeric|required',
-            //'vehicle_id'=>'exists:vehicles,id,fueltank|required',
-               //'vehicle_id'=>'exists:vehicles,id|required',
-           // 'vehicle_id'=>'exists:vehicles,id|required',
-
-            'km_used'=>'numeric|required',
-            // 'HOD_approval'=>'required|in:active,inactive',
-            // 'Admin_approval'=>'required|in:active,inactive',
-            // 'Fuel_station_approval'=>'required|in:issued,Notissued',
-
-            'Fuel_station'=>'required',
+            'ltr_collected'=>'numeric|required',
+            'previous_km'=>'numeric|required',
+            // 'amount'=>'numeric|required',
+            // 'km_covered'=>'numeric|required',
+            // 'AVG_KM/LTR'=>'numeric|required',
+            'fuelstation_id'=>'required',
          ]);
 
          $data=$request->all();
+         $vehicle=$data['vehicle_id'];
 
-
-        //  $data['order_number']='ORD-'.strtoupper(Str::random(10));
-
-        //  //$data=$request->all();
-        //  $data['user_id']=auth()->id();
-        //  $data['order_number']='ORD-'.strtoupper(Str::random(10));
+         // Calculate km_covered and AVG_KM/LTR
+        //  $data['amount'] = $data['ltr_collected'] * $data['price'];
 
 
 
+// Get the global fuel price
+$fuelPrice = Setting::where('key', 'fuel_price')->first();
+$price = $fuelPrice ? $fuelPrice->value : 0; // Use 0 if price is not set
 
-        //  $data['km_used']=$data['last_km']+$data['liters_km'];
-
-        //  //
-
-
-
-
-
-          $vehicle=$data['vehicle_id'];
+// Calculate amount
+$data['amount'] = $data['ltr_collected'] * $price;
 
 
+         $data['km_covered'] = $data['present_km'] - $data['previous_km'];
+         $data['AVG_KM/LTR'] = $data['km_covered'] / $data['ltr_collected'];
 
-
-
-
-
-
-
-
-        // $data=fuelrequest::create($data);
-
-
-    // $data->vehicles()->detach($vehicle);
-
-
-    //  foreach ($data->vehicles as $veH  ) {
-
-    //   return  $veH->fueltank - $data['liters_km'];
-
-
-    //     # code...
-    // }
-    $fuelrequestss=$fuelrequests->fill($data)->save();
-    $fuelrequestss=$fuelrequests->vehicles()->sync($vehicle);
-
-    // $fuelrequestss->vehicles()->sync($vehicle);
-
-
+         $fuelrequestss=$fuelrequests->fill($data)->save();
+         $fuelrequestss=$fuelrequests->vehicles()->sync($vehicle);
 
          if ($fuelrequestss) {
             return redirect()->route('fuelrequests.index', ['parameterKey' => 'success']);
-            # code...
          }else {
             return redirect()->back()->withErrors('someting went wrong')->withInput();
          }
-
     }
 
     /**
@@ -451,15 +324,12 @@ return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
      */
     public function destroy($id)
     {
-        //
-
         $data=fuelrequest::findOrFail($id);
         $data=$data->delete();
         if($data){
             request()->session()->flash('success','Banner successfully deleted');
         }
         else{
-
             request()->session()->flash('error','Error occurred while deleting banner');
         }
         return redirect()->route('fuelrequests.index');
@@ -479,49 +349,17 @@ return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
             $to   = $req->input('to');
             if ($req->has('search'))
             {
-                // select search
-                // $search = fuelrequest::whereBetween('created_at', [$from, $to])->with(['department','vehicles'])->get();
-
-                // $department = department::all();//whereDate('created_at', [$from, $to])->with(['department'])->get();
-
-                // $search =DB::table('fuelrequests')->where('created_at',$from,$to);
-                //  DB::table('users')->where('created_at',array($from, $to))->get();
-                //select("SELECT * FROM users WHERE created_at BETWEEN '$from' AND '$to'");
-                // return view('import',['ViewsPage' => $search]);
-                // $users = User::with(['department'])->get();
-                // $search = DB::table('fuelrequests')
-                // ->whereDate('created_at', array($from, $to))
-                // ->get();
-
-                // DB::table('users')
-                // ->whereBetween('created_at', array($from, $to))
-                // ->get();
-
                 $search =fuelrequest::whereBetween(DB::raw('DATE(`created_at`)'),
     [$req->from,$req->to])->with(['department','vehicles'])->get();
 
-
-                // $search = fuelrequest::where('created_at', '>=', $from)
-                //            ->where('created_at', '<=', $to)
-                //            ->get();
-
-
-                //   dd($search);
-                //  dd($to);
-
-
-                return view('backend.layouts.fuelrequests.import')->with('ViewsPage',$search);//->with('department',$department);//->with('roles',$roles)->with('department',$department);
+                return view('backend.layouts.fuelrequests.import')->with('ViewsPage',$search);
 
             }
             elseif ($req->has('exportPDF'))
             {
-                // select PDF
                 $PDFReport =fuelrequest::whereBetween(DB::raw('DATE(`created_at`)'),
                 [$req->from,$req->to])->with(['department','vehicles'])->get();
 
-            // dd($PDFReport);
-                // fuelrequest::whereDate('created_at', [$from, $to])->with(['department'])->get();
-                // User::select('*')->where('created_at','>=',$this->from)->where('created_at','<=', $this->to)->with(['department'])->get();// DB::select("SELECT * FROM users WHERE created_at BETWEEN '$from' AND '$to'");
                 $pdf = PDF::loadView('backend.layouts.fuelrequests.PDF_report', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
                 return $pdf->download('PDF_report.pdf');
             }
@@ -532,18 +370,13 @@ return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
                 // select Excel
             return  Excel::download(new FuelrequestExport($from, $to), 'Excel-reports.xlsx');
 
-                // dd($req->has('exportExcel'));
             {
         }
         }
             else
         {
-            //select all
             $ViewsPage = fuelrequest::with(['department','vehicles'])->get();
-            // dd($ViewsPage);
-            // return view('import',['ViewsPage' => $ViewsPage]);
-
-            return view('backend.layouts.fuelrequests.import')->with('ViewsPage',$ViewsPage);//->with('roles',$roles)->with('department',$department);
+            return view('backend.layouts.fuelrequests.import')->with('ViewsPage',$ViewsPage);
 
         }
     }

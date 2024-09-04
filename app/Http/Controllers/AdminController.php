@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\fuelrequest;
 use App\Models\User;
 use App\Models\Vehicle;
+use App\Models\department;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -18,8 +20,41 @@ class AdminController extends Controller
 
     public function admin()
     {
-        return view('backend.layouts.index');
+         $totalFuelAmount = fuelrequest::sum('amount');
+        $totalLitersCollected = fuelrequest::sum('ltr_collected');
+        $averageKmPerLiter = fuelrequest::avg('AVG_KM/LTR');
 
+        // Get the department with the highest fuel consumption
+        $highestConsumptionDept = fuelrequest::select('department_id', DB::raw('SUM(ltr_collected) as total_consumption'))
+            ->groupBy('department_id')
+            ->orderBy('total_consumption', 'desc')
+            ->with('department')
+            ->first();
+
+        // Total number of vehicles
+        $totalVehicles = Vehicle::count();
+
+        // Vehicle with the highest fuel requests
+        $vehicleWithHighestRequests = DB::table('fuelrequests')
+        ->join('fuelrequest_vehicle', 'fuelrequests.id', '=', 'fuelrequest_vehicle.fuelrequest_id')
+        ->join('vehicles', 'fuelrequest_vehicle.vehicle_id', '=', 'vehicles.id') // Join the vehicles table
+        ->select('vehicles.name as vehicle_name', DB::raw('COUNT(*) as request_count')) // Select vehicle name
+        ->groupBy('fuelrequest_vehicle.vehicle_id', 'vehicles.name') // Group by vehicle_id and name
+        ->orderBy('request_count', 'desc')
+        ->first();
+
+
+
+
+
+        return view('backend.layouts.index', compact(
+            'totalFuelAmount',
+            'totalLitersCollected',
+            'averageKmPerLiter',
+            'highestConsumptionDept',
+            'totalVehicles',
+            'vehicleWithHighestRequests'
+        ));
     }
 
 

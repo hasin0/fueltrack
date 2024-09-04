@@ -1611,3 +1611,743 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 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  fue
 hghgh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//VehicleSeeder
+
+
+
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\department;
+use App\Models\Vehicle;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+
+class VehicleSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+
+       $departments = department::all();
+       $departmentCount = $departments->count();
+       foreach ($departments as $department) {
+        for ($i = 1; $i <= 25; $i++) { // Create 25 cars for each department
+            $plateNo = 'ABC' . $i . '-' . $department->id; // Append department ID as a unique identifier
+            $tagNo = 'TAG' . $i;
+            $fueltank = rand(50, 70); // Generate a random fuel tank value between 50 and 70
+
+            Vehicle::create([
+                'name' => 'Car ' . $i,
+                'model' => 'Model ' . $i,
+                'plate_no' => $plateNo,
+                'tag_no' => $tagNo,
+                'fueltank' => $fueltank,
+                'status' => 'active',
+                'department_id' => $department->id,
+            ]);
+        }
+    }
+
+        // foreach(DB::table('departments')->get() as $department) { DB::table('vehicles')->insert(['department_id' => $department->id]); }
+
+        //
+        // foreach ($department as $department) {
+        //     for ($i = 1; $i <= 25; $i++) { // Create 10 cars for each department
+
+
+        //         $plateNo = 'ABC' . $i . '-' . $department->id; // Append department ID as a unique identifier
+        //         $tagNo = 'TAG' . $i;
+        //         $fueltank = rand(50, 70); // Generate a random fuel tank value between 50 and 70
+
+
+        //         Vehicle::create([
+        //             'name' => 'Car ' . $i,
+        //             'model' => 'Model ' . $i,
+        //             'plate_no' => $plateNo,
+        //             'tag_no' => $tagNo,
+        //             'fueltank' => $fueltank,
+        //             'status' => 'active',
+        //             'department_id' => $department->id,
+        //         ]);
+        //     }
+        // }
+    }
+}
+
+// Full texts
+// id
+// name
+// model
+// plate_no
+// tag_no
+// department
+// fueltank
+// status
+
+
+
+
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\fuelrequest;
+use App\Models\Vehicle;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Models\department;
+
+
+use App\Exports\FuelrequestExport;
+use App\Models\Fuelstation;
+use PDF;
+
+
+use Illuminate\Http\Request;
+
+
+class FuelrequestController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+
+    function __construct()
+    {
+         $this->middleware('permission:fuelrequests-list|fuelrequests-create|fuelrequests-edit|fuelrequests-delete', ['only' => ['index','show']]);
+         $this->middleware('permission:fuelrequests-create', ['only' => ['create','store']]);
+         $this->middleware('permission:fuelrequests-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:fuelrequests-delete', ['only' => ['destroy']]);
+         $this->middleware('permission:fuelrequests-AdminStatus', ['only' => ['AdminStatus']]);
+         $this->middleware('permission:fuelrequests-HodStatus', ['only' => ['HodStatus']]);
+         $this->middleware('permission:fuelrequests-FSAStatus', ['only' => ['FSAStatus']]);
+
+
+
+    }
+
+
+
+
+
+    public function index()
+    {
+
+        $fuelrequests = Fuelrequest::with('vehicles')->get();
+
+
+        // $fuelrequests = Fuelrequest::with('user')->get(); // Make sure this query works
+    return view('backend.layouts.fuelrequests.index', compact('fuelrequests'));
+        // $fuelrequest=fuelrequest::orderBy('id','DESC')->paginate(10);
+        // return view('backend.layouts.fuelrequests.index')->with('fuelrequest',$fuelrequest);
+    }
+
+
+// In your FuelRequestController
+public function adminStatus(Request $request)
+{
+    $fuelrequest = Fuelrequest::find($request->id);
+    $fuelrequest->Admin_approval = $request->mode == 'true' ? 'active' : 'inactive';
+    $fuelrequest->save();
+    return response()->json(['msg'=>'Admin approval updated successfully','status'=>true]);
+}
+
+// Similar methods for hodStatus and fsaStatus
+
+
+    // public function AdminStatus(Request $request)
+    // {
+    //     if ($request->mode == 'true') {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Admin_approval'=>'active']);
+    //     } else {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Admin_approval'=>'inactive']);
+    //     }
+
+    //     return response()->json(['msg'=>'Successfully updated status','status'=>true]);
+    // }
+
+
+    public function hodStatus(Request $request)
+    {
+        $fuelrequest = Fuelrequest::find($request->id);
+        $fuelrequest->HOD_approval = $request->mode == 'true' ? 'active' : 'inactive';
+        $fuelrequest->save();
+        return response()->json(['msg'=>'HOD approval updated successfully','status'=>true]);
+    }
+
+
+
+    // public function HodStatus(Request $request)
+    // {
+    //     if ($request->mode == 'true') {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['HOD_approval'=>'active']);
+    //     } else {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['HOD_approval'=>'inactive']);
+    //     }
+
+    //     return response()->json(['msg'=>'Successfully updated status','status'=>true]);
+    // }
+
+
+
+
+
+    // public function FSAStatus(Request $request)
+    // {
+    //     if ($request->mode == 'true') {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'issued']);
+    //     } else {
+    //         DB::table('fuelrequests')->where('id', $request->id)->update(['Fuel_station_approval'=>'Notissued']);
+    //     }
+
+    //     return response()->json(['msg'=>'Successfully updated status','status'=>true]);
+    // }
+
+    public function fsaStatus(Request $request)
+    {
+        $fuelrequest = Fuelrequest::find($request->id);
+        $fuelrequest->Fuel_station_approval = $request->mode == 'true' ? 'issued' : 'Notissued';
+        $fuelrequest->save();
+        return response()->json(['msg'=>'Fuel station approval updated successfully','status'=>true]);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $department=department::all();
+        $vehicle=Vehicle::where('status','active')->get();
+        $fuelstation=Fuelstation::all();
+
+        return view('backend.layouts.fuelrequests.create')->with('vehicle',$vehicle)->with('fuelstation',$fuelstation)->with('department',$department);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $this->validate($request,[
+            'present_km'=>'numeric|required',
+            'ltr_collected'=>'numeric|required',
+            'previous_km'=>'numeric|required',
+            'amount'=>'numeric|required',
+            'km_covered'=>'numeric|required',
+            'AVG_KM/LTR'=>'numeric|required',
+            'fuelstation_id'=>'required',
+         ]);
+
+         $data['order_number']='ORD-'.strtoupper(Str::random(10));
+
+         $data=$request->all();
+         $data['user_id']=auth()->id();
+         $data['order_number']='ORD-'.strtoupper(Str::random(10));
+         $data['fuelstation_id']=$request->fuelstation_id;
+         // $data['liters_per_km']=$data['present_km']-$data['last_km_when_fueling'];
+
+         $vehicle=$data['vehicle_id'];
+
+         $data=fuelrequest::create($data);
+         $data->vehicles()->attach($vehicle);
+
+         if ($data) {
+            return redirect()->route('fuelrequests.index', ['parameterKey' => 'success']);
+         }else {
+            return redirect()->back()->withErrors('someting went wrong')->withInput();
+         }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+         $fuelrequests=fuelrequest::where('id',$id)->get();
+         return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $vehicle=Vehicle::where('status','active')->get();
+        $department=department::all();
+        $fuelstation=Fuelstation::all();
+
+        $fuelrequests=fuelrequest::findOrFail($id);
+        if ($fuelrequests) {
+            return view('backend.layouts.fuelrequests.edit')->with('fuelrequests',$fuelrequests)->with('vehicle',$vehicle)->with('department',$department)->with('fuelstation',$fuelstation);
+        } else {
+            return back()->with('error','data not found');
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $fuelrequests=fuelrequest::findOrFail($id);
+
+        $this->validate($request,[
+            'present_km'=>'numeric|required',
+            'ltr_collected'=>'numeric|required',
+            'previous_km'=>'numeric|required',
+            'amount'=>'numeric|required',
+            'km_covered'=>'numeric|required',
+            'AVG_KM/LTR'=>'numeric|required',
+            'fuelstation_id'=>'required',
+         ]);
+
+         $data=$request->all();
+         $vehicle=$data['vehicle_id'];
+
+         $fuelrequestss=$fuelrequests->fill($data)->save();
+         $fuelrequestss=$fuelrequests->vehicles()->sync($vehicle);
+
+         if ($fuelrequestss) {
+            return redirect()->route('fuelrequests.index', ['parameterKey' => 'success']);
+         }else {
+            return redirect()->back()->withErrors('someting went wrong')->withInput();
+         }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $data=fuelrequest::findOrFail($id);
+        $data=$data->delete();
+        if($data){
+            request()->session()->flash('success','Banner successfully deleted');
+        }
+        else{
+            request()->session()->flash('error','Error occurred while deleting banner');
+        }
+        return redirect()->route('fuelrequests.index');
+    }
+
+
+
+
+
+    public function report(Request $req)
+    {
+        $method = $req->method();
+
+        if ($req->isMethod('post'))
+        {
+            $from = $req->input('from');
+            $to   = $req->input('to');
+            if ($req->has('search'))
+            {
+                $search =fuelrequest::whereBetween(DB::raw('DATE(`created_at`)'),
+    [$req->from,$req->to])->with(['department','vehicles'])->get();
+
+                return view('backend.layouts.fuelrequests.import')->with('ViewsPage',$search);
+
+            }
+            elseif ($req->has('exportPDF'))
+            {
+                $PDFReport =fuelrequest::whereBetween(DB::raw('DATE(`created_at`)'),
+                [$req->from,$req->to])->with(['department','vehicles'])->get();
+
+                $pdf = PDF::loadView('backend.layouts.fuelrequests.PDF_report', ['PDFReport' => $PDFReport])->setPaper('a4', 'landscape');
+                return $pdf->download('PDF_report.pdf');
+            }
+
+
+                elseif($req->has('exportExcel'))
+
+                // select Excel
+            return  Excel::download(new FuelrequestExport($from, $to), 'Excel-reports.xlsx');
+
+            {
+        }
+        }
+            else
+        {
+            $ViewsPage = fuelrequest::with(['department','vehicles'])->get();
+            return view('backend.layouts.fuelrequests.import')->with('ViewsPage',$ViewsPage);
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+@extends('backend.layouts.master')
+
+@section('title','E-SHOP || fuelrequests Create')
+
+@section('main-content')
+
+<div class="card">
+    <h5 class="card-header">Requestfuels</h5>
+    <div class="card-body">
+
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+
+     <form method="post" action="{{route('fuelrequests.update',$fuelrequests->id)}}">
+        {{csrf_field()}}
+        @method('patch')
+
+        <div class="form-group">
+          <label for="inputTitle" class="col-form-label">present_km <span class="text-danger">*</span></label>
+        <input id="inputTitle" type="number" name="present_km" placeholder="Enter present_km"  value="{{($fuelrequests->present_km)}}" class="form-control">
+        @error('present_km')
+        <span class="text-danger">{{$message}}</span>
+        @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="inputTitle" class="col-form-label">last_fuel_qty <span class="text-danger">*</span></label>
+          <input id="inputTitle" type="number" name="last_fuel_qty" placeholder="Enter last_fuel_qty"  value="{{($fuelrequests->last_fuel_qty)}}}" class="form-control">
+          @error('last_fuel_qty')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+          </div>
+
+          <div class="form-group">
+            <label for="inputTitle" class="col-form-label">last_km <span class="text-danger">*</span></label>
+          <input id="inputTitle" type="number" name="last_km" placeholder="Enter last_km"  value="{{$fuelrequests->last_km}}" class="form-control">
+          @error('last_km')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+          </div>
+
+          <div class="form-group">
+            <label for="inputTitle" class="col-form-label">last_km_when_fueling <span class="text-danger">*</span></label>
+          <input id="inputTitle" type="number" name="last_km_when_fueling" placeholder="Enter last_km_when_fueling"  value="{{$fuelrequests->last_km_when_fueling}}" class="form-control">
+          @error('last_km_when_fueling')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+          </div>
+
+
+          <div class="form-group">
+            <label for="inputTitle" class="col-form-label">km_used <span class="text-danger">*</span></label>
+          <input id="inputTitle" type="number" name="km_used" placeholder="Enter last_km_when_fueling"  value="{{$fuelrequests->last_km_when_fueling}}" class="form-control">
+          @error('km_used')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+          </div>
+
+
+
+          <div class="form-group">
+            <label for="inputTitle" class="col-form-label">liters_km <span class="text-danger">*</span></label>
+          <input id="inputTitle" type="number" name="liters_km" placeholder="Enter liters_km"  value="{{$fuelrequests->liters_km}}" class="form-control">
+          @error('liters_km')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <div class="form-group">
+            <label for="vehicle_id">VehicleName & FuelTank</label>
+            {{-- {{$brands}} --}}
+
+            <select name="vehicle_id" class="form-control">
+                <option value="">--Select vehicle--</option>
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($vehicle as $vehicles )
+
+                <option value="{{$vehicles->id}}">Car-Tag {{$vehicles->tag_no}} :{{$vehicles->fueltank}}Liters: {{$vehicles->department}}</option>
+               @endforeach
+            </select>
+          </div>
+
+
+
+
+          <div class="form-group">
+            <label for="department_id">department</label>
+            {{-- {{$brands}} --}}
+
+            <select name="department_id" class="form-control">
+                {{-- <option value="">--Select vehicle--</option> --}}
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($department as $department )
+                <option value="{{$department->id}}"> {{$department->name}}</option>
+               @endforeach
+            </select>
+          </div>
+
+
+
+
+
+          {{-- <div class="form-group">
+            <label for="department" class="col-form-label">Department <span class="text-danger">*</span></label>
+            <select name="department" class="form-control">
+                <option value="Admin">Admin</option>
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+                <option value="HSE">HSE</option>
+                <option value="Batching plant">Batching plant</option>
+                <option value="Legal">Legal</option>
+                <option value="Logistic">Logistic</option>
+                <option value="Security">Security</option>
+                <option value="GED">GED</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Process">Process</option>
+                <option value="Electrical">Electrical</option>
+                <option value="Marine">Marine</option>
+                <option value="Chemical">Chemical</option>
+                <option value="Warehouse">Warehouse</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Clinc">Clinc</option>
+
+
+            </select>
+            @error('department')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div> --}}
+
+
+
+{{--
+
+          <div class="form-group">
+            <label for="HOD_approval" class="col-form-label">HOD_approval <span class="text-danger">*</span></label>
+            <select name="HOD_approval" class="form-control">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+            @error('HOD_approval')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
+
+
+
+
+          <div class="form-group">
+            <label for="Admin_approval" class="col-form-label">Admin_approval <span class="text-danger">*</span></label>
+            <select name="Admin_approval" class="form-control">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+            @error('Admin_approval')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div>
+
+
+
+
+          <div class="form-group">
+            <label for="Fuel_station_approval" class="col-form-label">Fuel_station_approval <span class="text-danger">*</span></label>
+            <select name="Fuel_station_approval" class="form-control">
+                <option value="">--Select--</option>
+
+                <option value="issued">Issued</option>
+                <option value="Notissued">Not-Issued</option>
+            </select>
+            @error('Fuel_station_approval')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
+          </div> --}}
+
+
+
+
+
+          <div class="form-group">
+            <label for="fuelstation">fuelstation</label>
+            {{-- {{$brands}} --}}
+
+            <select name="fuelstation_id" class="form-control">
+                <option value="">--Select fuelstation--</option>
+               {{-- @foreach(\App\Models\Vehicle::where('status','active')->get() as $vehicles) --}}
+               @foreach($fuelstation as $fuelstations )
+                <option value="{{$fuelstations->id}}"> {{$fuelstations->name}}</option>
+               @endforeach
+            </select>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {{-- <div class="form-group">
+        <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
+        <div class="input-group">
+            <span class="input-group-btn">
+                <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                <i class="fa fa-picture-o"></i> Choose
+                </a>
+            </span>
+          <input id="thumbnail" class="form-control" type="text" name="photo" value="{{old('photo')}}">
+        </div>
+        <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+          @error('photo')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+        </div> --}}
+
+
+
+
+        <div class="form-group mb-3">
+          <button type="reset" class="btn btn-warning">Reset</button>
+           <button class="btn btn-success" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+</div>
+
+@endsection
+
+@push('styles')
+<link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
+@endpush
+@push('scripts')
+<script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
+<script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
+<script>
+    $('#lfm').filemanager('image');
+
+    $(document).ready(function() {
+    $('#description').summernote({
+      placeholder: "Write short description.....",
+        tabsize: 2,
+        height: 150
+    });
+    });
+</script>
+@endpush

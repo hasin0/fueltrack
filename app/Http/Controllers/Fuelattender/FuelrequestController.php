@@ -49,49 +49,24 @@ class FuelrequestController extends Controller
     {
 
 
-             $user=auth()->user();
+        $user = Auth::user();
+        $fuelStationId = Fuelstation::where('user_id', $user->id)->value('id');
 
-
-
-
-
-            $fuelstationid = DB::table('fuelstations')->where(['user_id'=>auth()->user()->id])->get();
-
-
-            $array = collect($fuelstationid)->map(function($obj){
-                return (array) $obj;
-              })->toArray();
-
-        // $vehicle=$data['vehicle_id'];
-
-
-                    foreach ($array as $fuelstationids) {
-
-
-                foreach($fuelstationids as $fuelstationsss){
-
-
-
-                    //return $fillstation->order_number;
-                    // return ($fuelstationsss);
-               }
-
+        if (!$fuelStationId) {
+            // Handle the case where the fuel station attendant doesn't have an associated fuel station
+            return back()->with('error', 'You are not associated with a fuel station.');
         }
 
+        // Get fuel requests that are approved by HOD or Admin and belong to the attendant's fuel station
+        $fuelrequests = fuelrequest::where('fuelstation_id', $fuelStationId)
+            ->where(function ($query) {
+                $query->where('Admin_approval', 'active')
+                      ->orWhere('HOD_approval', 'active');
+            })
+            ->with(['user', 'vehicles'])
+            ->get();
 
-
-            $fuelstationw=Fuelstation::where('user_id',$user)->get('id');
-            // $fuelrequest=fuelrequest::where('user_id',$user->user_id)->get();
-             $fuelstation=fuelrequest::where('fuelstation_id',$fuelstationids)->with(['user','vehicles'])->get();
-
-
-
-//  dd($fuelstation);
-
-
-
-        return view('FuelStationAttender.layouts.fuelrequests.index',compact('fuelstation'));//->with('fuelstation',$fuelstation);//->with('fuelrequestC',$fuelrequestC);
-        //
+        return view('FuelStationAttender.layouts.fuelrequests.index', compact('fuelrequests'));
     }
 
 

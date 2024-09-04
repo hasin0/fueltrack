@@ -40,12 +40,12 @@ class HomeController extends Controller
         }elseif (Auth::user()->hasRole('Driver')) {
             return redirect()->route('Driver');
 
-    }elseif (Auth::user()->hasRole('FuelStationAttender')) {
+    }elseif (Auth::user()->hasRole('fuelstation-attender')) {
         return redirect()->route('FuelStationAttender');
 
 }
     else {
-        return view('404');
+        return view('home');  //return view('home');
     }
 
         //return view('home');

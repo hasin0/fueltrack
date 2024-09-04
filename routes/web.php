@@ -26,6 +26,13 @@ Route::get('/', function () {
     return redirect()->route('login');
 
 });
+// Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+//                 ->middleware('auth')
+//                 ->name('logout');
+
+
+
+
 
 //Auth::routes(['register'=>false]);
 
@@ -77,11 +84,17 @@ Route::post('fuelrequestreports',[\App\Http\Controllers\FuelrequestController::c
  //fuelrequest
  Route::resource('/fuelrequests',\App\Http\Controllers\FuelrequestController::class);
 
- Route::post('Admin_approval',[\App\Http\Controllers\FuelrequestController::class,'AdminStatus'])->name('admin.status');
 
- Route::post('HOD_approval',[\App\Http\Controllers\FuelrequestController::class,'HodStatus'])->name('hod.status');
 
- Route::post('Fuel_station_approval',[\App\Http\Controllers\FuelrequestController::class,'FSAStatus'])->name('FSA.status');
+ Route::post('/admin/status', [\App\Http\Controllers\FuelrequestController::class, 'adminStatus'])->name('admin.status');
+Route::post('/hod/status', [\App\Http\Controllers\FuelrequestController::class, 'hodStatus'])->name('hod.status');
+Route::post('/fsa/status', [\App\Http\Controllers\FuelrequestController::class, 'fsaStatus'])->name('FSA.status');
+
+//  Route::post('Admin_approval',[\App\Http\Controllers\FuelrequestController::class,'AdminStatus'])->name('admin.status');
+
+//  Route::post('HOD_approval',[\App\Http\Controllers\FuelrequestController::class,'HodStatus'])->name('hod.status');
+
+//  Route::post('Fuel_station_approval',[\App\Http\Controllers\FuelrequestController::class,'FSAStatus'])->name('FSA.status');
 
 
 
@@ -97,6 +110,11 @@ Route::post('fuelrequestreports',[\App\Http\Controllers\FuelrequestController::c
  Route::get('change-password',  [App\Http\Controllers\AdminController::class, 'changePassword'])->name('change.password.form');
  Route::post('change-password',[App\Http\Controllers\AdminController::class, 'changPasswordStore'])->name('change.password');
 
+
+
+//  admin-settings
+ Route::get('/admin/settings', [App\Http\Controllers\SettingController::class, 'edit'])->name('admin.settings.edit');
+ Route::put('/admin/settings', [App\Http\Controllers\SettingController::class, 'update'])->name('admin.settings.update');
 
 });
 
@@ -114,7 +132,6 @@ Route::group(['prefix'=>'HOD','middleware' => ['role:HOD']], function () {
 
     Route::get('change-password',  [App\Http\Controllers\HodController::class, 'changePassword'])->name('HOD.change.password.form');
     Route::post('change-password',[App\Http\Controllers\HodController::class, 'changPasswordStore'])->name('change.password');
-
 
 
 
@@ -172,7 +189,7 @@ Route::group(['prefix'=>'Driver','middleware' => ['role:Driver']], function () {
 
 // fuelattender. ROUTE
 
-Route::group(['prefix'=>'fuelattender','middleware' => ['role:FuelStationAttender']], function () {
+Route::group(['prefix'=>'fuelattender','middleware' => ['role:fuelstation-attender']], function () {
     //
     Route::get('/fuelattender', [App\Http\Controllers\FuelStationAttenderController::class, 'dashboard'])->middleware(['auth'])->name('FuelStationAttender');
 

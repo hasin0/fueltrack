@@ -17,14 +17,14 @@ class CreateFuelrequestsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('user_id')->index();
-            //  $table->unsignedBigInteger('vehicles_id')->index();
-              $table->integer('present_km');
-              $table->integer('last_fuel_qty');
-              $table->integer('last_km');
-              $table->integer('last_km_when_fueling');
-              $table->integer('km_used');//->nullable()->change();
+            //  $table->unsignedBigInteger('vehicles_id')->index();  	present_km
+              $table->integer('present_km')->nullable();
+              $table->integer('ltr_collected')->nullable();
+              $table->integer('previous_km')->nullable();
+              $table->integer('amount')->nullable();
+              $table->integer('km_covered')->nullable();//->nullable()->change();
 
-              $table->integer('liters_km');
+              $table->integer('AVG_KM/LTR')->nullable();
               $table->enum('HOD_approval',['active','inactive'])->default('inactive');
               $table->enum('Admin_approval',['active','inactive'])->default('inactive');
               $table->string('order_number')->unique();
@@ -62,5 +62,5 @@ class CreateFuelrequestsTable extends Migration
         Schema::dropIfExists('fuelrequests');
     }
 
-    
+
 }
