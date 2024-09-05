@@ -342,6 +342,8 @@ $data['amount'] = $data['ltr_collected'] * $price;
     public function report(Request $req)
     {
         $method = $req->method();
+        $fuelPrice = Setting::where('key', 'fuel_price')->first()->value; // Get fuel price value
+
 
         if ($req->isMethod('post'))
         {
@@ -357,6 +359,7 @@ $data['amount'] = $data['ltr_collected'] * $price;
             }
             elseif ($req->has('exportPDF'))
             {
+
                 $PDFReport =fuelrequest::whereBetween(DB::raw('DATE(`created_at`)'),
                 [$req->from,$req->to])->with(['department','vehicles'])->get();
 
@@ -368,7 +371,7 @@ $data['amount'] = $data['ltr_collected'] * $price;
                 elseif($req->has('exportExcel'))
 
                 // select Excel
-            return  Excel::download(new FuelrequestExport($from, $to), 'Excel-reports.xlsx');
+            return  Excel::download(new FuelrequestExport($from, $to, $fuelPrice), 'Excel-reports.xlsx');
 
             {
         }

@@ -24,16 +24,21 @@ ShouldAutoSize,
 WithHeadings
 {
     use Exportable;
+    protected $from;
+    protected $to;
+    protected $fuelPrice;
 
     /**
     * @return \Illuminate\Support\Collection
     */
 
 
-    public function __construct(String $from = null , String $to = null)
+    public function __construct(String $from = null , String $to = null, $fuelPrice = null)
     {
         $this->from = $from;
         $this->to   = $to;
+        $this->fuelPrice = $fuelPrice; // Store the passed fuel price
+
     }
 
 
@@ -61,44 +66,66 @@ WithHeadings
     public function map($fuelrequests): array
     {
 
-       return [
-
-       $fuelrequests->id,
-
-         $fuelrequests->user->name,///$fuelrequests->user->phone,
 
 
-       $fuelrequests->present_km,
-       $fuelrequests->liters_km,
-       $fuelrequests->last_fuel_qty,
-       $fuelrequests->last_km,
-       $fuelrequests->last_km_when_fueling,
-       $fuelrequests->km_used,
+        return [
+            $fuelrequests->id,
+            $fuelrequests->user->name,
+            $fuelrequests->present_km,
+            $fuelrequests->previous_km,
+            $fuelrequests->ltr_collected,
+            $fuelrequests->km_covered,
+            $fuelrequests->{'AVG_KM/LTR'}, // Access the column correctly
+            'fuel_price' => $this->fuelPrice, // Add fuel price to the array
+            $fuelrequests->amount,
+            $fuelrequests->department->name,
+            $fuelrequests->order_number,
+            $fuelrequests->vehicles->pluck('tag_no')->implode(', '),
+            $fuelrequests->vehicles->pluck('name')->implode(', '),
+            $fuelrequests->vehicles->pluck('fueltank')->implode(', '),
+            $fuelrequests->created_at->toDatestring(),
+        ];
+    //    return [
+
+    //    $fuelrequests->id,
+
+    //      $fuelrequests->user->name,///$fuelrequests->user->phone,
+
+
+    //    $fuelrequests->present_km,
+    //    $fuelrequests->previous_km,
+    //    $fuelrequests->ltr_collected,
+    //    $fuelrequests->km_covered,
+    //    $fuelrequests->AVG_KM/LTR,
+    //    $fuelrequests->price,
+    //    $fuelrequests->amount,
 
 
 
-       $fuelrequests->department->name,///$fuelrequests->user->phone,
-       $fuelrequests->order_number,
-
-    //    @foreach($ViewsPages->vehicles as $data)($data->department->name)@endforeach,
-    //    $fuelrequests->vehicle()->tag_no,
-    //    $fuelrequests->vehicle()->fueltank,
 
 
-       $fuelrequests->vehicles->pluck('tag_no')->implode(', '),
-       $fuelrequests->vehicles->pluck('name')->implode(', '),
+    //    $fuelrequests->department->name,///$fuelrequests->user->phone,
+    //    $fuelrequests->order_number,
 
-       $fuelrequests->vehicles->pluck('fueltank')->implode(', '),
-
-
-
-       $fuelrequests->created_at->toDatestring(),
+    // //    @foreach($ViewsPages->vehicles as $data)($data->department->name)@endforeach,
+    // //    $fuelrequests->vehicle()->tag_no,
+    // //    $fuelrequests->vehicle()->fueltank,
 
 
-       //$fuelrequests->created_at wite time stamps
+    //    $fuelrequests->vehicles->pluck('tag_no')->implode(', '),
+    //    $fuelrequests->vehicles->pluck('name')->implode(', '),
+
+    //    $fuelrequests->vehicles->pluck('fueltank')->implode(', '),
 
 
-       ];
+
+    //    $fuelrequests->created_at->toDatestring(),
+
+
+    //    //$fuelrequests->created_at wite time stamps
+
+
+    //    ];
 
 
 
@@ -128,13 +155,13 @@ WithHeadings
             'No',
             'name',
             'present_km',
-            'liters_km',
-            'last_fuel_qty',
-            'last_km',
-            'last_km_when_fueling',
-            'km_used',
-
-             'department',
+            'previous_km',
+            'ltr_collected',
+            'km_covered',
+            'AVG_KM/LTR',
+            'price',
+            'amount',
+            'department',
             'order-number',
             'car-tag',
             'name',
@@ -151,3 +178,16 @@ WithHeadings
 
 
 }
+
+
+
+
+
+
+// 'HOD_approval',
+// 'Admin_approval',
+// 'order_number',
+// 'Fuel_station_approval',
+// 'user_id',
+// 'fuelstation_id',
+// 'department_id'

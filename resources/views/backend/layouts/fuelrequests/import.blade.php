@@ -23,11 +23,11 @@
                 <div class="row">
                 <label for="from" class="col-form-label">From</label>
                     <div class="col-md-2">
-                    <input type="date" class="form-control input-sm" id="from" name="from">
+                    <input type="date" class="form-control input-sm" id="from" name="from" value="{{ $from ?? '' }}">
                     </div>
                     <label for="from" class="col-form-label">To</label>
                     <div class="col-md-2">
-                        <input type="date" class="form-control input-sm" id="to" name="to">
+                        <input type="date" class="form-control input-sm" id="to" name="to" value="{{ $to ?? '' }}">
                     </div>
 
                     <div class="col-md-4">
@@ -51,84 +51,70 @@
             </form>
             <br>
             <table class="table table-dark">
+                {{-- <tr> --}}
+
+
+                    <thead>
+                        <tr>
+                            <th>S.N.</th>
+                            <th>Name/phone</th>
+                            <th>Fuel Station</th>
+                            {{-- <th>User</th> --}}
+                            <th>Vehicle Tag No</th>
+                            <th>fueltank</th>
+
+                            <th>Present KM</th>
+                            <th>Liters Collected</th>
+                            <th>Previous KM</th>
+                            <th>Amount</th>
+                            <th>KM Covered</th>
+                            <th>AVG KM/Liter</th>
+                            <th>Order Number</th>
+                            <th>Created At</th>
+
+
+
+                        </tr>
+                    </thead>
+
+
+
+
+
+                {{-- </tr> --}}
+                @foreach ($ViewsPage as $ViewsPages)
+
                 <tr>
-                <th>S.N.</th>
-              <th>Name/phone</th>
+                    <td>{{$ViewsPages->id}}</td>
+                    <td>{{$ViewsPages->user->name}} / {{$ViewsPages->user->phone}}</td>
+                    <td>{{$ViewsPages->fuelstation->name}}</td>
+                    {{-- <td>{{$fuelrequest->user->name}}</td> --}}
+                    <td>
+                        @foreach($ViewsPages->vehicles as $vehicle)
+                            {{ $vehicle->tag_no }} <br>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach($ViewsPages->vehicles as $vehicle)
+                            {{ $vehicle->fueltank }} <br>
+                        @endforeach
+                    </td>
+                    <td>{{$ViewsPages->present_km}}</td>
+                    <td>{{$ViewsPages->ltr_collected}}</td>
+                    <td>{{$ViewsPages->previous_km}}</td>
+                    <td>₦{{ number_format($ViewsPages->amount, 2) }}</td>
+                    <td>{{$ViewsPages->km_covered}}</td>
+                    <td>{{ number_format($ViewsPages->avg_km_per_ltr, 2) }}</td>
+                    <td>{{$ViewsPages->order_number}}</td>
+                    <td>{{ $ViewsPages->created_at }}</td>
 
-              <th>present_km</th>
-              <th>liters_km</th>
-              <th>last_fuel_qty</th>
-              <th>last_km</th>
-              <th>last_km_when_fueling</th>
-              <th>km_used</th>
-              <th>fueltank</th>
-              <th>department</th>
-              <th>order_number</th>
-              <th>TAG-NO</th>
-
-              <th>Fuel_station</th>
-              <th>Admin_approval</th>
-              <th>HOD_approval</th>
-              <th>Fuel_station_approval</th>
-              <th>created_at</th>
-
-               
 
                 </tr>
-                @foreach ($ViewsPage as $ViewsPages)
-{{-- 
-                @php
-              $departments=DB::table('departments')->select('name')->where('id',$ViewsPage->department_id)->get();
-    
-                @endphp --}}
-    
-    
-                    <tr>
-                        
-                    <td>{{$ViewsPages->id}}</td>
-
-<td>{{$ViewsPages->user->name}}/{{$ViewsPages->user->phone}}</td>
 
 
-<td>{{$ViewsPages->present_km}}</td>
-<td>{{$ViewsPages->liters_km}}</td>
-<td>{{$ViewsPages->last_fuel_qty}}</td>
-<td>{{$ViewsPages->last_km}}</td>
-<td>{{$ViewsPages->last_km_when_fueling}}</td>
-<td>{{$ViewsPages->km_used}}</td>
-{{-- <td>@foreach($ViewsPages->vehicles as $data){{($data->fueltank - $ViewsPages->last_km_when_fueling)}}  @endforeach</td> --}}
-
-<td>@foreach($ViewsPages->vehicles as $data){{($data->fueltank)}}  @endforeach</td>
-
-<td>@foreach($ViewsPages->vehicles as $data){{($data->department->name)}} @endforeach</td>
-<td>{{$ViewsPages->order_number}}</td>
-<td>@foreach($ViewsPages->vehicles as $data){{($data->tag_no)}}  @endforeach</td>
-
-<td>{{$ViewsPages->Fuel_station}}</td>
-<td>
-  <input value="{{$ViewsPages->id}}" name="toogle1" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $ViewsPages->Admin_approval =='active' ? 'checked' : '' }}>
-
-</td>
-
-<td>
-  <input value="{{$ViewsPages->id}}" name="toogle2" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="Active" data-off="InActive" {{ $ViewsPages->HOD_approval =='active' ? 'checked' : '' }}>
-
-</td>
-
-
-<td>
-  <input value="{{$ViewsPages->id}}" name="toogle3" type="checkbox" data-onstyle="success" data-offstyle="danger" data-toggle="toggle" data-on="issued" data-off="Notissued" {{ $ViewsPages->Fuel_station_approval =='issued' ? 'checked' : '' }}>
-
-</td>
-<td>{{$ViewsPages->created_at}}</td>
-
-
-
-                    </tr>
                 @endforeach
             </table>
 </div>
 </body>
 </html>
 @endsection
-
