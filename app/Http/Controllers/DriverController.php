@@ -23,6 +23,8 @@ class DriverController extends Controller
     {
        // return 'HOD dashboard';
      $user=auth()->user();
+     $departmentId = $user->department_id;
+     $userId  = $user->id;
 
      //$user=User::where('department_id',$user->department_id)->with(['fuelrequests','department'])->get();
 
@@ -32,13 +34,45 @@ class DriverController extends Controller
     $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->get();//->with(['vehicles','user'])->get();
 
 
+    $totalLitersCollected = fuelrequest::where('user_id', $userId)->sum('ltr_collected');
+    $totalAmountSpent = fuelrequest::where('user_id', $userId)->sum('amount');
+
+
+
+    // Department-wise fuel data (same as in HodController)
+    // $departmentFuelData = fuelrequest::where('department_id', $departmentId)
+    // ->select('department_id', DB::raw('SUM(amount) as total_amount'), DB::raw('SUM(ltr_collected) as total_liters'))
+    // ->groupBy('department_id')
+    // ->first();
+
+ // Vehicle-wise fuel data for the DRIVER ONLY
+ $vehicleFuelData = Vehicle::whereHas('fuelrequests', function ($query) use ($userId ) {
+    $query->where('user_id', $userId );
+})
+->with(['fuelrequests' => function ($query) use ($userId ) {
+    $query->select('vehicle_id', DB::raw('SUM(amount) as total_amount'), DB::raw('SUM(ltr_collected) as total_liters'), 'fuelrequest_vehicle.vehicle_id as pivot_vehicle_id', 'fuelrequest_vehicle.fuelrequest_id as pivot_fuelrequest_id')
+          ->where('user_id', $userId ); // Filter by driver's ID
+    $query->groupBy('vehicle_id', 'pivot_vehicle_id', 'pivot_fuelrequest_id');
+}])
+->get();
+
+
+
+
     // $user=Vehicle::where('department_id',$user->department_id)->count();
 
       // $department_id = Auth::user()->department_id; //get the id of the department that
     //    dd($user->count());
 
-       return view('Driver.layouts.index')->with('user',$user)->with('fuelrequest',$fuelrequest)->with('fuelrequestC',$fuelrequestC);
-
+    return view('Driver.layouts.index', [
+        'user' => $user,
+        'fuelrequest' => $fuelrequest,
+        'fuelrequestC' => $fuelrequestC,
+        // 'departmentFuelData' => $departmentFuelData,
+        'fuelDataByVehicle' => $vehicleFuelData,
+        'totalLitersCollected' => $totalLitersCollected,
+        'totalAmountSpent' => $totalAmountSpent,
+    ]);
     }
 
 

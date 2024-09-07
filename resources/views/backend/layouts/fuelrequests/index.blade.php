@@ -19,6 +19,19 @@
             <strong>Current Fuel Price:</strong>
             {{ $fuelPrice ? $fuelPrice->value : 'Not set' }}
         </div>
+
+
+
+        {{-- Search Form --}}
+        <form method="GET" action="{{ route('fuelrequests.index') }}">
+            <div class="row">
+                <div class="col-md-12">
+                    <input type="text" name="search" class="form-control" placeholder="Search by Plate No or Tag No" value="{{ request('search') }}">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Search</button>
+        </form>
+
     <div class="card-body">
       <div class="table-responsive">
         @if(count($fuelrequests)>0)

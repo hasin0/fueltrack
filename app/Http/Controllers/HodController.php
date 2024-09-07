@@ -27,27 +27,109 @@ class HodController extends Controller
 
     }
 
+
+
+
     public function dashboard()
-    {
-       // return 'HOD dashboard';
-     $user=auth()->user();
+{
+    $user = auth()->user();
+    $departmentId = $user->department_id;
 
-     //$user=User::where('department_id',$user->department_id)->with(['fuelrequests','department'])->get();
+    // Fuel requests made by the HOD
+    $fuelrequest = fuelrequest::where(['user_id' => auth()->user()->id])->get();
 
-     $fuelrequestC=fuelrequest::where('department_id',$user->department_id)->get();//with(['fuelrequests','department'])->get();
-    //dd($fuelrequest);
-
-    $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->get();//->with(['vehicles','user'])->get();
+    // All fuel requests for the HOD's department
+    $fuelrequestC = fuelrequest::where('department_id', $user->department_id)->get();
 
 
-    // $user=Vehicle::where('department_id',$user->department_id)->count();
+  $departmentTotalLitersCollected = fuelrequest::where('department_id', $departmentId)->sum('ltr_collected');
+ $departmentTotalAmountSpent = fuelrequest::where('department_id', $departmentId)->sum('amount');
 
-      // $department_id = Auth::user()->department_id; //get the id of the department that
-    //    dd($user->count());
 
-       return view('HOD.layouts.index')->with('user',$user)->with('fuelrequest',$fuelrequest)->with('fuelrequestC',$fuelrequestC);
+    // Department-wise fuel data
+    $departmentFuelData = fuelrequest::where('department_id', $departmentId)
+        ->select('department_id', DB::raw('SUM(amount) as total_amount'), DB::raw('SUM(ltr_collected) as total_liters'))
+        ->groupBy('department_id')
+        ->first();
 
-    }
+    // Vehicle-wise fuel data for the department
+    $vehicleFuelData = Vehicle::where('department_id', $departmentId)
+    ->with(['fuelrequests' => function ($query) {
+        $query->select('vehicle_id', DB::raw('SUM(amount) as total_amount'), DB::raw('SUM(ltr_collected) as total_liters'), 'fuelrequest_vehicle.vehicle_id as pivot_vehicle_id', 'fuelrequest_vehicle.fuelrequest_id as pivot_fuelrequest_id');
+        $query->groupBy('vehicle_id', 'pivot_vehicle_id', 'pivot_fuelrequest_id'); // Group by all selected columns
+    }])
+    ->get();
+
+
+    return view('HOD.layouts.index', [
+        'user' => $user,
+        'fuelrequest' => $fuelrequest,
+        'fuelrequestC' => $fuelrequestC,
+        'departmentFuelData' => $departmentFuelData,
+        'departmentTotalLitersCollected' => $departmentTotalLitersCollected,
+        'departmentTotalAmountSpent' => $departmentTotalAmountSpent,
+
+
+        'fuelDataByVehicle' => $vehicleFuelData,
+    ]);
+}
+
+
+
+
+
+
+
+
+
+
+
+//     public function dashboard()
+//     {
+//        // return 'HOD dashboard';
+//      $user=auth()->user();
+//      $departmentId = $user->department_id;
+
+
+//      //$user=User::where('department_id',$user->department_id)->with(['fuelrequests','department'])->get();
+
+//      $fuelrequestC=fuelrequest::where('department_id',$user->department_id)->get();//with(['fuelrequests','department'])->get();
+//     //dd($fuelrequest);
+
+//     $fuelrequest = fuelrequest::where(['user_id'=>auth()->user()->id])->get();//->with(['vehicles','user'])->get();
+
+
+//      // Department-wise fuel data
+//      $departmentFuelData = fuelrequest::where('department_id', $departmentId)
+//      ->select('department_id', DB::raw('SUM(amount) as total_amount'), DB::raw('SUM(ltr_collected) as total_liters'))
+//      ->groupBy('department_id')
+//      ->first(); // Get a single result for the department
+
+
+
+//         // Vehicle-wise fuel data
+//         $vehicleFuelData = Vehicle::where('department_id', $departmentId)
+//             ->with(['fuelrequests' => function ($query) {
+//                 $query->select('vehicle_id', DB::raw('SUM(amount) as total_amount'), DB::raw('SUM(ltr_collected) as total_liters'));
+//                 $query->groupBy('vehicle_id');
+//             }])
+//             ->get();
+
+
+//     // $user=Vehicle::where('department_id',$user->department_id)->count();
+
+//       // $department_id = Auth::user()->department_id; //get the id of the department that
+//     //    dd($user->count());
+
+//        return view('HOD.layouts.index')->with(  [
+//         'user' => $user,
+//         'fuelDataByVehicle' => $vehicleFuelData,
+//         'departmentFuelData' => $departmentFuelData, // Pass department data to the view
+//         // ... other data you need for the view
+//         // ... other data you need for the view
+// ])->with('fuelrequest',$fuelrequest)->with('fuelrequestC',$fuelrequestC);
+
+//     }
 
 
 

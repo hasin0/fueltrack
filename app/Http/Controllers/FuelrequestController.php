@@ -48,14 +48,27 @@ class FuelrequestController extends Controller
 
 
 
-    public function index()
+    public function index(Request $request)
     {
 
 
         $fuelPrice = Setting::where('key', 'fuel_price')->first(); // Fetch from settings table
 
+        $searchTerm = $request->input('search');
 
-        $fuelrequests = Fuelrequest::with('vehicles')->get();
+
+
+        $fuelrequests = Fuelrequest::with(['vehicles', 'user', 'fuelstation'])
+        ->when($searchTerm, function ($query) use ($searchTerm) {
+            $query->whereHas('vehicles', function ($q) use ($searchTerm) {
+                $q->where('plate_no', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('tag_no', 'like', '%' . $searchTerm . '%');
+            });
+        })
+        ->get();
+
+
+        // $fuelrequests = Fuelrequest::with('vehicles')->get();
 
 
         // $fuelrequests = Fuelrequest::with('user')->get(); // Make sure this query works
