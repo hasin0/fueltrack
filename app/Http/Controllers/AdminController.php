@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
+use Illuminate\Support\Facades\Validator;
+use Solana\Web3\PublicKey;
+use Solana\Web3\Connection;
+use Solana\Transaction;
+use Solana\SystemProgram;
+
 class AdminController extends Controller
 {
     //
@@ -122,6 +128,16 @@ class AdminController extends Controller
         // return redirect()->route('user.account')->with('success','Password successfully changed');
     }
 
+
+// public function createSolanaTransaction(Request $request, FuelRequest $fuelrequest){
+
+
+//     $fuelrequests = FuelRequest::all(); // Or however you fetch your fuel requests
+
+
+//     return view('backend.layouts.fuelrequests.solana')->with('fuelrequests', $fuelrequests);
+
+// }
 
 
 

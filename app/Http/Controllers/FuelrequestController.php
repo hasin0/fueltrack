@@ -16,6 +16,12 @@ use App\Models\Setting;
 use App\Exports\FuelrequestExport;
 use App\Models\Fuelstation;
 use PDF;
+// use Solana\Web3\Connection;
+// use Solana\Transaction;
+// use Solana\SystemProgram;
+// use Solana\Web3\PublicKey;
+// use Solana\Web3\LAMPORTS_PER_SOL;
+
 
 
 use Illuminate\Http\Request;
@@ -256,7 +262,11 @@ $data['amount'] = $data['ltr_collected'] * $price;
     public function show($id)
     {
          $fuelrequests=fuelrequest::where('id',$id)->get();
-         return view('backend.layouts.fuelrequests.show',compact('fuelrequests'));
+         $fuelPrice = Setting::where('key', 'fuel_price')->first(); // Fetch from settings table
+         $amount = $fuelrequests->first()->amount; // Assuming you want the amount of the first fuel request
+         $recipientPublicKey = 'BfkuJhxwm3b6nk5Uay9ch1wGG81r3pdZrNZz193PL27T'; // Replace with actual key
+
+         return view('backend.layouts.fuelrequests.show',compact('fuelrequests' ,'fuelPrice', 'amount','recipientPublicKey'));
     }
 
     /**
@@ -396,6 +406,78 @@ $data['amount'] = $data['ltr_collected'] * $price;
 
         }
     }
+
+
+// FuelrequestController.php
+public function solana(FuelRequest $fuelrequest)
+{
+    // 1. Fetch necessary data (fuel request amount, recipient's Solana address, etc.)
+
+        // 1. Fetch necessary data
+
+    $amountNaira = $fuelrequest->amount;
+    $solMarketValue = $this->fetchSolanaMarketValue(); // Function to get current Solana price in USD
+
+
+    // 2. Perform the conversion
+    $amountUsd = $amountNaira / 1600; // Assuming 1 USD = 1600 Naira (adjust as needed)
+    $amountSol = $amountUsd / $solMarketValue;
+
+
+
+
+    $recipientPublicKey = 'BfkuJhxwm3b6nk5Uay9ch1wGG81r3pdZrNZz193PL27T'; // Replace with actual key
+
+    // 2. Pass data to the view
+    return view('backend.layouts.fuelrequests.solana', [
+        'fuelrequest' => $fuelrequest,
+        'amountNaira' => $amountNaira,
+        'amountSol' => $amountSol,
+        'recipientPublicKey' => $recipientPublicKey,
+    ]);
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+private function fetchSolanaMarketValue()
+{
+    $apiUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd';
+    $response = file_get_contents($apiUrl);
+
+    if ($response === false) {
+        // Handle the error, maybe log it and return a default value
+        error_log("Error fetching Solana price from CoinGecko: " . error_get_last()['message']);
+        return 0;
+    }
+
+    $data = json_decode($response, true);
+    return $data['solana']['usd'] ?? 0;
+}
+
+
+public function updatePaymentStatus(Request $request, FuelRequest $fuelrequest)
+{
+    // 1. Validate the request data (status, transaction_id)
+    // 2. Update the fuel request's payment status in your database
+    $fuelrequest->update([
+        'payment_status' => $request->status,
+        'transaction_id' => $request->transaction_id // Optional
+    ]);
+
+    // 3. Return a JSON response indicating success or failure
+    return response()->json(['success' => true]);
+}
 
 
 

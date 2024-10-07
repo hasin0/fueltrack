@@ -238,6 +238,26 @@
 
   </li>
 
+
+
+  {{-- <li class="nav-item">
+    @foreach ($fuelrequests as $fuelrequest)
+        <a class="nav-link" href="{{ route('admin.fuelrequests.solana.createTransaction', $fuelrequest) }}">
+            <i class="fas fa-users"></i>
+            <span>Pay for Request #{{ $fuelrequest->id }} with Solana</span>
+        </a>
+    @endforeach
+</li> --}}
+
+{{--
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('admin.fuelrequests.solana.createTransaction', $fuelrequest) }}">
+        <i class="fas fa-users"></i>
+        <span>Pay with Solana</span>
+    </a>
+</li> --}}
+
+
 {{--
     <li class="nav-item">
         <a class="nav-link" href="">

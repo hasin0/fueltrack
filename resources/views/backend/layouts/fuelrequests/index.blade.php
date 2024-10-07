@@ -82,7 +82,7 @@
             <tbody>
                 @foreach($fuelrequests as $fuelrequest)
                 <tr>
-                    <td>{{$fuelrequest->id}}</td>
+                    <td><a href="{{ route('fuelrequests.show', $fuelrequest->id) }}">{{$fuelrequest->id}}</a></td>
                     <td>{{$fuelrequest->user->name}} / {{$fuelrequest->user->phone}}</td>
                     <td>{{$fuelrequest->fuelstation->name}}</td>
                     {{-- <td>{{$fuelrequest->user->name}}</td> --}}

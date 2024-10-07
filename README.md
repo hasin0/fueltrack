@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is a Laravel application for managing fuel requests and tracking vehicle fuel consumption.
+This is a Laravel application with solana blockchain for managing fuel requests and tracking vehicle fuel consumption.
 
 ## Installation
 
@@ -100,7 +100,19 @@ Option 2 Using Docker
 
 
 
+Frontend :
 
+→ HTML
+→ CSS → CSS framework
+
+Solana :
+
+→ Solana Web3.js
+→ Solana CLI & SDK
+
+Backend :
+
+→ Laravel
 
 
 Usage

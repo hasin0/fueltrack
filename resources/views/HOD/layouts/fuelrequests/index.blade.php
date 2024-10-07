@@ -190,4 +190,74 @@
       })
     })
   </script>
+
+
+<script>
+    $(document).ready(function(){
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        // Handle changes for all approval toggles
+        $('input[data-approval-type]').change(function() {
+            let fuelRequestId = $(this).data('fuel-request-id');
+            let approvalType = $(this).data('approval-type');
+            let newStatus = $(this).is(':checked');
+
+            // Determine the correct route based on approval type
+            let route;
+            if (approvalType === 'admin') {
+                route = "{{ route('admin.status') }}";
+            } else if (approvalType === 'hod') {
+                route = "{{ route('hods.status') }}";
+            } else if (approvalType === 'fuel_station') {
+                route = "{{ route('FSA.status') }}";
+            }
+
+            $.ajax({
+                url: route,
+                type: "POST",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    mode: newStatus,
+                    id: fuelRequestId
+                },
+                success: function(response) {
+                    if (response.status) {
+                        alert(response.msg);
+                    } else {
+                        alert('Error updating approval.');
+                    }
+                },
+                error: function() {
+                    alert('An error occurred. Please try again.');
+                }
+            });
+        });
+
+        // ... (Your other JavaScript code for delete confirmation, etc.) ...
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @endpush

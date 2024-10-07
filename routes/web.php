@@ -48,6 +48,16 @@ Route::group(['prefix'=>'admin','middleware'=>['role:Admin','auth']],function(){
     Route::get('/',[\App\Http\Controllers\AdminController::class,'admin'])->name('admin');
 
 
+    // Solana route within Fuel Requests
+
+    // routes/web.php (or your route file)
+// Route::post('/admin/fuelrequests/{fuelrequest}/solana/create-transaction', [
+//     \App\Http\Controllers\AdminController::class,
+//     'createSolanaTransaction'
+// ])->name('admin.fuelrequests.solana.createTransaction');
+
+    //  Route::post('/admin/fuelrequests/{fuelrequest}/solana/create-transaction', [\App\Http\Controllers\AdminController::class, 'createSolanaTransaction']) ->name('admin.fuelrequests.solana.createTransaction');
+
 
     //Vehicles
     Route::resource('/vehicle',\App\Http\Controllers\VehicleController::class);
@@ -83,6 +93,23 @@ Route::post('fuelrequestreports',[\App\Http\Controllers\FuelrequestController::c
 
  //fuelrequest
  Route::resource('/fuelrequests',\App\Http\Controllers\FuelrequestController::class);
+
+
+    // // Solana route within Fuel Requests
+     Route::get('/fuelrequests/{fuelrequest}/solana', [\App\Http\Controllers\FuelrequestController::class, 'solana'])
+        ->name('fuelrequests.solana');
+
+
+// Route to handle the Solana payment submission
+Route::post('/fuelrequests/make-solana-payment', [\App\Http\Controllers\FuelrequestController::class, 'makeSolanaPayment'])->name('fuelrequests.makeSolanaPayment');
+
+Route::post('/fuelrequests/{fuelrequest}/update-payment-status', [\App\Http\Controllers\FuelrequestController::class, 'updatePaymentStatus'])->name('fuelrequests.updatePaymentStatus');
+
+
+
+
+
+
 
 
 
