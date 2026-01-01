@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fueltrack-deployment
+  labels:
+    app: fueltrack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fueltrack
+  template:
+    metadata:
+      labels:
+        app: fueltrack
+    spec:
+      containers:
+        - name: fueltrack
+          image: hasino2258/fueltrack:latest
+          ports:
+            - containerPort: 9001
+              name: http
