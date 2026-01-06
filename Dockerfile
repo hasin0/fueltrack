@@ -16,7 +16,7 @@ RUN apk add --no-cache \
     oniguruma-dev \
     jpegoptim optipng pngquant gifsicle \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql zip gd
+    && docker-php-ext-install pdo pdo_mysql zip gd mbstring bcmath
 
 # Copy the application files including .env.example
 COPY . .
