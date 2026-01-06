@@ -14,6 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set short SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -27,5 +30,4 @@ jobs:
           push: true
           tags: |
             hasino2258/fueltrack:latest
-            hasino2258/fueltrack:${{ github.sha }}
-
+            hasino2258/fueltrack:${{ env.SHORT_SHA }}
