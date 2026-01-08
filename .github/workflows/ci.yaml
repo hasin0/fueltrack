@@ -1,4 +1,4 @@
-name: Build and Push Docker Images
+name: cicd
 
 on:
   push:
@@ -6,11 +6,10 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: self-hosted
+  ci:
+    runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -32,3 +31,19 @@ jobs:
           tags: |
             hasino2258/fueltrack:latest
             hasino2258/fueltrack:${{ env.SHORT_SHA }}
+
+  cd:
+    needs: ci
+    runs-on: self-hosted
+
+    steps:
+      - name: ArgoCD app sync
+        shell: bash
+        run: |
+          argocd login argocd.test.com \
+            --insecure \
+            --grpc-web \
+            --username admin \
+            --password ${{ secrets.ARGOCD_PASSWORD }}
+
+          argocd app sync fueltrack-app
