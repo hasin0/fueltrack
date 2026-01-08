@@ -47,9 +47,9 @@ jobs:
       - name: ArgoCD app sync
         shell: bash
         run: |
-          argocd app sync fueltrack-app \
-            --server argocd-server.argocd.svc.cluster.local \
+          argocd --server argocd-server.argocd.svc.cluster.local \
             --insecure \
             --grpc-web \
             --username admin \
-            --password ${{ secrets.ARGOCD_PASSWORD }}
+            --password ${{ secrets.ARGOCD_PASSWORD }} \
+            app sync fueltrack-app
