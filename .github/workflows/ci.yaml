@@ -37,7 +37,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Install argocd
+      - name: Installing argocd
         run: |
           sudo rm -f /usr/local/bin/argocd
           curl -ksSL -o argocd https://argocd-server.argocd/download/argocd-linux-amd64
