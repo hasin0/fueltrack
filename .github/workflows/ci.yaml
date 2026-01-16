@@ -44,7 +44,7 @@ jobs:
           chmod +x argocd
           sudo mv ./argocd /usr/local/bin/argocd
 
-      - name: ArgoCD app sync
+      - name: ArgoCD login
         shell: bash
         run: |
           argocd --server argocd-server.argocd \
@@ -52,4 +52,10 @@ jobs:
             --grpc-web \
             --username admin \
             --password ${{ secrets.ARGOCD_PASSWORD }} \
-            app sync fueltrack-app
+
+
+
+      - name: ArgoCD app sync
+        shell: bash
+        run: |
+          argocd app sync fueltrack-app
