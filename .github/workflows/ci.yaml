@@ -52,5 +52,5 @@ jobs:
             --grpc-web \
             --username admin \
             --password ${{ secrets.ARGOCD_PASSWORD }}
-            app sync fueltrack
+            argocd app sync fueltrack
 
