@@ -6,18 +6,13 @@ on:
       - main
 
 jobs:
-# =======================
-# CI JOB
-# =======================
   ci:
     runs-on: ubuntu-latest
-
     outputs:
       image_tag: ${{ steps.tag.outputs.sha }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set short SHA
         id: tag
@@ -38,46 +33,20 @@ jobs:
             hasino2258/fueltrack:latest
             hasino2258/fueltrack:${{ steps.tag.outputs.sha }}
 
-# =======================
-# CD JOB
-# =======================
   cd:
     needs: ci
     runs-on: self-hosted
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Install yq
-        run: |
-          sudo curl -sSL \
-            https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
-            -o /usr/local/bin/yq
-          sudo chmod +x /usr/local/bin/yq
-          yq --version
-
-      - name: Update Helm values.yaml
-        run: |
-          echo "New image tag: ${{ needs.ci.outputs.image_tag }}"
-          yq -i '.image.tag = "${{ needs.ci.outputs.image_tag }}"' charts/fueltrack/values.yaml
-
-      - name: Commit Helm values update
-        uses: EndBug/add-and-commit@v9
-        with:
-          message: "chore: update image tag to ${{ needs.ci.outputs.image_tag }}"
-          add: "charts/fueltrack/values.yaml"
-
-      - name: Install ArgoCD CLI
+      - name: Install Argo CD CLI
         run: |
           sudo rm -f /usr/local/bin/argocd
-          curl -ksSL -o argocd \
-            https://argocd-server.argocd/download/argocd-linux-amd64
+          curl -ksSL -o argocd https://argocd-server.argocd/download/argocd-linux-amd64
           chmod +x argocd
           sudo mv argocd /usr/local/bin/argocd
           argocd version --client
 
-      - name: ArgoCD Login
+      - name: Login to Argo CD
         run: |
           argocd login argocd-server.argocd \
             --insecure \
@@ -85,6 +54,9 @@ jobs:
             --username admin \
             --password ${{ secrets.ARGOCD_PASSWORD }}
 
-      - name: Sync Application
+      - name: Update image tag & sync
         run: |
+          argocd app set fueltrack \
+            --helm-set image.tag=${{ needs.ci.outputs.image_tag }}
+
           argocd app sync fueltrack
