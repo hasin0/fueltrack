@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: fueltrack-app
+  description: FuelTrack is an application to monitor and optimize fuel consumption for vehicles.
+  # Example for optional annotations
+  annotations:
+    github.com/project-slug: hasin0/fueltrack
+  #   backstage.io/techdocs-ref: dir:.
+spec:
+  type: website
+  owner: devlopment
+  lifecycle: experimental
